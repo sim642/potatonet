@@ -1,6 +1,7 @@
 package ee.potatonet;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -9,6 +10,11 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.preauth.x509.X509AuthenticationFilter;
+import sun.security.x509.RFC822Name;
+
+import java.io.IOException;
+import java.security.cert.CertificateParsingException;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -26,8 +32,25 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
                     .authenticated()
                     .and()
                     .x509()
-                        .subjectPrincipalRegex("(?:serialNumber|SERIALNUMBER)=(\\d{11})")
+                        .withObjectPostProcessor(new X509PostProcessor())
+                        //.subjectPrincipalRegex("(?:serialNumber|SERIALNUMBER)=(\\d{11})")
                         .userDetailsService(userDetailsService());
+    }
+
+    private static class X509PostProcessor implements ObjectPostProcessor<X509AuthenticationFilter> {
+
+        @Override
+        public <O extends X509AuthenticationFilter> O postProcess(O object) {
+            object.setPrincipalExtractor(cert -> {
+                try {
+                    return new RFC822Name((String) cert.getSubjectAlternativeNames().iterator().next().get(1)).getName();
+                }
+                catch (CertificateParsingException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            return object;
+        }
     }
 
     /*
