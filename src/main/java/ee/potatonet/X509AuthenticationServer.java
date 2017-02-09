@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @EnableWebSecurity
@@ -42,15 +41,12 @@ Stored in: SAAN,SIMMO,39603032788 (PIN1)
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) {
-                System.out.println(username);
-                return new User(username, "",
-                        AuthorityUtils
-                                .commaSeparatedStringToAuthorityList("ROLE_EID"));
-                //throw new UsernameNotFoundException(username);
-            }
+        return username -> {
+            System.out.println(username);
+            return new User(username, "",
+                    AuthorityUtils
+                            .commaSeparatedStringToAuthorityList("ROLE_EID"));
+            //throw new UsernameNotFoundException(username);
         };
     }
 }
