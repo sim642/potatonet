@@ -9,19 +9,25 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated()
+        /*http.authorizeRequests().anyRequest().authenticated()
                 .and()
                 .x509()
                 //.subjectPrincipalRegex("CN=(.*?)(?:,|$)")
                 .subjectPrincipalRegex("serialNumber=(\\d{11})")
-                .userDetailsService(userDetailsService());
+                .userDetailsService(userDetailsService());*/
+        http.authorizeRequests()
+                .antMatchers("/test")
+                    .authenticated()
+                    .and()
+                    .x509()
+                        .subjectPrincipalRegex("(?:serialNumber|SERIALNUMBER)=(\\d{11})")
+                        .userDetailsService(userDetailsService());
     }
 
     /*
@@ -42,7 +48,7 @@ Stored in: SAAN,SIMMO,39603032788 (PIN1)
                 System.out.println(username);
                 return new User(username, "",
                         AuthorityUtils
-                                .commaSeparatedStringToAuthorityList("ROLE_USER"));
+                                .commaSeparatedStringToAuthorityList("ROLE_EID"));
                 //throw new UsernameNotFoundException(username);
             }
         };
