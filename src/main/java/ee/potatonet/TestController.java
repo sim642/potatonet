@@ -25,6 +25,6 @@ public class TestController {
 
     @RequestMapping("/test3")
     public String test3(Model model) {
-        return "index";
+        return "feed";
     }
 }
