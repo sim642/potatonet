@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-    <link href="index.css" rel="stylesheet">
+    <link th:href="@{/css/index.css}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,7 +28,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-9">
-            <img src="potato.png" class="img-responsive">
+            <img th:src="@{/img/potato.png}" class="img-responsive">
         </div>
         <div class="col-md-3">
             <h1 id="login-title">potatonet</h1>
@@ -57,7 +57,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <a href="#">
-                                    <img src="id-card-et.svg" class="btn-eid"/>
+                                    <img th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
                                 </a>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <a href="#">
-                                    <img src="id-card-et.svg" class="btn-eid"/>
+                                    <img th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
                                 </a>
                             </div>
                         </div>
