@@ -13,9 +13,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import java.io.File;
 import java.io.IOException;
+
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @SpringBootApplication
 public class PotatonetApplication {
@@ -66,5 +70,12 @@ public class PotatonetApplication {
 				.build();
 		
 		return db;
-	} 
+	}
+
+	@Bean
+	public TemplateEngine templateEngine() {
+		SpringTemplateEngine engine = new SpringTemplateEngine();
+		engine.addDialect(new LayoutDialect());
+		return engine;
+	}
 }

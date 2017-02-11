@@ -22,4 +22,9 @@ public class TestController {
     public String test2(Model model) {
         return "login";
     }
+
+    @RequestMapping("/test3")
+    public String test3(Model model) {
+        return "index";
+    }
 }
