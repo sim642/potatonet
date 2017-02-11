@@ -27,6 +27,8 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
+import ee.potatonet.eid.EIDDetails;
+
 @Entity
 public class User implements UserDetails {
 
@@ -65,6 +67,10 @@ public class User implements UserDetails {
   }
 
   public User() {
+  }
+
+  public User(EIDDetails eidDetails) {
+    this(eidDetails.getIdCode(), eidDetails.getEmail(), eidDetails.getFullName());
   }
 
   public String getIdCode() {
