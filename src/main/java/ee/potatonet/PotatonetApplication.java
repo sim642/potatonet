@@ -1,5 +1,6 @@
 package ee.potatonet;
 
+import javax.sql.DataSource;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.boot.SpringApplication;
@@ -8,7 +9,10 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.SocketUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,4 +53,18 @@ public class PotatonetApplication {
 					+ "] or truststore: [" + "keystore" + "]", ex);
 		}
 	}
+	
+	@Bean
+	public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
+	}
+	
+	@Bean
+	public DataSource dataSource() {
+		EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
+				.setType(EmbeddedDatabaseType.HSQL)
+				.build();
+		
+		return db;
+	} 
 }
