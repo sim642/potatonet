@@ -1,8 +1,10 @@
 package ee.potatonet;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -16,6 +18,10 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import ee.potatonet.data.repos.UserRepository;
 
 @SpringBootApplication
 public class PotatonetApplication {
@@ -58,13 +64,4 @@ public class PotatonetApplication {
 	public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
 		return new JdbcTemplate(dataSource);
 	}
-	
-	@Bean
-	public DataSource dataSource() {
-		EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
-				.setType(EmbeddedDatabaseType.HSQL)
-				.build();
-		
-		return db;
-	} 
 }
