@@ -1,23 +1,32 @@
 package ee.potatonet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.preauth.x509.X509AuthenticationFilter;
+
+import ee.potatonet.data.User;
+import ee.potatonet.data.repos.UserRepository;
 import sun.security.x509.RFC822Name;
 
 import java.io.IOException;
 import java.security.cert.CertificateParsingException;
+import java.util.List;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
+    
+    @Autowired
+    private UserRepository userRepository;
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         /*http.authorizeRequests().anyRequest().authenticated()
@@ -32,7 +41,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
                     .and()
                     .x509()
                         .withObjectPostProcessor(new X509PostProcessor())
-                        //.subjectPrincipalRegex("(?:serialNumber|SERIALNUMBER)=(\\d{11})")
+                       // .subjectPrincipalRegex("(?:serialNumber|SERIALNUMBER)=(\\d{11})")
                         .userDetailsService(userDetailsService());
     }
 
@@ -66,9 +75,23 @@ Stored in: SAAN,SIMMO,39603032788 (PIN1)
     public UserDetailsService userDetailsService() {
         return username -> {
             System.out.println(username);
-            return new User(username, "",
-                    AuthorityUtils
-                            .commaSeparatedStringToAuthorityList("ROLE_EID"));
+            List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_EID");
+
+            User exisitingUser = userRepository.findOneByEstMail(username);
+            if (exisitingUser != null) {
+                System.out.println("User logged in: " + exisitingUser);
+                exisitingUser.setAuthorities(authorities);
+                
+                return exisitingUser;
+            } else {
+                User newUser = new User("", username, "");
+                newUser.setAuthorities(authorities);
+
+                System.out.println("Created user: " + newUser);
+                userRepository.save(newUser);
+                return newUser;
+            }
+            
             //throw new UsernameNotFoundException(username);
         };
     }
