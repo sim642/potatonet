@@ -17,4 +17,9 @@ public class TestController {
         model.addAttribute("name", user.getUsername());
         return "test";
     }
+
+    @RequestMapping("/test2")
+    public String test2(Model model) {
+        return "login";
+    }
 }
