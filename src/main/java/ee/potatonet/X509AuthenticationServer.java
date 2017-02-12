@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.repos.UserRepository;
@@ -42,6 +43,10 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
                 .x509()
                 .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
                 .authenticationUserDetailsService(authenticationUserDetailsService());
+        http.logout()
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            .logoutSuccessUrl("/")
+            .permitAll();
     }
 
     @Bean
