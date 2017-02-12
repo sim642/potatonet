@@ -3,7 +3,6 @@ package ee.potatonet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,11 +14,13 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.repos.UserRepository;
+import ee.potatonet.eid.AuthenticationSuccessHandlerPostProcessor;
 import ee.potatonet.eid.EIDDetails;
 import ee.potatonet.eid.EIDDetailsX509PrincipalExtractor;
 import ee.potatonet.eid.PrincipalExtractorPostProcessor;
@@ -69,18 +70,27 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated();
         http.x509()
             .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
+            .withObjectPostProcessor(new AuthenticationSuccessHandlerPostProcessor(authenticationSuccessHandler()))
             .authenticationUserDetailsService(authenticationUserDetailsService());
         http.formLogin()
             .loginPage("/")
             .usernameParameter("email")
             .passwordParameter("password")
             .loginProcessingUrl("/")
-            .defaultSuccessUrl("/feed")
+            .successHandler(authenticationSuccessHandler())
             .permitAll();
         http.logout()
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
             .logoutSuccessUrl("/")
             .permitAll();
+    }
+
+    @Bean
+    public SavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler() {
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        successHandler.setDefaultTargetUrl("/feed");
+        successHandler.setAlwaysUseDefaultTargetUrl(false);
+        return successHandler;
     }
 
     @Bean

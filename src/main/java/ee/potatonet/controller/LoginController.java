@@ -12,9 +12,4 @@ public class LoginController {
   public String doGet(Model model) {
     return "login";
   }
-
-  @RequestMapping(value = "/login_eid")
-  public String loginEID() {
-    return "redirect:https://localhost:8443/feed";
-  }
 }
