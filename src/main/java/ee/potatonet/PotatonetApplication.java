@@ -1,6 +1,8 @@
 package ee.potatonet;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.IOException;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.boot.SpringApplication;
@@ -16,10 +18,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import java.io.File;
-import java.io.IOException;
-
 import nz.net.ultraq.thymeleaf.LayoutDialect;
+import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
 
 @SpringBootApplication
 public class PotatonetApplication {
@@ -75,7 +75,7 @@ public class PotatonetApplication {
 	@Bean
 	public TemplateEngine templateEngine() {
 		SpringTemplateEngine engine = new SpringTemplateEngine();
-		engine.addDialect(new LayoutDialect());
+		engine.addDialect(new LayoutDialect(new GroupingStrategy()));
 		return engine;
 	}
 }
