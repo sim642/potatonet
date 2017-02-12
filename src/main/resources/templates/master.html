@@ -23,7 +23,9 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body layout:fragment="body">
+<body>
+
+<nav layout:fragment="navbar" th:remove="tag"></nav>
 
 <div class="container" layout:fragment="content">
     Here be content!
