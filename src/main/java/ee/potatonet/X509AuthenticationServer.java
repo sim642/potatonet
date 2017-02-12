@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -12,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -31,18 +34,49 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/css/**", "/img/**")
-                .antMatchers(HttpMethod.GET, "/");
+                .antMatchers("/css/**", "/img/**");
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(emailUserDetailsService());
+    }
+
+    @Bean
+    public UserDetailsService emailUserDetailsService() {
+        return email -> {
+            System.out.println(email);
+
+            List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_EMAIL");
+
+            User exisitingUser = userRepository.findOneByEstMail(email);
+            if (exisitingUser != null) {
+                System.out.println("User logged in: " + exisitingUser);
+                exisitingUser.setAuthorities(authorities);
+
+                return exisitingUser;
+            }
+            else {
+                throw new UsernameNotFoundException(email);
+            }
+        };
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .x509()
-                .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
-                .authenticationUserDetailsService(authenticationUserDetailsService());
+            .antMatchers("/").permitAll()
+            .anyRequest().authenticated();
+        http.x509()
+            .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
+            .authenticationUserDetailsService(authenticationUserDetailsService());
+        http.formLogin()
+            .loginPage("/")
+            .usernameParameter("email")
+            .passwordParameter("password")
+            .loginProcessingUrl("/")
+            .defaultSuccessUrl("/feed")
+            .permitAll();
         http.logout()
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
             .logoutSuccessUrl("/")

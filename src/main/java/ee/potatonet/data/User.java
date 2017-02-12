@@ -213,7 +213,7 @@ public class User implements UserDetails {
 
   @Override
   public String getPassword() {
-    return "";
+    return ""; // TODO: 12.02.17 don't allow passwordless login
   }
 
   @Override
