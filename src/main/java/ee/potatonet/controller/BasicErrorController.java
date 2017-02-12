@@ -34,8 +34,8 @@ public class BasicErrorController implements ErrorController {
   }
 
   @ModelAttribute("errorJson")
-  private ErrorJSON errorJSON(HttpServletResponse response, HttpServletRequest request) {
-    return new ErrorJSON(response.getStatus(), errorAttributes.getErrorAttributes(new ServletRequestAttributes(request), true));
+  private ErrorDetails errorJSON(HttpServletResponse response, HttpServletRequest request) {
+    return new ErrorDetails(response.getStatus(), errorAttributes.getErrorAttributes(new ServletRequestAttributes(request), true));
   }
 
   @ModelAttribute("devMode")
