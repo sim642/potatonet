@@ -26,12 +26,17 @@
                 <li th:classappend="(*{active} == 'friends')? 'active' : _">
                     <a th:href="@{/friends}">Friends</a>
                 </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
                 <li th:classappend="(*{active} == 'profile')? 'active' : _">
-                    <a th:href="@{/profile}">Profile</a>
+                    <a th:href="@{/profile}">
+                        <img src="http://placehold.it/20x20" class="navbar-img-left">
+                        Peeter Pakiraam
+                    </a>
                 </li>
                 <li th:classappend="(*{active} == 'settings')? 'active' : _">
                     <a id="dLabel" data-target="#" href="http://example.com" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        Settings
                         <span class="caret"></span>
                     </a>
 

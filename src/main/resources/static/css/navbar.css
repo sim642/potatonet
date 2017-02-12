@@ -5,3 +5,8 @@ body {
 .navbar .badge {
     margin-top: -3px;
 }
+
+.navbar .navbar-img-left {
+    float: left;
+    margin-right: 15px;
+}
