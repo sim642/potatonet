@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{master}">
+<head>
+    <title>ERROR</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>:(</h2>
+            <h3>Something went wrong!</h3>
+            <h4 th:text="${errorJson.status + ' ' + errorJson.error}" />
+            <p th:text="${errorJson.timeStamp + ' ' + errorJson.message + ' '+ errorJson.trace}"
+               th:unless="${devMode == false}"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>
