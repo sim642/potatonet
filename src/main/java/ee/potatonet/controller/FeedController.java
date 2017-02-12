@@ -10,6 +10,6 @@ public class FeedController {
 
   @RequestMapping(value = "/feed", method = RequestMethod.GET)
   public String doGet(Model model) {
-    return "index";
+    return "feed";
   }
 }
