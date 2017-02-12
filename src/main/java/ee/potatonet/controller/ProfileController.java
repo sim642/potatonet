@@ -14,4 +14,10 @@ public class ProfileController {
     // TODO: Add logic
     return "profile";
   }
+
+  @RequestMapping(value = "/profile", method = RequestMethod.GET)
+  public String doGet(Model model) {
+    // TODO: Add logic
+    return "profile";
+  }
 }
