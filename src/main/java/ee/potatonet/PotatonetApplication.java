@@ -1,8 +1,10 @@
 package ee.potatonet;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -13,9 +15,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import ee.potatonet.data.repos.UserRepository;
+
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @SpringBootApplication
 public class PotatonetApplication {
@@ -66,5 +76,12 @@ public class PotatonetApplication {
 				.build();
 		
 		return db;
-	} 
+	}
+
+	@Bean
+	public TemplateEngine templateEngine() {
+		SpringTemplateEngine engine = new SpringTemplateEngine();
+		engine.addDialect(new LayoutDialect());
+		return engine;
+	}
 }
