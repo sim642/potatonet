@@ -80,7 +80,7 @@ public class PotatonetApplication {
 	}
 
 	@Bean
-	public AvatarService avatarService() {
-		return new GravatarAvatarService();
+	public AvatarService avatarService(GravatarAvatarService gravatarAvatarService) {
+		return gravatarAvatarService;
 	}
 }
