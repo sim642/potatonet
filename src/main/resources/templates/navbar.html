@@ -32,7 +32,8 @@
                 <li th:classappend="(*{active} == 'profile')? 'active' : _">
                     <a th:href="@{/profile}">
                         <img src="http://placehold.it/20x20" class="navbar-img-left">
-                        Peeter Pakiraam
+                        <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.User"*/-->
+                        <span th:text="${currentUser.getName()}"></span>
                     </a>
                 </li>
                 <li th:classappend="(*{active} == 'settings')? 'active' : _">
