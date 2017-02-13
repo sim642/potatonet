@@ -31,7 +31,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li th:classappend="(*{active} == 'profile')? 'active' : _">
                     <a th:href="@{/profile}">
-                        <img src="http://placehold.it/20x20" class="navbar-img-left">
+                        <img src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
                         <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.User"*/-->
                         <span th:text="${currentUser.getName()}"></span>
                     </a>

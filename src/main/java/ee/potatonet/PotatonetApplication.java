@@ -78,4 +78,9 @@ public class PotatonetApplication {
 		engine.addDialect(new LayoutDialect(new GroupingStrategy()));
 		return engine;
 	}
+
+	@Bean
+	public AvatarService avatarService() {
+		return new GravatarAvatarService();
+	}
 }
