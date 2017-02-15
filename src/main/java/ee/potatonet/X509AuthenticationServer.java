@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -31,6 +32,9 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RedirectStrategy redirectStrategy;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -90,7 +94,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         successHandler.setDefaultTargetUrl("/feed");
         successHandler.setAlwaysUseDefaultTargetUrl(false);
-        successHandler.setRedirectStrategy(new DomainRedirectStrategy("https://localhost:8443/")); // TODO: 15.02.17 take domain from properties
+        successHandler.setRedirectStrategy(redirectStrategy);
         return successHandler;
     }
 
