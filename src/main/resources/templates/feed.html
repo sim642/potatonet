@@ -9,17 +9,18 @@
     <div class="panel panel-default">
         <div class="panel-heading">New post</div>
         <div class="panel-body">
-            <textarea class="form-control" rows="3"></textarea>
-            <button type="submit" class="btn btn-default pull-right">Post</button>
+            <form th:action="@{/feed}" th:object="${post}" method="post">
+                <textarea class="form-control" rows="3" th:field="*{content}" ></textarea>
+                <button type="submit" class="btn btn-default pull-right">Post</button>
+            </form>
         </div>
     </div>
-
-
-    <div th:replace="~{common :: post}"></div>
-    <div th:replace="~{common :: post}"></div>
-    <div th:replace="~{common :: post}"></div>
-    <div th:replace="~{common :: post}"></div>
-    <div th:replace="~{common :: post}"></div>
+    
+    <div th:each="postInfo : ${posts}">
+        <div th:replace="~{common :: post (${postInfo})}">
+        </div>
+    </div>
+    
 </div>
 
 </body>
