@@ -90,6 +90,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         successHandler.setDefaultTargetUrl("/feed");
         successHandler.setAlwaysUseDefaultTargetUrl(false);
+        successHandler.setRedirectStrategy(new DomainRedirectStrategy("https://localhost:8443/")); // TODO: 15.02.17 take domain from properties
         return successHandler;
     }
 
