@@ -102,7 +102,12 @@ public class PotatonetApplication {
 		User veiko = userRepository.save(new User("", "veiko.kaap@eesti.ee", "Veiko Kääp"));
 		User tiit = userRepository.save(new User("", "tiit.oja@eesti.ee", "Tiit Ojasoo"));
 		User simmo = userRepository.save(new User("", "simmo.saan@eesti.ee", "Simmo Saan"));
-
+		
+		User wannaBeFriend = userRepository.save(new User("", "wannabe@eesti.ee", "Wanna Be Friend"));
+		veiko.getIncomingFriendRequests().add(wannaBeFriend);
+		simmo.getIncomingFriendRequests().add(wannaBeFriend);
+		tiit.getIncomingFriendRequests().add(wannaBeFriend);
+		
 		createPost(veiko, "Tere, ma Veiko");
 		createPost(tiit, "Tere, ma Tiit");
 		createPost(simmo, "Tere, ma Simmo");
