@@ -7,40 +7,27 @@
 
 <div layout:fragment="content">
     <h3>Friend requests</h3>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-success">Accept</button>
-                <button type="button" class="btn btn-danger">Reject</button>
-            </div>
+    <div th:each="friendRequest : ${currentUser.incomingFriendRequests}">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="btn-group pull-right" role="group">
+                    <button type="button" class="btn btn-success">Accept</button>
+                    <button type="button" class="btn btn-danger">Reject</button>
+                </div>
 
-            <img src="http://placehold.it/64x64" class="pull-left">
-            <h3>Peeter Pakiraam</h3>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-success">Accept</button>
-                <button type="button" class="btn btn-danger">Reject</button>
+                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friendRequest, 64)}" class=" pull-left">
+                <h3 th:text="${friendRequest.name}"></h3>
             </div>
-
-            <img src="http://placehold.it/64x64" class="pull-left">
-            <h3>Peeter Pakiraam</h3>
         </div>
     </div>
 
     <h3>Friends</h3>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <img src="http://placehold.it/64x64" class="pull-left">
-            <h3>Peeter Pakiraam</h3>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <img src="http://placehold.it/64x64" class="pull-left">
-            <h3>Peeter Pakiraam</h3>
+    <div th:each="friend : ${currentUser.friends}">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friend, 64)}" class=" pull-left">
+                <h3 th:text="${friend.name}"></h3>
+            </div>
         </div>
     </div>
 </div>
