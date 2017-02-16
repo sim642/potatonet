@@ -73,6 +73,10 @@ public class User implements UserDetails {
     this(eidDetails.getIdCode(), eidDetails.getEmail(), eidDetails.getFullName());
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public String getIdCode() {
     return idCode;
   }

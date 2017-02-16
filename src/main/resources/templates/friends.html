@@ -11,8 +11,12 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="btn-group pull-right" role="group">
-                    <button type="button" class="btn btn-success">Accept</button>
-                    <button type="button" class="btn btn-danger">Reject</button>
+                    <form th:action="@{/friends/accept/{id}(id=${friendRequest.id})}" method="post">
+                        <button type="submit" class="btn btn-success">Accept</button>
+                    </form>
+                    <form th:action="@{/friends/reject/{id}(id=${friendRequest.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
                 </div>
 
                 <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friendRequest, 64)}" class=" pull-left">
