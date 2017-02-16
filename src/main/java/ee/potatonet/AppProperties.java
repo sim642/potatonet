@@ -9,6 +9,7 @@ public class AppProperties {
   private boolean showErrors;
 
   private String domain;
+  private String domainEid;
 
   public boolean getShowErrors() {
     return showErrors;
@@ -24,5 +25,13 @@ public class AppProperties {
 
   public void setDomain(String domain) {
     this.domain = domain;
+  }
+
+  public String getDomainEid() {
+    return domainEid;
+  }
+
+  public void setDomainEid(String domainEid) {
+    this.domainEid = domainEid;
   }
 }
