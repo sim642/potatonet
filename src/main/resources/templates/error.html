@@ -5,15 +5,11 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <h2>:(</h2>
-            <h3>Something went wrong!</h3>
-            <h4 th:text="${errorJson.status + ' ' + errorJson.error}" />
-            <p th:text="${errorJson.timeStamp + ' ' + errorJson.message + ' '+ errorJson.trace}"
-               th:unless="${devMode == false}"/>
-        </div>
-    </div>
+    <h2>:(</h2>
+    <h3>Something went wrong!</h3>
+    <!--/*@thymesVar id="errorDetails" type="ee.potatonet.controller.ErrorDetails"*/-->
+    <h4 th:text="${errorDetails.status + ' ' + errorDetails.error}"/>
+    <pre th:if="${showErrors}" th:text="${errorDetails.timeStamp + ' ' + errorDetails.message + ' '+ errorDetails.trace}"/>
 </div>
 </body>
 </html>
