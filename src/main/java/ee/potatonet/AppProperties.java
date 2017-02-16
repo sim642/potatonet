@@ -11,6 +11,9 @@ public class AppProperties {
   private String domain;
   private String domainEid;
 
+  private String trustStore;
+  private String trustStorePassword;
+
   public boolean getShowErrors() {
     return showErrors;
   }
@@ -33,5 +36,21 @@ public class AppProperties {
 
   public void setDomainEid(String domainEid) {
     this.domainEid = domainEid;
+  }
+
+  public String getTrustStore() {
+    return trustStore;
+  }
+
+  public void setTrustStore(String trustStore) {
+    this.trustStore = trustStore;
+  }
+
+  public String getTrustStorePassword() {
+    return trustStorePassword;
+  }
+
+  public void setTrustStorePassword(String trustStorePassword) {
+    this.trustStorePassword = trustStorePassword;
   }
 }

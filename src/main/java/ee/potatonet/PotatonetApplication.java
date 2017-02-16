@@ -5,9 +5,12 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
@@ -28,6 +31,12 @@ public class PotatonetApplication {
 		SpringApplication.run(PotatonetApplication.class, args);
 	}
 
+	@Autowired
+	private ServerProperties serverProperties;
+
+	@Autowired
+	private AppProperties appProperties;
+
 	@Bean
 	public EmbeddedServletContainerFactory servletContainer() {
 		TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
@@ -38,24 +47,21 @@ public class PotatonetApplication {
 	private Connector createSslConnector() {
 		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 		Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();
-		try {
-			File keystore = new ClassPathResource("eid/server.jks").getFile();
-			File truststore = new ClassPathResource("eid/ca/ca.jks").getFile();
-			connector.setScheme("https");
-			connector.setSecure(true);
-			connector.setPort(8446);
-			protocol.setSSLEnabled(true);
-			protocol.setKeystoreFile(keystore.getAbsolutePath());
-			protocol.setKeystorePass("123456");
-			protocol.setTruststoreFile(truststore.getAbsolutePath());
-			protocol.setTruststorePass("123456");
-			protocol.setClientAuth("true");
-			return connector;
-		}
-		catch (IOException ex) {
-			throw new IllegalStateException("can't access keystore: [" + "keystore"
-					+ "] or truststore: [" + "keystore" + "]", ex);
-		}
+		connector.setScheme("https");
+		connector.setSecure(true);
+		connector.setPort(8446);
+
+		protocol.setSSLEnabled(true);
+		Ssl ssl = serverProperties.getSsl();
+		protocol.setKeystoreFile(ssl.getKeyStore());
+		protocol.setKeystorePass(ssl.getKeyStorePassword());
+		protocol.setKeyPass(ssl.getKeyPassword());
+
+		protocol.setTruststoreFile(appProperties.getTrustStore());
+		protocol.setTruststorePass(appProperties.getTrustStorePassword());
+		protocol.setClientAuth("true");
+
+		return connector;
 	}
 	
 	@Bean
