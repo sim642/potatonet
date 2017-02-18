@@ -9,6 +9,7 @@ public class AppProperties {
   private boolean showErrors;
 
   private String domain;
+  private String domainPort;
   private String domainEid;
 
   private String trustStore;
@@ -28,6 +29,14 @@ public class AppProperties {
 
   public void setDomain(String domain) {
     this.domain = domain;
+  }
+
+  public int getDomainPort() {
+    return Integer.valueOf(domainPort);
+  }
+
+  public void setDomainPort(int domainPort) {
+    this.domainPort = String.valueOf(domainPort);
   }
 
   public String getDomainEid() {

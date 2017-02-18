@@ -56,12 +56,12 @@ public class PotatonetApplication {
 		return tomcat;
 	}
 
-	// Redirects requests to HTTP port 8080 to HTTPS port 8443
+	// Redirects requests to HTTP port 8080 to HTTPS port
 	private Connector createHTTPConnector() {
 		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 		connector.setScheme("http");
 		connector.setPort(8080);
-		connector.setRedirectPort(443);
+		connector.setRedirectPort(appProperties.getDomainPort());
 		return connector;
 	}
 
