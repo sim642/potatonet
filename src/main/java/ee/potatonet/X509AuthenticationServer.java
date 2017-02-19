@@ -39,7 +39,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/css/**", "/img/**");
+                .antMatchers("/css/**", "/img/**", "/js/**");
     }
 
     @Override
