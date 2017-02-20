@@ -1,5 +1,6 @@
 package ee.potatonet;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.apache.catalina.Context;
@@ -7,6 +8,9 @@ import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+
+import java.time.ZonedDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +26,10 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
+import ee.potatonet.data.Post;
+import ee.potatonet.data.User;
+import ee.potatonet.data.repos.PostRepository;
+import ee.potatonet.data.repos.UserRepository;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
 
@@ -109,5 +117,41 @@ public class PotatonetApplication {
 	@Bean
 	public AvatarService avatarService(GravatarAvatarService gravatarAvatarService) {
 		return gravatarAvatarService;
+	}
+
+	
+	@Autowired
+	private PostRepository postRepository;
+	@Autowired
+	private UserRepository userRepository;
+
+	@PostConstruct
+	public void mockSetUp() {
+		User veiko = userRepository.save(new User("", "veiko.kaap@eesti.ee", "Veiko Kääp"));
+		User tiit = userRepository.save(new User("", "tiit.oja@eesti.ee", "Tiit Ojasoo"));
+		User simmo = userRepository.save(new User("", "simmo.saan@eesti.ee", "Simmo Saan"));
+		
+		User wannaBeFriend = userRepository.save(new User("", "wannabe@eesti.ee", "Wanna Be Friend"));
+		veiko.getIncomingFriendRequests().add(wannaBeFriend);
+		simmo.getIncomingFriendRequests().add(wannaBeFriend);
+		tiit.getIncomingFriendRequests().add(wannaBeFriend);
+		
+		createPost(veiko, "Tere, ma Veiko");
+		createPost(tiit, "Tere, ma Tiit");
+		createPost(simmo, "Tere, ma Simmo");
+
+		veiko.addFriend(tiit);
+		veiko.addFriend(simmo);
+		tiit.addFriend(simmo);
+		
+		userRepository.save(veiko);
+		userRepository.save(tiit);
+		userRepository.save(simmo);
+	}
+
+	private void createPost(User user, String content) {
+		Post entity = new Post(user, content);
+		entity.setCreationDateTime(ZonedDateTime.now());
+		postRepository.save(entity);
 	}
 }

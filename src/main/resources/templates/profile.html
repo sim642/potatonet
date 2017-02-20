@@ -8,18 +8,17 @@
 <div layout:fragment="content">
     <div class="panel panel-default">
         <div class="panel-body">
-            <img src="http://placehold.it/256x256" class="pull-left">
-            <h2>Peeter Pakiraam</h2>
+            <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="pull-left">
+            <h2 th:text="${user.name}"></h2>
             <button type="button" class="btn btn-primary">Add friend</button>
         </div>
     </div>
 
 
-    <div th:replace="~{common :: post}"></div>
-    <div th:replace="~{common :: post}"></div>
-    <div th:replace="~{common :: post}"></div>
-    <div th:replace="~{common :: post}"></div>
-    <div th:replace="~{common :: post}"></div>
+    <div th:each="postInfo : ${user.posts}">
+        <div th:replace="~{common :: post (${postInfo})}">
+        </div>
+    </div>
 </div>
 
 </body>
