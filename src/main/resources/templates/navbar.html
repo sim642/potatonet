@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top" layout:fragment="navbar" th:remove="none">
+<nav class="navbar navbar-inverse navbar-fixed-top" layout:fragment="navbar" th:remove="none" th:with="active=${#execInfo.processedTemplateName}">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -20,18 +20,34 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a th:href="@{/feed}">Feed <span class="badge">3</span></a></li>
-                <li><a th:href="@{/friends}">Friends</a></li>
-                <li><a th:href="@{/profile}">Profile</a></li>
-                <li>
+                <li th:classappend="(*{active} == 'feed')? 'active' : _">
+                    <a th:href="@{/feed}">Feed <span class="badge">3</span></a>
+                </li>
+                <li th:classappend="(*{active} == 'friends')? 'active' : _">
+                    <a th:href="@{/friends}">Friends</a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li th:classappend="(*{active} == 'profile')? 'active' : _">
+                    <a th:href="@{/profile}">
+                        <img src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
+                        <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.User"*/-->
+                        <span th:text="${currentUser.getFullName()}"></span>
+                    </a>
+                </li>
+                <li th:classappend="(*{active} == 'settings')? 'active' : _">
                     <a id="dLabel" data-target="#" href="http://example.com" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        Settings
                         <span class="caret"></span>
                     </a>
 
                     <ul class="dropdown-menu" aria-labelledby="dLabel">
-                        <li><a th:href="@{/settings}">Settings</a></li>
-                        <li><a th:href="@{/logout}">Logout</a></li>
+                        <li th:classappend="(*{active} == 'settings')? 'active' : _">
+                            <a th:href="@{/settings}">Settings</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/logout}">Logout</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

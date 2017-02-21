@@ -69,6 +69,10 @@ public class User implements UserDetails {
     this.incomingFriendRequests = new HashSet<>();
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public EIDDetails getEid() {
     return eid;
   }

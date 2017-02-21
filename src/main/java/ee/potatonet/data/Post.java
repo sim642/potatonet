@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.ZonedDateTime;
 
 @Entity
 public class Post {
@@ -19,6 +20,8 @@ public class Post {
   private User user;
 
   private String content;
+  
+  private ZonedDateTime creationDateTime;
 
   public Post(User user, String content) {
     this.user = user;
@@ -70,5 +73,13 @@ public class Post {
         ", user=" + user +
         ", content='" + content + '\'' +
         '}';
+  }
+
+  public ZonedDateTime getCreationDateTime() {
+    return creationDateTime;
+  }
+
+  public void setCreationDateTime(ZonedDateTime creationDateTime) {
+    this.creationDateTime = creationDateTime;
   }
 }
