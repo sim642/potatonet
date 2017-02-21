@@ -1,6 +1,7 @@
 package ee.potatonet.data;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,10 +36,10 @@ public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  private String idCode;
 
-  private String estMail;
-  private String name;
+  @Embedded
+  private EIDDetails eid;
+
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Post> posts;
   @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
@@ -56,45 +57,24 @@ public class User implements UserDetails {
   
   @Transient
   private Set<? extends GrantedAuthority> authorities;
-  
-  public User(String idCode, String estMail, String name) {
-    this.idCode = idCode;
-    this.estMail = estMail;
-    this.name = name;
+
+  private User() {
+
+  }
+
+  public User(EIDDetails eid) {
+    this.eid = eid;
     this.posts = new ArrayList<>();
     this.friends = new HashSet<>();
     this.incomingFriendRequests = new HashSet<>();
   }
 
-  public User() {
+  public EIDDetails getEid() {
+    return eid;
   }
 
-  public User(EIDDetails eidDetails) {
-    this(eidDetails.getIdCode(), eidDetails.getEmail(), eidDetails.getFullName());
-  }
-
-  public String getIdCode() {
-    return idCode;
-  }
-
-  public void setIdCode(String idCode) {
-    this.idCode = idCode;
-  }
-
-  public String getEstMail() {
-    return estMail;
-  }
-
-  public void setEstMail(String estMail) {
-    this.estMail = estMail;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
+  public String getFullName() {
+    return eid.getFullName();
   }
 
   public List<Post> getPosts() {
@@ -197,12 +177,10 @@ public class User implements UserDetails {
   public String toString() {
     return "User{" +
         "id=" + id +
-        ", idCode='" + idCode + '\'' +
-        ", estMail='" + estMail + '\'' +
-        ", name='" + name + '\'' +
-        ", posts=" + posts.stream() +
-        ", friends={" + friends.stream().map(User::getName).collect(Collectors.joining(",")) + "}" +
-        ", incomingFriendRequests={" + incomingFriendRequests.stream().map(User::getName).collect(Collectors.joining(",")) + "}" +
+        ", eid=" + eid +
+        ", posts={" + posts.stream().map(Post::getContent).collect(Collectors.joining(", ")) + "}" +
+        ", friends={" + friends.stream().map(User::getFullName).collect(Collectors.joining(", ")) + "}" +
+        ", incomingFriendRequests={" + incomingFriendRequests.stream().map(User::getFullName).collect(Collectors.joining(", ")) + "}" +
         '}';
   }
 
@@ -218,7 +196,7 @@ public class User implements UserDetails {
 
   @Override
   public String getUsername() {
-    return estMail;
+    return eid.getEmail();
   }
 
   @Override

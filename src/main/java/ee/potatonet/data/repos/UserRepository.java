@@ -7,5 +7,5 @@ import ee.potatonet.data.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-  User findOneByEstMail(String estMail);
+  User findOneByEidEmail(String eidEmail);
 }

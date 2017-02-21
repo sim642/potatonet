@@ -31,7 +31,7 @@ public class EIDDetailsX509PrincipalExtractor implements X509PrincipalExtractor 
     String surname = capitalize((String) surnameExtractor.extractPrincipal(cert));
     String email = emailExtractor.extractPrincipal(cert);
 
-    return new EIDDetails(idCode, givenName, surname, email);
+    return new EIDDetails(new EIDCodeDetails(idCode), givenName, surname, email);
   }
 
   private static String capitalize(String name) {
