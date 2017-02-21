@@ -6,6 +6,6 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="ee.potatonet.data.User"*/-->
-<p th:text="'Hello, ' + ${user.getFullName()} + ' (' + ${user.getEid().getEidCode()} + ', ' + ${user.getEid().getEmail()} + ') !!!'" />
+<p th:text="'Hello, ' + ${user.fullName} + ' (' + ${user.eid.eidCode} + ', ' + ${user.eid.email} + ') !!!'" />
 </body>
 </html>
