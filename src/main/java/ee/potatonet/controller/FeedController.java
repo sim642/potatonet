@@ -2,7 +2,12 @@ package ee.potatonet.controller;
 
 
 import java.time.ZonedDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,9 +23,12 @@ public class FeedController {
 
   private final PostRepository postRepository;
 
+  private final SimpMessagingTemplate simpMessagingTemplate;
+
   @Autowired
-  public FeedController(PostRepository postRepository) {
+  public FeedController(PostRepository postRepository, SimpMessagingTemplate simpMessagingTemplate) {
     this.postRepository = postRepository;
+    this.simpMessagingTemplate = simpMessagingTemplate;
   }
 
   @RequestMapping(value = "/feed", method = RequestMethod.GET)
@@ -41,6 +49,10 @@ public class FeedController {
     
     return "redirect:/feed";
   }
-  
+
+  @MessageMapping("/fromSockJSClient")
+  public void handlePost() {
+    simpMessagingTemplate.convertAndSend("/feed/websocket", "{\"content\": \"stuff\"}");
+  }
   
 }
