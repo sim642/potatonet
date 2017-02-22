@@ -37,6 +37,7 @@ import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
 public class PotatonetApplication {
 
 	public static void main(String[] args) {
+		System.setProperty("timestamp", String.valueOf(System.currentTimeMillis()));
 		SpringApplication.run(PotatonetApplication.class, args);
 	}
 
