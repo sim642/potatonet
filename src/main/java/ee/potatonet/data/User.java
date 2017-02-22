@@ -39,15 +39,15 @@ public class User implements UserDetails {
 
   private String estMail;
   private String name;
-  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Post> posts;
-  @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
   @JoinTable(name = "tbl_friends",
       joinColumns = @JoinColumn(name = "personId"),
       inverseJoinColumns = @JoinColumn(name = "friendId")
   )
   private Set<User> friends;
-  @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
   @JoinTable(name = "tbl_friend_requests",
       joinColumns = @JoinColumn(name = "personId"),
       inverseJoinColumns = @JoinColumn(name = "friendId")
@@ -204,9 +204,6 @@ public class User implements UserDetails {
         ", idCode='" + idCode + '\'' +
         ", estMail='" + estMail + '\'' +
         ", name='" + name + '\'' +
-        ", posts=" + posts.stream() +
-        ", friends={" + friends.stream().map(User::getName).collect(Collectors.joining(",")) + "}" +
-        ", incomingFriendRequests={" + incomingFriendRequests.stream().map(User::getName).collect(Collectors.joining(",")) + "}" +
         '}';
   }
 
