@@ -8,7 +8,18 @@
 <div layout:fragment="content">
     <div class="row">
         <div class="col-md-9">
-            <img th:src="@{/img/potato.png}" class="img-responsive">
+            <img class="img-responsive" th:src="@{/img/potato-md.png}"
+                 srcset="/img/potato-xxs.png 480w,
+                         /img/potato-xs.png 768w,
+                         /img/potato-sm.png 992w,
+                         /img/potato-md.png 1200w,
+                         /img/potato-lg.png 1920w,
+                         /img/potato-xl.png 2360w"
+                 sizes="(min-width: 1200px) calc((1170px - 2 * 15px) * 9 / 12),
+                        (min-width: 992px) calc((970px - 2 * 15px) * 9 / 12),
+                        (min-width: 768px) calc((750px - 2 * 15px) * 12 / 12),
+                        calc((100vw - 2 * 15px) * 12 / 12)">
+            <!--/* https://ericportis.com/posts/2014/srcset-sizes/ */-->
         </div>
         <div class="col-md-3">
             <h1 id="login-title">potatonet</h1>
