@@ -39,13 +39,14 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/css/**", "/img/**", "/js/**");
+                .antMatchers("/css/**", "/img/**", "/js/**", "/favicon.ico");
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(emailUserDetailsService());
     }
+
 
     @Bean
     public UserDetailsService emailUserDetailsService() {
