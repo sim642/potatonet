@@ -29,7 +29,7 @@ public class ProfileController {
 
   @RequestMapping(value = "/profile", method = RequestMethod.GET)
   public String doGet(@CurrentUser User currentUser, Model model) {
-    model.addAttribute("user", currentUser);
+    model.addAttribute("user", userRepository.findOne(currentUser.getId()));
 
     return "profile";
   }
