@@ -35,6 +35,8 @@ public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+
+  private String password;
   private String idCode;
 
   private String estMail;
@@ -75,6 +77,15 @@ public class User implements UserDetails {
 
   public Long getId() {
     return id;
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getIdCode() {
@@ -177,7 +188,7 @@ public class User implements UserDetails {
       return g1.getAuthority().compareTo(g2.getAuthority());
     }
   }
-  
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -213,11 +224,6 @@ public class User implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return null;
-  }
-
-  @Override
-  public String getPassword() {
-    return ""; // TODO: 12.02.17 don't allow passwordless login
   }
 
   @Override
