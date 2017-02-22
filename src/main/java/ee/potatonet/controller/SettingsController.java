@@ -1,10 +1,15 @@
 package ee.potatonet.controller;
 
+import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +34,8 @@ public class SettingsController {
   }
 
   @PostMapping("/settings")
-  public String doPost(@ModelAttribute PasswordSettings passwordSettings, @CurrentUser User currentUser) {
-    if (!passwordSettings.areMatching()) {
+  public String doPost(@ModelAttribute @Valid PasswordSettings passwordSettings, BindingResult bindingResult, @CurrentUser User currentUser) { // WTF spring magic: http://stackoverflow.com/a/29075342
+    if (bindingResult.hasErrors()) {
       return "redirect:/settings?error";
     }
 
@@ -41,9 +46,13 @@ public class SettingsController {
   }
 
   public static class PasswordSettings {
+    @NotNull
+    @Size(min = 8)
     private String password;
+
     private String passwordConfirm;
 
+    @AssertTrue
     public boolean areMatching() {
       return Objects.equals(password, passwordConfirm);
     }
