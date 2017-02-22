@@ -1,50 +1,42 @@
 package ee.potatonet.eid;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import java.util.Objects;
 
+@Embeddable
 public class EIDDetails {
-  private String idCode;
+  @Embedded
+  private EIDCodeDetails eidCode;
   private String givenName;
   private String surname;
   private String email;
 
-  public EIDDetails(String idCode, String givenName, String surname, String email) {
-    this.idCode = idCode;
+  private EIDDetails() {
+
+  }
+
+  public EIDDetails(EIDCodeDetails eidCode, String givenName, String surname, String email) {
+    this.eidCode = eidCode;
     this.givenName = givenName;
     this.surname = surname;
     this.email = email;
   }
 
-  public String getIdCode() {
-    return idCode;
-  }
-
-  public void setIdCode(String idCode) {
-    this.idCode = idCode;
+  public EIDCodeDetails getEidCode() {
+    return eidCode;
   }
 
   public String getGivenName() {
     return givenName;
   }
 
-  public void setGivenName(String givenName) {
-    this.givenName = givenName;
-  }
-
   public String getSurname() {
     return surname;
   }
 
-  public void setSurname(String surname) {
-    this.surname = surname;
-  }
-
   public String getEmail() {
     return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
   }
 
   public String getFullName() {
@@ -60,7 +52,7 @@ public class EIDDetails {
       return false;
     }
     EIDDetails that = (EIDDetails) o;
-    return Objects.equals(idCode, that.idCode) &&
+    return Objects.equals(eidCode, that.eidCode) &&
         Objects.equals(givenName, that.givenName) &&
         Objects.equals(surname, that.surname) &&
         Objects.equals(email, that.email);
@@ -68,13 +60,13 @@ public class EIDDetails {
 
   @Override
   public int hashCode() {
-    return Objects.hash(idCode, givenName, surname, email);
+    return Objects.hash(eidCode, givenName, surname, email);
   }
 
   @Override
   public String toString() {
     return "EIDDetails{" +
-        "idCode='" + idCode + '\'' +
+        "eidCode=" + eidCode +
         ", givenName='" + givenName + '\'' +
         ", surname='" + surname + '\'' +
         ", email='" + email + '\'' +

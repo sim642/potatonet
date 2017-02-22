@@ -20,7 +20,7 @@
                 </div>
 
                 <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friendRequest, 64)}" class=" pull-left">
-                <h3 th:text="${friendRequest.name}"></h3>
+                <h3 th:text="${friendRequest.fullName}"></h3>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friend, 64)}" class=" pull-left">
-                <h3 th:text="${friend.name}"></h3>
+                <h3 th:text="${friend.fullName}"></h3>
             </div>
         </div>
     </div>

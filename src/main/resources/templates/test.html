@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p th:text="'Hello, ' + ${user.getName()} + ' (' + ${user.getIdCode()} + ', ' + ${user.getEstMail()} + ') !!!'" />
+<!--/*@thymesVar id="user" type="ee.potatonet.data.User"*/-->
+<p th:text="'Hello, ' + ${user.fullName} + ' (' + ${user.eid.eidCode} + ', ' + ${user.eid.email} + ') !!!'" />
 </body>
 </html>

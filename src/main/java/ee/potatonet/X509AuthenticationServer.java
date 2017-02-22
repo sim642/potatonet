@@ -59,7 +59,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_EMAIL");
 
-            User exisitingUser = userRepository.findOneByEstMail(email);
+            User exisitingUser = userRepository.findOneByEidEmail(email);
             if (exisitingUser != null) {
                 System.out.println("User logged in: " + exisitingUser);
                 exisitingUser.setAuthorities(authorities);
@@ -121,7 +121,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_EID");
 
-            User exisitingUser = userRepository.findOneByEstMail(eidDetails.getEmail());
+            User exisitingUser = userRepository.findOneByEidEmail(eidDetails.getEmail());
             if (exisitingUser != null) {
                 System.out.println("User logged in: " + exisitingUser);
                 exisitingUser.setAuthorities(authorities);

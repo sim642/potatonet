@@ -9,7 +9,7 @@ import ee.potatonet.data.User;
 class GravatarAvatarService implements AvatarService {
   @Override
   public String getAvatarUrl(User user, int size) {
-    return String.format("https://www.gravatar.com/avatar/%s?s=%d", getEmailHash(user.getEstMail()), size);
+    return String.format("https://www.gravatar.com/avatar/%s?s=%d", getEmailHash(user.getEid().getEmail()), size);
   }
 
   private static String getEmailHash(String email) {

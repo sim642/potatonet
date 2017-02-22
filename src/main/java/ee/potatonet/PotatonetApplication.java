@@ -30,6 +30,8 @@ import ee.potatonet.data.Post;
 import ee.potatonet.data.User;
 import ee.potatonet.data.repos.PostRepository;
 import ee.potatonet.data.repos.UserRepository;
+import ee.potatonet.eid.EIDCodeDetails;
+import ee.potatonet.eid.EIDDetails;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
 
@@ -128,11 +130,11 @@ public class PotatonetApplication {
 
 	@PostConstruct
 	public void mockSetUp() {
-		User veiko = userRepository.save(new User("", "veiko.kaap@eesti.ee", "Veiko Kääp"));
-		User tiit = userRepository.save(new User("", "tiit.oja@eesti.ee", "Tiit Ojasoo"));
-		User simmo = userRepository.save(new User("", "simmo.saan@eesti.ee", "Simmo Saan"));
-		
-		User wannaBeFriend = userRepository.save(new User("", "wannabe@eesti.ee", "Wanna Be Friend"));
+		User veiko = userRepository.save(new User(new EIDDetails(new EIDCodeDetails("38001230000"), "Veiko", "Kääp", "veiko.kaap@eesti.ee")));
+		User tiit = userRepository.save(new User(new EIDDetails(new EIDCodeDetails("37001230000"), "Tiit", "Oja", "tiit.oja@eesti.ee")));
+		User simmo = userRepository.save(new User(new EIDDetails(new EIDCodeDetails("36001230000"), "Simmo", "Saan", "simmo.saan@eesti.ee")));
+
+		User wannaBeFriend = userRepository.save(new User(new EIDDetails(new EIDCodeDetails("49510201111"), "Wannabe", "Friend", "wannabe@eesti.ee")));
 		veiko.getIncomingFriendRequests().add(wannaBeFriend);
 		simmo.getIncomingFriendRequests().add(wannaBeFriend);
 		tiit.getIncomingFriendRequests().add(wannaBeFriend);
