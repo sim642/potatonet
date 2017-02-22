@@ -7,8 +7,8 @@
 
 <div layout:fragment="content">
     <form class="form-horizontal" th:action="@{/settings}" method="post" th:object="${passwordSettings}">
-        <div class="alert alert-danger" role="alert" th:if="${param.error}">
-            Mismatching passwords
+        <div class="alert alert-danger" role="alert" th:each="error : ${#fields.errors('*')}" th:text="${error}">
+            Error
         </div>
         <div class="alert alert-success" role="alert" th:if="${param.success}">
             Password changed

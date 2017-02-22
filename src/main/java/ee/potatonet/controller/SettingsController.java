@@ -36,7 +36,7 @@ public class SettingsController {
   @PostMapping("/settings")
   public String doPost(@ModelAttribute @Valid PasswordSettings passwordSettings, BindingResult bindingResult, @CurrentUser User currentUser) { // WTF spring magic: http://stackoverflow.com/a/29075342
     if (bindingResult.hasErrors()) {
-      return "redirect:/settings?error";
+      return "settings";
     }
 
     currentUser.setPassword(passwordEncoder.encode(passwordSettings.getPassword()));
@@ -53,7 +53,7 @@ public class SettingsController {
     private String passwordConfirm;
 
     @AssertTrue
-    public boolean areMatching() {
+    public boolean isMatching() {
       return Objects.equals(password, passwordConfirm);
     }
 
