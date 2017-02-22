@@ -2,15 +2,12 @@ package ee.potatonet;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
-
+import java.time.ZonedDateTime;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
-
-import java.time.ZonedDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +20,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
@@ -128,13 +127,14 @@ public class PotatonetApplication {
 	@Autowired
 	private UserRepository userRepository;
 
+
 	@PostConstruct
 	public void mockSetUp() {
-		User veiko = userRepository.save(new User(new EIDDetails(new EIDCodeDetails("38001230000"), "Veiko", "Kääp", "veiko.kaap@eesti.ee")));
-		User tiit = userRepository.save(new User(new EIDDetails(new EIDCodeDetails("37001230000"), "Tiit", "Oja", "tiit.oja@eesti.ee")));
-		User simmo = userRepository.save(new User(new EIDDetails(new EIDCodeDetails("36001230000"), "Simmo", "Saan", "simmo.saan@eesti.ee")));
+		User veiko = createUser("38001230000", "Veiko", "Kääp", "veiko.kaap@eesti.ee", "veiko");
+		User tiit = createUser("37001230000", "Tiit", "Oja", "tiit.oja@eesti.ee", "tiit");
+		User simmo = createUser("36001230000", "Simmo", "Saan", "simmo.saan@eesti.ee", "simmo");
 
-		User wannaBeFriend = userRepository.save(new User(new EIDDetails(new EIDCodeDetails("49510201111"), "Wannabe", "Friend", "wannabe@eesti.ee")));
+		User wannaBeFriend = createUser("49510201111", "Wannabe", "Friend", "wannabe@eesti.ee", "wannabe");
 		veiko.getIncomingFriendRequests().add(wannaBeFriend);
 		simmo.getIncomingFriendRequests().add(wannaBeFriend);
 		tiit.getIncomingFriendRequests().add(wannaBeFriend);
@@ -150,6 +150,13 @@ public class PotatonetApplication {
 		userRepository.save(veiko);
 		userRepository.save(tiit);
 		userRepository.save(simmo);
+	}
+
+	private User createUser(String idCode, String givenName, String surname, String email, String password) {
+		User user = new User(new EIDDetails(new EIDCodeDetails(idCode), givenName, surname, email));
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		user.setPassword(passwordEncoder.encode(password));
+		return userRepository.save(user);
 	}
 
 	private void createPost(User user, String content) {
