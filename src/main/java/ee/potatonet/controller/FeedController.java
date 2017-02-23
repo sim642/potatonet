@@ -14,8 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.ExpressionContext;
-import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.expression.ThymeleafEvaluationContext;
 
 import ee.potatonet.data.Post;
@@ -28,13 +28,13 @@ public class FeedController {
   private final PostRepository postRepository;
 
   private final SimpMessagingTemplate simpMessagingTemplate;
-  private final SpringTemplateEngine springTemplateEngine;
+  private final TemplateEngine templateEngine;
 
   @Autowired
-  public FeedController(PostRepository postRepository, SimpMessagingTemplate simpMessagingTemplate, SpringTemplateEngine springTemplateEngine) {
+  public FeedController(PostRepository postRepository, SimpMessagingTemplate simpMessagingTemplate, TemplateEngine templateEngine) {
     this.postRepository = postRepository;
     this.simpMessagingTemplate = simpMessagingTemplate;
-    this.springTemplateEngine = springTemplateEngine;
+    this.templateEngine = templateEngine;
   }
 
   @RequestMapping(value = "/feed", method = RequestMethod.GET)
@@ -65,12 +65,12 @@ public class FeedController {
 
     User user = (User) ((Authentication) principal).getPrincipal();
 
-    ExpressionContext context = new ExpressionContext(springTemplateEngine.getConfiguration());
+    ExpressionContext context = new ExpressionContext(templateEngine.getConfiguration());
     context.setVariable("postInfo", new Post(user, "test"));
     final ThymeleafEvaluationContext evaluationContext =
         new ThymeleafEvaluationContext(applicationContext, null);
     context.setVariable(ThymeleafEvaluationContext.THYMELEAF_EVALUATION_CONTEXT_CONTEXT_VARIABLE_NAME, evaluationContext);
-    String output = springTemplateEngine.process("common", Collections.singleton("post"), context);
+    String output = templateEngine.process("common", Collections.singleton("post"), context);
     System.out.println(output);
   }
   
