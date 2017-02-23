@@ -8,8 +8,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.TemplateEngine;
 
 import ee.potatonet.TemplateRenderService;
@@ -41,7 +43,19 @@ public class FeedController {
   }
   
   @RequestMapping(value = "/feed", method = RequestMethod.POST)
-  public String savePost(@CurrentUser User currentUser, @ModelAttribute Post post) {
+  public String doPost(@CurrentUser User currentUser, @ModelAttribute Post post) {
+    createPost(currentUser, post);
+    return "redirect:/feed";
+  }
+
+  @PostMapping("/post")
+  @ResponseBody
+  public String doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
+    createPost(currentUser, post);
+    return "";
+  }
+
+  private void createPost(User currentUser, Post post) {
     post.setUser(currentUser);
     post.setCreationDateTime(ZonedDateTime.now());
     Post saved = postRepository.save(post);
@@ -51,10 +65,15 @@ public class FeedController {
 
     String output = templateRenderService.render("common", Collections.singleton("post"), Collections.singletonMap("postInfo", saved));
     System.out.println(output);
+
+    simpMessagingTemplate.convertAndSendToUser(currentUser.getUsername(), "/feed", output);
     currentUser.getFriends().forEach(user -> {
       simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/feed", output);
     });
-    
-    return "redirect:/feed";
   }
+
+  /*@MessageMapping("/feed")
+  public void doMsg(@CurrentUser User currentUser, @Payload String message) {
+    System.out.println(message);
+  }*/
 }
