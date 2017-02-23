@@ -4,7 +4,6 @@ package ee.potatonet.controller;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,17 +48,13 @@ public class FeedController {
     currentUser.getPosts().add(post);
     System.out.println(saved);
     postRepository.findAll();
+
+    String output = templateRenderService.render("common", Collections.singleton("post"), Collections.singletonMap("postInfo", saved));
+    System.out.println(output);
+    currentUser.getFriends().forEach(user -> {
+      simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/feed", output);
+    });
     
     return "redirect:/feed";
   }
-
-  @MessageMapping("/fromSockJSClient")
-  public void handlePost(@CurrentUser User currentUser) {
-    simpMessagingTemplate.convertAndSend("/feed/websocket", "{\"content\": \"stuff\"}");
-
-    Post post = new Post(currentUser, "test");
-    String output = templateRenderService.render("common", Collections.singleton("post"), Collections.singletonMap("postInfo", post));
-    System.out.println(output);
-  }
-  
 }
