@@ -2,7 +2,6 @@ package ee.potatonet;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
-import java.time.ZonedDateTime;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -26,9 +25,10 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import ee.potatonet.data.Post;
+import ee.potatonet.data.PostService;
 import ee.potatonet.data.User;
+import ee.potatonet.data.UserService;
 import ee.potatonet.data.repos.PostRepository;
-import ee.potatonet.data.repos.UserRepository;
 import ee.potatonet.eid.EIDCodeDetails;
 import ee.potatonet.eid.EIDDetails;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
@@ -123,9 +123,9 @@ public class PotatonetApplication {
 
 	
 	@Autowired
-	private PostRepository postRepository;
+	private PostService postService;
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 
 
 	@PostConstruct
@@ -147,21 +147,21 @@ public class PotatonetApplication {
 		veiko.addFriend(simmo);
 		tiit.addFriend(simmo);
 		
-		userRepository.save(veiko);
-		userRepository.save(tiit);
-		userRepository.save(simmo);
+		userService.save(veiko);
+		userService.save(tiit);
+		userService.save(simmo);
 	}
 
 	private User createUser(String idCode, String givenName, String surname, String email, String password) {
 		User user = new User(new EIDDetails(new EIDCodeDetails(idCode), givenName, surname, email));
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passwordEncoder.encode(password));
-		return userRepository.save(user);
+		return userService.save(user);
 	}
 
 	private void createPost(User user, String content) {
-		Post entity = new Post(user, content);
-		entity.setCreationDateTime(ZonedDateTime.now());
-		postRepository.save(entity);
+		Post post = new Post();
+		post.setContent(content);
+		postService.savePostToUser(post, user);
 	}
 }
