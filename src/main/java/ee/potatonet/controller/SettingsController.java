@@ -16,16 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import ee.potatonet.data.User;
+import ee.potatonet.data.UserService;
 import ee.potatonet.data.repos.UserRepository;
 
 @Controller
 public class SettingsController {
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
+  private final UserService userService;
 
   @Autowired
-  private UserRepository userRepository;
+  public SettingsController(PasswordEncoder passwordEncoder, UserService userService) {
+    this.passwordEncoder = passwordEncoder;
+    this.userService = userService;
+  }
 
   @RequestMapping(value = "/settings", method = RequestMethod.GET)
   public String doGet(Model model) {
@@ -39,8 +43,9 @@ public class SettingsController {
       return "settings";
     }
 
+    currentUser = userService.find(currentUser);
     currentUser.setPassword(passwordEncoder.encode(passwordSettings.getPassword()));
-    userRepository.save(currentUser);
+    userService.save(currentUser);
 
     return "redirect:/settings?success";
   }
