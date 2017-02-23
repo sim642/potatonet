@@ -132,8 +132,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
                 newUser.setAuthorities(authorities);
 
                 System.out.println("Created user: " + newUser);
-                userRepository.save(newUser);
-                return newUser;
+                return userRepository.save(newUser);
             }
         };
     }

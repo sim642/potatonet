@@ -36,21 +36,20 @@ public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-
   private String password;
 
   @Embedded
   private EIDDetails eid;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Post> posts;
-  @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
   @JoinTable(name = "tbl_friends",
       joinColumns = @JoinColumn(name = "personId"),
       inverseJoinColumns = @JoinColumn(name = "friendId")
   )
   private Set<User> friends;
-  @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
   @JoinTable(name = "tbl_friend_requests",
       joinColumns = @JoinColumn(name = "personId"),
       inverseJoinColumns = @JoinColumn(name = "friendId")
@@ -193,9 +192,6 @@ public class User implements UserDetails {
     return "User{" +
         "id=" + id +
         ", eid=" + eid +
-        ", posts={" + posts.stream().map(Post::getContent).collect(Collectors.joining(", ")) + "}" +
-        ", friends={" + friends.stream().map(User::getFullName).collect(Collectors.joining(", ")) + "}" +
-        ", incomingFriendRequests={" + incomingFriendRequests.stream().map(User::getFullName).collect(Collectors.joining(", ")) + "}" +
         '}';
   }
 

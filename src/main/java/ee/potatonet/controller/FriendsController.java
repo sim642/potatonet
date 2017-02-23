@@ -6,8 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.repos.UserRepository;
@@ -31,15 +29,20 @@ public class FriendsController {
   @PostMapping(value = "/friends/accept/{id}")
   public String acceptFriendRequest(@PathVariable("id") long id, @CurrentUser User currentUser) {
     User newFriend = userRepository.findOne(id);
+    currentUser = userRepository.findOne(currentUser.getId());
     currentUser.addFriend(newFriend);
     currentUser.getIncomingFriendRequests().remove(newFriend);
+    userRepository.save(currentUser);
+    userRepository.save(newFriend);
     
     return "redirect:/friends";
   }
 
   @PostMapping(value = "/friends/reject/{id}")
   public String rejectFriendRequest(@PathVariable("id") long id, @CurrentUser User currentUser) {
+    currentUser = userRepository.findOne(currentUser.getId());
     currentUser.getIncomingFriendRequests().remove(userRepository.findOne(id));
+    userRepository.save(currentUser);
 
     return "redirect:/friends";
   }
