@@ -22,7 +22,8 @@ public class CurrentUserControllerAdvice {
   public void currentUserAttribute(@CurrentUser User currentUser, Model model) {
     if (currentUser != null) {
       currentUser = userRepository.findOne(currentUser.getId());
+      model.addAttribute("currentUser", currentUser);
+      model.addAttribute("incomingFriendRequestCount", userRepository.countIncomingFriendRequests(currentUser));
     }
-    model.addAttribute("currentUser", currentUser);
   }
 }
