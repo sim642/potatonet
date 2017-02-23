@@ -5,10 +5,10 @@ function onPosts (msg) {
 }
 
 $(function () {
-  var sockJs = new SockJS('/feed-ws');
+  var sockJs = new SockJS('/stomp');
   stomp = Stomp.over(sockJs);
   stomp.connect({}, function () {
-    stomp.subscribe('/topic/posts/' + $("#userId").val(), onPosts);
+    stomp.subscribe('/topic/posts/' + userId, onPosts);
   });
 });
 

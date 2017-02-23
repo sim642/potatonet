@@ -21,11 +21,12 @@ public class WebSocketConfigration extends AbstractWebSocketMessageBrokerConfigu
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry registry) {
-    registry.enableSimpleBroker("/feed", "/topic");
+    registry.setApplicationDestinationPrefixes("/app");
+    registry.enableSimpleBroker("/topic", "/queue");
   }
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-    stompEndpointRegistry.addEndpoint("/feed-ws").withSockJS();
+    stompEndpointRegistry.addEndpoint("/stomp").withSockJS();
   }
 }

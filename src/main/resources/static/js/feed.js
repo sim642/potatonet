@@ -5,10 +5,12 @@ function onFeed (msg) {
 }
 
 $(function () {
-  var sockJs = new SockJS('/feed-ws');
+  var sockJs = new SockJS('/stomp');
   stomp = Stomp.over(sockJs);
   stomp.connect({}, function () {
-    stomp.subscribe('/user/feed', onFeed);
+    $.each(userIds, function (i, userId) {
+      stomp.subscribe('/topic/posts/' + userId, onFeed);
+    });
 
     $("#post").submit(function (event) {
       var $content = $("#content");

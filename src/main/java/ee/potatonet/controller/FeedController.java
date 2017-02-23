@@ -3,6 +3,8 @@ package ee.potatonet.controller;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -39,6 +41,7 @@ public class FeedController {
   public String doGet(@CurrentUser User currentUser, Model model) {
     model.addAttribute("post", new Post());
     model.addAttribute("posts", postRepository.findAllPostsByFriendsAndMe(currentUser));
+    model.addAttribute("userIds", Stream.concat(Stream.of(currentUser), currentUser.getFriends().stream()).map(User::getId).collect(Collectors.toList()));
     return "feed";
   }
   
@@ -64,12 +67,6 @@ public class FeedController {
     postRepository.findAll();
 
     String output = templateRenderService.render("common", Collections.singleton("post"), Collections.singletonMap("postInfo", saved));
-    System.out.println(output);
-
-    simpMessagingTemplate.convertAndSendToUser(currentUser.getUsername(), "/feed", output);
-    currentUser.getFriends().forEach(user -> {
-      simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/feed", output);
-    });
     simpMessagingTemplate.convertAndSend("/topic/posts/" + currentUser.getId(), output);
   }
 
