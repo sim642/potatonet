@@ -21,7 +21,7 @@ public class WebSocketConfigration extends AbstractWebSocketMessageBrokerConfigu
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry registry) {
-    registry.enableSimpleBroker("/feed");
+    registry.enableSimpleBroker("/feed", "/topic");
   }
 
   @Override

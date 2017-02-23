@@ -2,10 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
 <head>
     <title>profile</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> <!-- This is bad here! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.min.js"></script>
+    <script th:src="@{/js/profile.js}"></script>
 </head>
 <body>
 
 <div layout:fragment="content">
+    <input type="hidden" th:value="${user.id}" id="userId"/>
+
     <div class="panel panel-default">
         <div class="panel-body">
             <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="pull-left">
@@ -15,7 +21,7 @@
     </div>
 
 
-    <div th:each="postInfo : ${user.posts}">
+    <div id="posts" th:each="postInfo : ${user.posts}">
         <div th:replace="~{common :: post (${postInfo})}">
         </div>
     </div>

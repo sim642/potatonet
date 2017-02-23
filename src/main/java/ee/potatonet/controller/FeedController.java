@@ -70,6 +70,7 @@ public class FeedController {
     currentUser.getFriends().forEach(user -> {
       simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/feed", output);
     });
+    simpMessagingTemplate.convertAndSend("/topic/posts/" + currentUser.getId(), output);
   }
 
   /*@MessageMapping("/feed")
