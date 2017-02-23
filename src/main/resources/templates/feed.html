@@ -26,27 +26,20 @@
     </div>
 </div>
 
-<script layout:fragment="fallback">
-  fallback.load({
-    Stomp: [
-      'https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js',
-      '/js/stomp.min.js'
-    ],
-    SockJS: [
-      'https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.min.js',
-      '/js/sockjs.min.js'
-    ],
-    feedjs: [
-      '/js/feed.js'
-    ]
-  }, {
-    shim: {
-      'Stomp': ['jQuery'],
-      'SockJS': ['jQuery', 'Stomp'],
-      'feedjs': ['Stomp', 'SockJS']
-    }
-  });
-</script>
+<th:block layout:fragment="fallback">
+    <script th:src="@{/js/fallback-websocket.js}"></script>
+    <script>
+      fallback.load({
+        feedjs: [
+          '/js/feed.js'
+        ]
+      }, {
+        shim: {
+          'feedjs': ['Stomp', 'SockJS']
+        }
+      });
+    </script>
+</th:block>
 
 </body>
 </html>
