@@ -59,7 +59,7 @@ public class User implements UserDetails {
   @Transient
   private Set<? extends GrantedAuthority> authorities;
 
-  private User() {
+  public User() {
 
   }
 
