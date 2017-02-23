@@ -1,14 +1,12 @@
 package ee.potatonet.controller;
 
 
-import java.security.Principal;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -60,13 +58,11 @@ public class FeedController {
   private ApplicationContext applicationContext;
 
   @MessageMapping("/fromSockJSClient")
-  public void handlePost(@CurrentUser User currentUser, Principal principal) {
+  public void handlePost(@CurrentUser User currentUser) {
     simpMessagingTemplate.convertAndSend("/feed/websocket", "{\"content\": \"stuff\"}");
 
-    User user = (User) ((Authentication) principal).getPrincipal();
-
     ExpressionContext context = new ExpressionContext(templateEngine.getConfiguration());
-    context.setVariable("postInfo", new Post(user, "test"));
+    context.setVariable("postInfo", new Post(currentUser, "test"));
     final ThymeleafEvaluationContext evaluationContext =
         new ThymeleafEvaluationContext(applicationContext, null);
     context.setVariable(ThymeleafEvaluationContext.THYMELEAF_EVALUATION_CONTEXT_CONTEXT_VARIABLE_NAME, evaluationContext);
