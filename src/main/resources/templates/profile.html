@@ -17,7 +17,7 @@
     </div>
 
 
-    <div th:each="postInfo : ${user.posts}">
+    <div th:each="postInfo : ${posts}">
         <div th:replace="~{common :: post (${postInfo})}">
         </div>
     </div>
