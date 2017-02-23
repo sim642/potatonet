@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{navbar}">
 <head>
     <title>feed</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> <!-- This is bad here! -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.min.js"></script>
-    <script th:src="@{/js/datapush.js}"></script>
 </head>
 <body>
 
@@ -14,7 +11,7 @@
         <div class="panel-heading">New post</div>
         <div class="panel-body">
             <form id="post" th:action="@{/feed}" th:object="${post}" method="post">
-                <textarea class="form-control" rows="3" th:field="*{content}" ></textarea>
+                <textarea class="form-control" rows="3" th:field="*{content}"></textarea>
                 <button id="postButton" type="submit" class="btn btn-default pull-right">Post</button>
             </form>
         </div>
@@ -26,5 +23,28 @@
     </div>
 </div>
 
+<div layout:fragment="fallback">
+    <script>
+        fallback.load({
+            Stomp: [
+                'https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js',
+                '/js/stomp.min.js'
+            ],
+            SockJS: [
+                'https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.min.js',
+                '/js/sockjs.min.js'
+            ],
+            datapush: [
+                '/js/datapush.js'
+            ]
+        }, {
+            shim: {
+                'Stomp': ['jQuery'],
+                'SockJS': ['jQuery', 'Stomp'],
+                'datapush': ['Stomp', 'SockJS']
+            }
+        });
+    </script>
+</div>
 </body>
 </html>
