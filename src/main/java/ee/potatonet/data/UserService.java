@@ -24,6 +24,10 @@ public class UserService {
   public User find(User user) {
     return findById(user.getId());
   }
+
+  public User findOneByEidEmail(String eidEmail) {
+    return userRepository.findOneByEidEmail(eidEmail);
+  }
   
   public User save(User user) {
     return userRepository.save(user);

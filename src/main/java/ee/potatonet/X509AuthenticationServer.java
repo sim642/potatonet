@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ee.potatonet.data.User;
+import ee.potatonet.data.UserService;
 import ee.potatonet.data.repos.UserRepository;
 import ee.potatonet.eid.AuthenticationSuccessHandlerPostProcessor;
 import ee.potatonet.eid.EIDDetails;
@@ -33,7 +34,7 @@ import ee.potatonet.eid.PrincipalExtractorPostProcessor;
 public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private RedirectStrategy redirectStrategy;
@@ -59,7 +60,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_EMAIL");
 
-            User exisitingUser = userRepository.findOneByEidEmail(email);
+            User exisitingUser = userService.findOneByEidEmail(email);
             if (exisitingUser != null) {
                 System.out.println("User logged in: " + exisitingUser);
                 exisitingUser.setAuthorities(authorities);
@@ -121,7 +122,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_EID");
 
-            User exisitingUser = userRepository.findOneByEidEmail(eidDetails.getEmail());
+            User exisitingUser = userService.findOneByEidEmail(eidDetails.getEmail());
             if (exisitingUser != null) {
                 System.out.println("User logged in: " + exisitingUser);
                 exisitingUser.setAuthorities(authorities);
@@ -132,7 +133,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
                 newUser.setAuthorities(authorities);
 
                 System.out.println("Created user: " + newUser);
-                return userRepository.save(newUser);
+                return userService.save(newUser);
             }
         };
     }
