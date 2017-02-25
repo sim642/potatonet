@@ -6,24 +6,24 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import ee.potatonet.data.User;
-import ee.potatonet.data.repos.UserRepository;
+import ee.potatonet.data.UserService;
 
 @ControllerAdvice
 public class CurrentUserControllerAdvice {
   
-  private final UserRepository userRepository;
+  private final UserService userService;
 
   @Autowired
-  public CurrentUserControllerAdvice(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  public CurrentUserControllerAdvice(UserService userService) {
+    this.userService = userService;
   }
 
   @ModelAttribute
   public void currentUserAttribute(@CurrentUser User currentUser, Model model) {
     if (currentUser != null) {
-      currentUser = userRepository.findOne(currentUser.getId());
+      currentUser = userService.find(currentUser);
       model.addAttribute("currentUser", currentUser);
-      model.addAttribute("incomingFriendRequestCount", userRepository.countIncomingFriendRequests(currentUser));
+      model.addAttribute("incomingFriendRequestCount", userService.countUserIncomingFriendRequests(currentUser));
     }
   }
 }

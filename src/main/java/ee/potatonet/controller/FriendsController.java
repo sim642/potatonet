@@ -8,41 +8,33 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import ee.potatonet.data.User;
-import ee.potatonet.data.repos.UserRepository;
+import ee.potatonet.data.UserService;
 
 @Controller
 public class FriendsController {
   
-  private final UserRepository userRepository;
+  private final UserService userService;
 
   @Autowired
-  public FriendsController(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  public FriendsController(UserService userService) {
+    this.userService = userService;
   }
 
   @GetMapping(value = "/friends")
   public String doGet(Model model) {
-    // TODO: Add logic
     return "friends";
   }
   
   @PostMapping(value = "/friends/accept/{id}")
   public String acceptFriendRequest(@PathVariable("id") long id, @CurrentUser User currentUser) {
-    User newFriend = userRepository.findOne(id);
-    currentUser = userRepository.findOne(currentUser.getId());
-    currentUser.addFriend(newFriend);
-    currentUser.getIncomingFriendRequests().remove(newFriend);
-    userRepository.save(currentUser);
-    userRepository.save(newFriend);
+    userService.addFriendship(currentUser, userService.findById(id));
     
     return "redirect:/friends";
   }
 
   @PostMapping(value = "/friends/reject/{id}")
   public String rejectFriendRequest(@PathVariable("id") long id, @CurrentUser User currentUser) {
-    currentUser = userRepository.findOne(currentUser.getId());
-    currentUser.getIncomingFriendRequests().remove(userRepository.findOne(id));
-    userRepository.save(currentUser);
+    userService.removeFriendRequests(currentUser, userService.findById(id));
 
     return "redirect:/friends";
   }
