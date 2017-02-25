@@ -6,6 +6,10 @@
 <body>
 
 <div layout:fragment="content">
+    <script th:inline="javascript">
+        var userId = [[${user.id}]];
+    </script>
+
     <div class="panel panel-default">
         <div class="panel-body">
             <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="pull-left">
@@ -17,11 +21,26 @@
     </div>
 
 
-    <div th:each="postInfo : ${posts}">
+    <div id="posts" th:each="postInfo : ${posts}">
         <div th:replace="~{common :: post (${postInfo})}">
         </div>
     </div>
 </div>
+
+<th:block layout:fragment="fallback">
+    <script th:src="@{/js/fallback-websocket.js}"></script>
+    <script>
+      fallback.load({
+        profilejs: [
+          '/js/profile.js'
+        ]
+      }, {
+        shim: {
+          'profilejs': ['Stomp', 'SockJS']
+        }
+      });
+    </script>
+</th:block>
 
 </body>
 </html>
