@@ -26,6 +26,9 @@
                 <li th:classappend="(*{active} == 'friends')? 'active' : _">
                     <a th:href="@{/friends}">Friends <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span></a>
                 </li>
+                <li th:classappend="(*{active} == 'people')? 'active' : _">
+                    <a th:href="@{/people}">People</a>
+                </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
