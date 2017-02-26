@@ -23,6 +23,19 @@
     Here be content!
 </div>
 
+
+<div class="container">
+    <hr/>
+    <footer>
+        <p class="text-muted text-center">
+            <small>
+                <span th:text="|build: ${@buildProperties.name} ${@buildProperties.version} (${@buildProperties.time})|" th:if="${hasBuildProperties}"/>
+                <span th:text="|git: ${@gitProperties.get('commit.id.describe')} (${@gitProperties.branch})|" th:if="${hasGitProperties}"/>
+            </small>
+        </p>
+    </footer>
+</div>
+
 <script th:src="@{/js/fallback.min.js}" ></script>
 <script th:src="@{/js/fallback-master.js}"></script>
 
