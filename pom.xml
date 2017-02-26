@@ -11,6 +11,12 @@
 	<name>potatonet</name>
 	<description>Social network web application made as a Web Application Development course work</description>
 
+	<scm>
+		<connection>scm:git:https://github.com/sim642/potatonet.git</connection>
+		<developerConnection>scm:git:git@github.com:sim642/potatonet.git</developerConnection>
+		<url>https://github.com/sim642/potatonet</url>
+	</scm>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
