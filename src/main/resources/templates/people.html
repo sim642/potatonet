@@ -8,14 +8,14 @@
 <div layout:fragment="content">
     <h3>People</h3>
     <div th:each="user : ${users}">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class=" pull-left">
-                <a th:href="@{/profile/{id}(id=${user.id})}">
-                    <h3 th:text="${user.fullName}"></h3>
-                </a>
+        <a th:href="@{/profile/{id}(id=${user.id})}">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class=" pull-left">
+                        <h3 th:text="${user.fullName}"></h3>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
 </div>
 
