@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{master}">
+<head>
+    <title>ERROR</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2>:(</h2>
+    <h3>Something went wrong!</h3>
+    <!--/*@thymesVar id="errorDetails" type="ee.potatonet.controller.ErrorDetails"*/-->
+    <h4 th:text="${errorDetails.status + ' ' + errorDetails.error}"/>
+    <pre th:if="${showErrors}" th:text="${errorDetails.timeStamp + ' ' + errorDetails.message + ' '+ errorDetails.trace}"/>
+</div>
+</body>
+</html>

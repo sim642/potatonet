@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
+<head>
+    <title>profile</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <script th:inline="javascript">
+        var userId = [[${user.id}]];
+    </script>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="pull-left">
+            <h2 th:text="${user.fullName}"></h2>
+            <form th:if="${!currentUser.friends.contains(user) && !currentUser.equals(user)}" th:action="@{/profile/add/{id}(id=${user.id})}" method="post">
+                <button  type="submit" class="btn btn-primary">Add friend</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="posts" th:each="postInfo : ${posts}">
+        <div th:replace="~{common :: post (${postInfo})}">
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="fallback">
+    <script th:src="@{/js/fallback-websocket.js}"></script>
+    <script>
+      fallback.load({
+        profilejs: [
+          '/js/profile.js'
+        ]
+      }, {
+        shim: {
+          'profilejs': ['Stomp', 'SockJS']
+        }
+      });
+    </script>
+</th:block>
+
+</body>
+</html>

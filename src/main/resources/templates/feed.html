@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
+<head>
+    <title>feed</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <script th:inline="javascript">
+        var userIds = [[${userIds}]];
+    </script>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">New post</div>
+        <div class="panel-body">
+            <form id="post" th:action="@{/feed}" th:object="${post}" method="post">
+                <textarea class="form-control" rows="3" th:field="*{content}"></textarea>
+                <button id="postButton" type="submit" class="btn btn-default pull-right">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="feed" th:each="postInfo : ${posts}">
+        <div th:replace="~{common :: post (${postInfo})}">
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="fallback">
+    <script th:src="@{/js/fallback-websocket.js}"></script>
+    <script>
+      fallback.load({
+        feedjs: [
+          '/js/feed.js'
+        ]
+      }, {
+        shim: {
+          'feedjs': ['Stomp', 'SockJS']
+        }
+      });
+    </script>
+</th:block>
+
+</body>
+</html>
