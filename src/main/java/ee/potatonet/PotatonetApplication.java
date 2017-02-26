@@ -1,6 +1,5 @@
 package ee.potatonet;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
@@ -16,21 +15,9 @@ import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import ee.potatonet.data.Post;
-import ee.potatonet.data.PostService;
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
-import ee.potatonet.data.repos.PostRepository;
-import ee.potatonet.eid.EIDCodeDetails;
-import ee.potatonet.eid.EIDDetails;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
 
@@ -99,15 +86,6 @@ public class PotatonetApplication {
 	public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
 		return new JdbcTemplate(dataSource);
 	}
-	
-	@Bean
-	public DataSource dataSource() {
-		EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
-				.setType(EmbeddedDatabaseType.HSQL)
-				.build();
-		
-		return db;
-	}
 
 	@Bean
 	public TemplateEngine templateEngine() {
@@ -119,49 +97,5 @@ public class PotatonetApplication {
 	@Bean
 	public AvatarService avatarService(GravatarAvatarService gravatarAvatarService) {
 		return gravatarAvatarService;
-	}
-
-	
-	@Autowired
-	private PostService postService;
-	@Autowired
-	private UserService userService;
-
-
-	@PostConstruct
-	public void mockSetUp() {
-		User veiko = createUser("38001230000", "Veiko", "Kääp", "veiko.kaap@eesti.ee", "veiko");
-		User tiit = createUser("37001230000", "Tiit", "Oja", "tiit.oja@eesti.ee", "tiit");
-		User simmo = createUser("36001230000", "Simmo", "Saan", "simmo.saan@eesti.ee", "simmo");
-
-		User wannaBeFriend = createUser("49510201111", "Wannabe", "Friend", "wannabe@eesti.ee", "wannabe");
-		veiko.getIncomingFriendRequests().add(wannaBeFriend);
-		simmo.getIncomingFriendRequests().add(wannaBeFriend);
-		tiit.getIncomingFriendRequests().add(wannaBeFriend);
-		
-		createPost(veiko, "Tere, ma Veiko");
-		createPost(tiit, "Tere, ma Tiit");
-		createPost(simmo, "Tere, ma Simmo");
-
-		veiko.addFriend(tiit);
-		veiko.addFriend(simmo);
-		tiit.addFriend(simmo);
-		
-		userService.save(veiko);
-		userService.save(tiit);
-		userService.save(simmo);
-	}
-
-	private User createUser(String idCode, String givenName, String surname, String email, String password) {
-		User user = new User(new EIDDetails(new EIDCodeDetails(idCode), givenName, surname, email));
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		user.setPassword(passwordEncoder.encode(password));
-		return userService.save(user);
-	}
-
-	private void createPost(User user, String content) {
-		Post post = new Post();
-		post.setContent(content);
-		postService.savePostToUser(post, user);
 	}
 }
