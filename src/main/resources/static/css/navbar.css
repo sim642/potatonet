@@ -10,3 +10,8 @@ body {
     float: left;
     margin-right: 15px;
 }
+
+.navbar-brand img {
+    margin-top: -13px;
+    height: 48px;
+}
