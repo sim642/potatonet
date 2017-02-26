@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
+<head>
+    <title>people</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h3>People</h3>
+    <div th:each="user : ${users}">
+        <a th:href="@{/profile/{id}(id=${user.id})}">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class=" pull-left">
+                        <h3 th:text="${user.fullName}"></h3>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
