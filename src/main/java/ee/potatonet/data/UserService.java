@@ -28,6 +28,10 @@ public class UserService {
     return findById(user.getId());
   }
 
+  public List<User> findAll() {
+    return userRepository.findAll();
+  }
+
   public User findOneByEidEmail(String eidEmail) {
     return userRepository.findOneByEidEmail(eidEmail);
   }
