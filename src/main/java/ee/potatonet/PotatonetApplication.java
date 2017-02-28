@@ -51,7 +51,7 @@ public class PotatonetApplication {
 			@Override
 			protected void customizeConnector(Connector connector) {
 				super.customizeConnector(connector);
-				connector.setParseBodyMethods("POST,DELETE");
+				connector.setParseBodyMethods("POST,PUT,DELETE");
 			}
 		};
 		tomcat.addAdditionalTomcatConnectors(createSslConnector());

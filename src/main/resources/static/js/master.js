@@ -18,22 +18,16 @@ $(function () {
   $(".btn-friend-accept").click(function () {
     var friendRequestId = $(this).attr("data-friend-request-id");
     $.ajax({
-      url: "/users/" + currentUserId + "/friends",
-      method: "POST",
-      data: {
-        "friendRequestId": friendRequestId
-      }
+      url: "/users/" + currentUserId + "/friends/" + friendRequestId,
+      method: "PUT"
     });
   });
 
   $(".btn-friend-reject").click(function () {
     var friendRequestId = $(this).attr("data-friend-request-id");
     $.ajax({
-      url: "/users/" + currentUserId + "/friendrequests",
-      method: "DELETE",
-      data: {
-        "friendRequestId": friendRequestId
-      }
+      url: "/users/" + currentUserId + "/friendrequests/" + friendRequestId,
+      method: "DELETE"
     });
   });
 });

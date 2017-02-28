@@ -6,9 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.potatonet.data.User;
@@ -36,9 +35,9 @@ public class FriendsController {
     return "friends";
   }
 
-  @PostMapping
+  @PutMapping("/{friendRequestId}")
   @ResponseBody
-  public void doPost(@ModelAttribute User user, @RequestParam("friendRequestId") Long friendRequestId) {
+  public void doIdPut(@ModelAttribute User user, @PathVariable("friendRequestId") Long friendRequestId) {
     User friendUser = userService.findById(friendRequestId);
     userService.addFriendship(user, friendUser);
   }
