@@ -2,8 +2,7 @@ package ee.potatonet.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +14,13 @@ import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
 
 @Controller
-@RequestMapping("/users/{userId}/friends")
-public class FriendsController {
-  
+@RequestMapping("/users/{userId}/friendrequests")
+public class FriendRequestsController {
+
   private final UserService userService;
 
   @Autowired
-  public FriendsController(UserService userService) {
+  public FriendRequestsController(UserService userService) {
     this.userService = userService;
   }
 
@@ -30,17 +29,18 @@ public class FriendsController {
     return userService.findById(userId);
   }
 
-  @GetMapping
-  public String doGet(@ModelAttribute User user, Model model) {
-    model.addAttribute("user", user);
-    return "friends";
-  }
-
   @PostMapping
   @ResponseBody
-  public String doPost(@ModelAttribute User user, @RequestParam("friendUserId") Long friendUserId) {
-    User friendUser = userService.findById(friendUserId);
-    userService.addFriendship(user, friendUser);
+  public String doPost(@ModelAttribute User user, @CurrentUser User currentUser) {
+    userService.addFriendRequest(currentUser, user);
+    return "";
+  }
+
+  @DeleteMapping
+  @ResponseBody
+  public String doDelete(@ModelAttribute User user, @RequestParam("friendUserId") Long friendUserId) {
+    User friend = userService.findById(friendUserId);
+    userService.removeFriendRequests(user, friend);
     return "";
   }
 }

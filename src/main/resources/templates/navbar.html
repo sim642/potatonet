@@ -24,16 +24,16 @@
                     <a th:href="@{/feed}">Feed</a>
                 </li>
                 <li th:classappend="(*{active} == 'friends')? 'active' : _">
-                    <a th:href="@{/friends}">Friends <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span></a>
+                    <a th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">Friends <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span></a>
                 </li>
                 <li th:classappend="(*{active} == 'people')? 'active' : _">
-                    <a th:href="@{/people}">People</a>
+                    <a th:href="@{/users}">People</a>
                 </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 <li th:classappend="(*{active} == 'profile')? 'active' : _">
-                    <a th:href="@{/profile}">
+                    <a th:href="@{/users/{userId}(userId=${currentUser.id})}">
                         <img src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
                         <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.User"*/-->
                         <span th:text="${currentUser.fullName}"></span>

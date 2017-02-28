@@ -6,23 +6,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import ee.potatonet.data.PostService;
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
 
 @Controller
-@RequestMapping("/users/{userId}/friends")
-public class FriendsController {
-  
+@RequestMapping("/users/{userId}")
+public class UserController {
+
   private final UserService userService;
+  private final PostService postService;
 
   @Autowired
-  public FriendsController(UserService userService) {
+  public UserController(UserService userService, PostService postService) {
     this.userService = userService;
+    this.postService = postService;
   }
 
   @ModelAttribute
@@ -33,14 +33,7 @@ public class FriendsController {
   @GetMapping
   public String doGet(@ModelAttribute User user, Model model) {
     model.addAttribute("user", user);
-    return "friends";
-  }
-
-  @PostMapping
-  @ResponseBody
-  public String doPost(@ModelAttribute User user, @RequestParam("friendUserId") Long friendUserId) {
-    User friendUser = userService.findById(friendUserId);
-    userService.addFriendship(user, friendUser);
-    return "";
+    model.addAttribute("posts", postService.getUserProfilePosts(user));
+    return "profile";
   }
 }

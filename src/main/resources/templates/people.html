@@ -8,10 +8,10 @@
 <div layout:fragment="content">
     <h3>People</h3>
     <div th:each="user : ${users}">
-        <a th:href="@{/profile/{id}(id=${user.id})}">
+        <a th:href="@{/users/{userId}(userId=${user.id})}">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class=" pull-left">
+                    <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="pull-left">
                         <h3 th:text="${user.fullName}"></h3>
                 </div>
             </div>

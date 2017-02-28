@@ -7,7 +7,7 @@
 
 <div layout:fragment="content">
     <h3>Friend requests</h3>
-    <div th:each="friendRequest : ${currentUser.incomingFriendRequests}">
+    <div th:each="friendRequest : ${user.incomingFriendRequests}">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="btn-group pull-right" role="group">
@@ -19,17 +19,17 @@
                     </form>
                 </div>
 
-                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friendRequest, 64)}" class=" pull-left">
+                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friendRequest, 64)}" class="pull-left">
                 <h3 th:text="${friendRequest.fullName}"></h3>
             </div>
         </div>
     </div>
 
     <h3>Friends</h3>
-    <div th:each="friend : ${currentUser.friends}">
+    <div th:each="friend : ${user.friends}">
         <div class="panel panel-default">
             <div class="panel-body">
-                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friend, 64)}" class=" pull-left">
+                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friend, 64)}" class="pull-left">
                 <h3 th:text="${friend.fullName}"></h3>
             </div>
         </div>
