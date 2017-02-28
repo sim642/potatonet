@@ -6,30 +6,17 @@
 <body>
 
 <div layout:fragment="content">
-    <h3>Friend requests</h3>
-    <div th:each="friendRequest : ${user.incomingFriendRequests}">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="btn-group pull-right" role="group">
-                    <button type="button" class="btn btn-success btn-friend-accept" th:data-friend-request-id="${friendRequest.id}">Accept</button>
-                    <button type="button" class="btn btn-danger btn-friend-reject" th:data-friend-request-id="${friendRequest.id}">Reject</button>
-                </div>
-
-                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friendRequest, 64)}" class="pull-left">
-                <h3 th:text="${friendRequest.fullName}"></h3>
-            </div>
-        </div>
-    </div>
+    <th:block th:if="${currentUser.equals(user)}">
+        <h3>Friend requests</h3>
+        <th:block th:each="friendRequest : ${user.incomingFriendRequests}">
+            <div th:replace="~{common :: userPanel (${friendRequest})}"></div>
+        </th:block>
+    </th:block>
 
     <h3>Friends</h3>
-    <div th:each="friend : ${user.friends}">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friend, 64)}" class="pull-left">
-                <h3 th:text="${friend.fullName}"></h3>
-            </div>
-        </div>
-    </div>
+    <th:block th:each="friend : ${user.friends}">
+        <div th:replace="~{common :: userPanel (${friend})}"></div>
+    </th:block>
 </div>
 
 </body>

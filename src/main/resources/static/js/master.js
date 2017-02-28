@@ -13,6 +13,8 @@ $(function () {
       url: "/users/" + userId + "/friendrequests",
       method: "POST"
     });
+
+    return false;
   });
 
   $(".btn-friend-accept").click(function () {
@@ -21,6 +23,8 @@ $(function () {
       url: "/users/" + currentUserId + "/friends/" + friendRequestId,
       method: "PUT"
     });
+
+    return false;
   });
 
   $(".btn-friend-reject").click(function () {
@@ -29,6 +33,8 @@ $(function () {
       url: "/users/" + currentUserId + "/friendrequests/" + friendRequestId,
       method: "DELETE"
     });
+
+    return false;
   });
 });
 

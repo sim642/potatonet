@@ -7,16 +7,9 @@
 
 <div layout:fragment="content">
     <h3>People</h3>
-    <div th:each="user : ${users}">
-        <a th:href="@{/users/{userId}(userId=${user.id})}">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="pull-left">
-                        <h3 th:text="${user.fullName}"></h3>
-                </div>
-            </div>
-        </a>
-    </div>
+    <th:block th:each="user : ${users}">
+        <div th:replace="~{common :: userPanel (${user})}"></div>
+    </th:block>
 </div>
 
 </body>
