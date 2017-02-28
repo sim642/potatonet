@@ -1,12 +1,8 @@
 package ee.potatonet.data;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -19,6 +15,7 @@ public class Post {
   @JoinColumn(name = "user_id")
   private User user;
 
+  @Column(columnDefinition= "LONGVARCHAR")
   private String content;
   
   private ZonedDateTime creationDateTime;

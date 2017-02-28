@@ -1,6 +1,9 @@
 .btn-eid {
     height: 2.5em;
 }
+.panel-body  {
+    word-break:break-all
+}
 
 #login-title {
     font-size: 63px;
