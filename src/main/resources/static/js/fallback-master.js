@@ -14,9 +14,13 @@ fallback.load({
   bootstrapThemeCSS: [
     'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css',
     '/css/bootstrap-theme.min.css'
+  ],
+  masterjs: [
+    '/js/master.js'
   ]
 }, {
   shim: {
-    'jQuery.fn.modal': ['jQuery']
+    'jQuery.fn.modal': ['jQuery'],
+    'masterjs': ['jQuery', 'jQuery.fn.modal']
   }
 });

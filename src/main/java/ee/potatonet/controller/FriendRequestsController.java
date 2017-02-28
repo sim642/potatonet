@@ -38,8 +38,8 @@ public class FriendRequestsController {
 
   @DeleteMapping
   @ResponseBody
-  public String doDelete(@ModelAttribute User user, @RequestParam("friendUserId") Long friendUserId) {
-    User friend = userService.findById(friendUserId);
+  public String doDelete(@ModelAttribute User user, @RequestParam("friendRequestId") Long friendRequestId) {
+    User friend = userService.findById(friendRequestId);
     userService.removeFriendRequests(user, friend);
     return "";
   }

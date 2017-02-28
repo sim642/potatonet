@@ -5,6 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_current_user_id" th:content="${currentUser.id}" th:unless="${currentUser == null}"/>
+
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">potatonet</title>
     <link th:href="@{/css/master.css}" rel="stylesheet">
 
