@@ -31,16 +31,14 @@ public class FriendRequestsController {
 
   @PostMapping
   @ResponseBody
-  public String doPost(@ModelAttribute User user, @CurrentUser User currentUser) {
+  public void doPost(@ModelAttribute User user, @CurrentUser User currentUser) {
     userService.addFriendRequest(currentUser, user);
-    return "";
   }
 
   @DeleteMapping
   @ResponseBody
-  public String doDelete(@ModelAttribute User user, @RequestParam("friendRequestId") Long friendRequestId) {
+  public void doDelete(@ModelAttribute User user, @RequestParam("friendRequestId") Long friendRequestId) {
     User friend = userService.findById(friendRequestId);
     userService.removeFriendRequests(user, friend);
-    return "";
   }
 }

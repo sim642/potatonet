@@ -38,9 +38,8 @@ public class FriendsController {
 
   @PostMapping
   @ResponseBody
-  public String doPost(@ModelAttribute User user, @RequestParam("friendRequestId") Long friendRequestId) {
+  public void doPost(@ModelAttribute User user, @RequestParam("friendRequestId") Long friendRequestId) {
     User friendUser = userService.findById(friendRequestId);
     userService.addFriendship(user, friendUser);
-    return "";
   }
 }

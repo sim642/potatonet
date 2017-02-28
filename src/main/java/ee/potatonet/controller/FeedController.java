@@ -1,8 +1,6 @@
 package ee.potatonet.controller;
 
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,8 +43,7 @@ public class FeedController {
 
   @PostMapping("/post")
   @ResponseBody
-  public String doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
+  public void doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
-    return "";
   }
 }
