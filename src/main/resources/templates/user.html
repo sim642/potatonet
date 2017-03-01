@@ -19,8 +19,29 @@
                 <div class="media-body">
                     <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
 
-                    <h2 th:text="${user.fullName}"></h2>
-                    <a class="btn btn-link" th:href="@{/users/{userId}/friends(userId=${user.id})}" role="button">Friends</a>
+                    <h1 th:text="${user.fullName}"></h1>
+
+                    <div class="form-horizontal user-details">
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="gender">Gender</label>
+                            <div class="col-md-10">
+                                <p class="form-control-static" id="gender" th:text="${user.eid.eidCode.gender}"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="birthday">Birthday</label>
+                            <div class="col-md-10">
+                                <p class="form-control-static" id="birthday" th:text="${user.eid.eidCode.birthDate}"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <p class="form-control-static">
+                                    <a class="btn btn-link" th:href="@{/users/{userId}/friends(userId=${user.id})}" role="button">Friends</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

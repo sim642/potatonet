@@ -26,3 +26,7 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     margin-top: 0;
     margin-bottom: 0;
 }
+
+.user-details .form-group {
+    margin-bottom: 0;
+}
