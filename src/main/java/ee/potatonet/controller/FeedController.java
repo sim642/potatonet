@@ -34,14 +34,14 @@ public class FeedController {
     model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
     return "feed";
   }
-  
-  @RequestMapping(value = "/", method = RequestMethod.POST)
+
+  @PostMapping(value = "/", headers = "X-Requested-With!=XMLHttpRequest")
   public String doPost(@CurrentUser User currentUser, @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
     return "redirect:/";
   }
 
-  @PostMapping("/post")
+  @PostMapping(value = "/", headers = "X-Requested-With=XMLHttpRequest")
   @ResponseBody
   public void doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
