@@ -27,9 +27,8 @@
     </div>
 
 
-    <div id="posts" th:each="postInfo : ${posts}">
-        <div th:replace="~{common :: post (${postInfo})}">
-        </div>
+    <div id="posts" th:each="post : ${posts}">
+        <div th:replace="~{common :: postPanel (${post})}"></div>
     </div>
 </div>
 

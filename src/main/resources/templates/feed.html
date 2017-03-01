@@ -10,19 +10,17 @@
         var userIds = [[${userIds}]];
     </script>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">New post</div>
-        <div class="panel-body">
+    <div layout:replace="~{common :: postBasePanel(${post})}">
+        <div layout:fragment="content">
             <form id="post" th:action="@{/}" th:object="${post}" method="post">
-                <textarea class="form-control" rows="3" th:field="*{content}"></textarea>
+                <textarea class="form-control" rows="2" th:field="*{content}"></textarea>
                 <button id="postButton" type="submit" class="btn btn-default pull-right">Post</button>
             </form>
         </div>
     </div>
 
-    <div id="feed" th:each="postInfo : ${posts}">
-        <div th:replace="~{common :: post (${postInfo})}">
-        </div>
+    <div id="feed" th:each="post : ${posts}">
+        <div th:replace="~{common :: postPanel (${post})}"></div>
     </div>
 </div>
 

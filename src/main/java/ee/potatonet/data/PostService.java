@@ -68,7 +68,7 @@ public class PostService {
     user.getPosts().add(post);
     userService.save(user);
 
-    String output = templateRenderService.render("common", Collections.singleton("post"), Collections.singletonMap("postInfo", post));
+    String output = templateRenderService.render("common", Collections.singleton("postPanel"), Collections.singletonMap("post", post));
     simpMessagingTemplate.convertAndSend("/topic/posts/" + user.getId(), output);
   }
 }

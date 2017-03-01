@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
 
-<div class="panel panel-default" th:fragment="post(postInfo)">
+<div class="panel panel-default" layout:fragment="postBasePanel(post)">
     <div class="panel-heading">
-        <span th:text="${postInfo.user.fullName}"/>
-        <span class="pull-right" th:text="${postInfo.creationDateTime}">2017-02-11 15:00:00</span>
+        <span th:text="${post.user.fullName}"/>
+        <!--<span class="pull-right" th:text="${postInfo.creationDateTime}">2017-02-11 15:00:00</span>-->
     </div>
     <div class="panel-body">
         <div class="media">
             <div class="media-left">
-                <img class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(postInfo.user, 64)}">
+                <img class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(post.user, 64)}">
             </div>
-            <div class="media-body">
-                <p th:text="${postInfo.content}"></p>
+            <div class="media-body" layout:fragment="content">
+                <p>Content</p>
             </div>
         </div>
+    </div>
+</div>
+
+<div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
+    <div layout:fragment="content">
+        <p th:text="${post.content}"></p>
     </div>
 </div>
 
