@@ -23,6 +23,6 @@ public class UsersController {
   @GetMapping
   public String doGet(@CurrentUser User user, Model model) {
     model.addAttribute("users", userService.findAll());
-    return "people";
+    return "users";
   }
 }

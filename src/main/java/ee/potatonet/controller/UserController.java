@@ -34,6 +34,6 @@ public class UserController {
   public String doGet(@ModelAttribute User user, Model model) {
     model.addAttribute("user", user);
     model.addAttribute("posts", postService.getUserProfilePosts(user));
-    return "profile";
+    return "user";
   }
 }
