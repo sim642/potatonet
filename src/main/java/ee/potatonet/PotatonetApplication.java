@@ -1,6 +1,8 @@
 package ee.potatonet;
 
+import javax.servlet.ServletContext;
 import javax.sql.DataSource;
+import java.util.Collection;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -15,8 +17,8 @@ import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
@@ -94,9 +96,12 @@ public class PotatonetApplication {
 	}
 
 	@Bean
-	public TemplateEngine templateEngine() {
+	public SpringTemplateEngine springTemplateEngine(Collection<ITemplateResolver> templateResolvers, ServletContext servletContext) {
 		SpringTemplateEngine engine = new SpringTemplateEngine();
+		templateResolvers.forEach(engine::addTemplateResolver);
+
 		engine.addDialect(new LayoutDialect(new GroupingStrategy()));
+		engine.setLinkBuilder(new TemplateRenderService.LinkBuilder(servletContext));
 		return engine;
 	}
 
