@@ -12,8 +12,14 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="pull-left">
-            <h2 th:text="${user.fullName}"></h2>
+            <div class="media">
+                <div class="media-left">
+                    <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="pull-left img-rounded">
+                </div>
+                <div class="media-body">
+                    <h2 th:text="${user.fullName}"></h2>
+                </div>
+            </div>
             <form th:if="${!currentUser.friends.contains(user) && !currentUser.equals(user)}" th:action="@{/profile/add/{id}(id=${user.id})}" method="post">
                 <button  type="submit" class="btn btn-primary">Add friend</button>
             </form>

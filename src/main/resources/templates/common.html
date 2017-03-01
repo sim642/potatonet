@@ -8,8 +8,14 @@
         <span class="pull-right" th:text="${postInfo.creationDateTime}">2017-02-11 15:00:00</span>
     </div>
     <div class="panel-body">
-        <img src="http://placehold.it/64x64" class="pull-left" th:src="${@avatarService.getAvatarUrl(postInfo.user, 64)}">
-        <p th:text="${postInfo.content}"></p>
+        <div class="media">
+            <div class="media-left">
+                <img class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(postInfo.user, 64)}">
+            </div>
+            <div class="media-body">
+                <p th:text="${postInfo.content}"></p>
+            </div>
+        </div>
     </div>
 </div>
 
