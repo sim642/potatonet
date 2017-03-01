@@ -2,11 +2,10 @@ package ee.potatonet.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -14,13 +13,13 @@ import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
 
 @Controller
-@RequestMapping("/users/{userId}/friends")
-public class FriendsController {
-  
+@RequestMapping("/users/{userId}/friendrequests")
+public class FriendRequestsController {
+
   private final UserService userService;
 
   @Autowired
-  public FriendsController(UserService userService) {
+  public FriendRequestsController(UserService userService) {
     this.userService = userService;
   }
 
@@ -29,16 +28,16 @@ public class FriendsController {
     return userService.findById(userId);
   }
 
-  @GetMapping
-  public String doGet(@ModelAttribute User user, Model model) {
-    model.addAttribute("user", user);
-    return "friends";
+  @PostMapping
+  @ResponseBody
+  public void doPost(@ModelAttribute User user, @CurrentUser User currentUser) {
+    userService.addFriendRequest(currentUser, user);
   }
 
-  @PutMapping("/{friendRequestId}")
+  @DeleteMapping("/{friendRequestId}")
   @ResponseBody
-  public void doIdPut(@ModelAttribute User user, @PathVariable("friendRequestId") Long friendRequestId) {
-    User friendUser = userService.findById(friendRequestId);
-    userService.addFriendship(user, friendUser);
+  public void doIdDelete(@ModelAttribute User user, @PathVariable("friendRequestId") Long friendRequestId) {
+    User friend = userService.findById(friendRequestId);
+    userService.removeFriendRequests(user, friend);
   }
 }

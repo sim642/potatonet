@@ -14,15 +14,15 @@
         <div class="panel-body">
             <div class="media">
                 <div class="media-left">
-                    <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="pull-left img-rounded">
+                    <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="img-rounded">
                 </div>
                 <div class="media-body">
+                    <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
+
                     <h2 th:text="${user.fullName}"></h2>
+                    <a class="btn btn-link" th:href="@{/users/{userId}/friends(userId=${user.id})}" role="button">Friends</a>
                 </div>
             </div>
-            <form th:if="${!currentUser.friends.contains(user) && !currentUser.equals(user)}" th:action="@{/profile/add/{id}(id=${user.id})}" method="post">
-                <button  type="submit" class="btn btn-primary">Add friend</button>
-            </form>
         </div>
     </div>
 
@@ -37,12 +37,12 @@
     <script th:src="@{/js/fallback-websocket.js}"></script>
     <script>
       fallback.load({
-        profilejs: [
-          '/js/profile.js'
+        userjs: [
+          '/js/user.js'
         ]
       }, {
         shim: {
-          'profilejs': ['Stomp', 'SockJS']
+          'userjs': ['Stomp', 'SockJS']
         }
       });
     </script>

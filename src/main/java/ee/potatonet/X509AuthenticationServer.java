@@ -23,7 +23,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
-import ee.potatonet.data.repos.UserRepository;
 import ee.potatonet.eid.AuthenticationSuccessHandlerPostProcessor;
 import ee.potatonet.eid.EIDDetails;
 import ee.potatonet.eid.EIDDetailsX509PrincipalExtractor;
@@ -81,29 +80,29 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/").permitAll()
+            .antMatchers("/login").permitAll()
             .anyRequest().authenticated();
         http.x509()
             .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
             .withObjectPostProcessor(new AuthenticationSuccessHandlerPostProcessor(authenticationSuccessHandler()))
             .authenticationUserDetailsService(authenticationUserDetailsService());
         http.formLogin()
-            .loginPage("/")
+            .loginPage("/login")
             .usernameParameter("email")
             .passwordParameter("password")
-            .loginProcessingUrl("/")
+            .loginProcessingUrl("/login")
             .successHandler(authenticationSuccessHandler())
             .permitAll();
         http.logout()
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .logoutSuccessUrl("/")
+            .logoutSuccessUrl("/login")
             .permitAll();
     }
 
     @Bean
     public SavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler() {
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
-        successHandler.setDefaultTargetUrl("/feed");
+        successHandler.setDefaultTargetUrl("/");
         successHandler.setAlwaysUseDefaultTargetUrl(false);
         successHandler.setRedirectStrategy(redirectStrategy);
         return successHandler;

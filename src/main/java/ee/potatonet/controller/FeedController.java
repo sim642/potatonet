@@ -1,8 +1,6 @@
 package ee.potatonet.controller;
 
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,24 +27,23 @@ public class FeedController {
     this.userService = userService;
   }
 
-  @RequestMapping(value = "/feed", method = RequestMethod.GET)
+  @RequestMapping(value = "/", method = RequestMethod.GET)
   public String doGet(@CurrentUser User currentUser, Model model) {
     model.addAttribute("post", new Post());
     model.addAttribute("posts", postService.getUserFeedPosts(currentUser));
     model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
     return "feed";
   }
-  
-  @RequestMapping(value = "/feed", method = RequestMethod.POST)
+
+  @PostMapping(value = "/", headers = "X-Requested-With!=XMLHttpRequest")
   public String doPost(@CurrentUser User currentUser, @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
-    return "redirect:/feed";
+    return "redirect:/";
   }
 
-  @PostMapping("/post")
+  @PostMapping(value = "/", headers = "X-Requested-With=XMLHttpRequest")
   @ResponseBody
-  public String doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
+  public void doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
-    return "";
   }
 }

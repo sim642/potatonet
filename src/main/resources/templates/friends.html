@@ -6,46 +6,17 @@
 <body>
 
 <div layout:fragment="content">
-    <h3>Friend requests</h3>
-    <div th:each="friendRequest : ${currentUser.incomingFriendRequests}">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="btn-group pull-right" role="group">
-                    <form th:action="@{/friends/accept/{id}(id=${friendRequest.id})}" method="post">
-                        <button type="submit" class="btn btn-success">Accept</button>
-                    </form>
-                    <form th:action="@{/friends/reject/{id}(id=${friendRequest.id})}" method="post">
-                        <button type="submit" class="btn btn-danger">Reject</button>
-                    </form>
-                </div>
-
-                <div class="media">
-                    <div class="media-left">
-                        <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friendRequest, 64)}" class="pull-left img-rounded">
-                    </div>
-                    <div class="media-body">
-                        <h3 th:text="${friendRequest.fullName}"></h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <th:block th:if="${currentUser.equals(user)}">
+        <h3>Friend requests</h3>
+        <th:block th:each="friendRequest : ${user.incomingFriendRequests}">
+            <div th:replace="~{common :: userPanel (${friendRequest})}"></div>
+        </th:block>
+    </th:block>
 
     <h3>Friends</h3>
-    <div th:each="friend : ${currentUser.friends}">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="media">
-                    <div class="media-left">
-                        <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friend, 64)}" class="pull-left img-rounded">
-                    </div>
-                    <div class="media-body">
-                        <h3 th:text="${friend.fullName}"></h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <th:block th:each="friend : ${user.friends}">
+        <div th:replace="~{common :: userPanel (${friend})}"></div>
+    </th:block>
 </div>
 
 </body>

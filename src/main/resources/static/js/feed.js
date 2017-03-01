@@ -15,7 +15,7 @@ $(function () {
     $("#post").submit(function (event) {
       var $content = $("#content");
 
-      $.post("/post", $("#post").serialize());
+      $.post("/", $("#post").serialize());
       $content.val("");
 
       return false;

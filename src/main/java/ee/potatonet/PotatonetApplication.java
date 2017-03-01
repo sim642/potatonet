@@ -47,6 +47,12 @@ public class PotatonetApplication {
 				securityConstraint.addCollection(collection);
 				context.addConstraint(securityConstraint);
 			}
+
+			@Override
+			protected void customizeConnector(Connector connector) {
+				super.customizeConnector(connector);
+				connector.setParseBodyMethods("POST,PUT,DELETE");
+			}
 		};
 		tomcat.addAdditionalTomcatConnectors(createSslConnector());
 		tomcat.addAdditionalTomcatConnectors(createHTTPConnector());

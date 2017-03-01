@@ -19,5 +19,33 @@
     </div>
 </div>
 
+<div class="btn-group" role="group" th:fragment="friendButtons(user)">
+    <th:block th:unless="${user.equals(currentUser)}">
+        <th:block th:if="${!currentUser.friends.contains(user)}">
+            <button type="button" class="btn btn-primary btn-friend-add" th:data-user-id="${user.id}" th:if="${!currentUser.incomingFriendRequests.contains(user)}">Add friend</button>
+
+            <button type="button" class="btn btn-success btn-friend-accept" th:data-friend-request-id="${user.id}" th:if="${currentUser.incomingFriendRequests.contains(user)}">Accept</button>
+            <button type="button" class="btn btn-danger btn-friend-reject" th:data-friend-request-id="${user.id}" th:if="${currentUser.incomingFriendRequests.contains(user)}">Reject</button>
+        </th:block>
+    </th:block>
+</div>
+
+<a class="panel-link" th:href="@{/users/{userId}(userId=${user.id})}" th:fragment="userPanel(user)">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-left">
+                    <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="img-rounded">
+                </div>
+                <div class="media-body">
+                    <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
+
+                    <h3 th:text="${user.fullName}"></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+
 </body>
 </html>

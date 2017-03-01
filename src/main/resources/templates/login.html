@@ -28,7 +28,7 @@
                     Login
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" th:action="@{/}" method="post">
+                    <form class="form-horizontal" th:action="@{/login}" method="post">
                         <div class="alert alert-danger" role="alert" th:if="${param.error}">
                             Invalid email or password
                         </div>
@@ -50,7 +50,7 @@
                         <hr/>
                         <div class="row">
                             <div class="col-sm-12">
-                                <a href="https://localhost:8446/" th:href="${app.domainEid}">
+                                <a href="https://localhost:8446/" th:href="@{{domain}/login(domain=${app.domainEid})}" th:fragment="eidButton">
                                     <img th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
                                 </a>
                             </div>
@@ -67,9 +67,7 @@
                     <form>
                         <div class="row">
                             <div class="col-sm-12">
-                                <a href="https://localhost:8446/" th:href="${app.domainEid}">
-                                    <img th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
-                                </a>
+                                <a th:replace="~{:: eidButton}"></a>
                             </div>
                         </div>
                     </form>

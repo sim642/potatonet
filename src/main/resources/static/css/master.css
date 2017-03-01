@@ -8,3 +8,8 @@
 #login-title {
     font-size: 63px;
 }
+
+a.panel-link:link, a.panel-link:visited, a.panel-link:hover, a.panel-link:active {
+    color: #333;
+    text-decoration: none;
+}
