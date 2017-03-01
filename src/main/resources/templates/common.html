@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
 
-<div class="panel" layout:fragment="postBasePanel(post, panel_class)" th:classappend="${panel_class} ?: 'panel-default'">
+<div class="panel panel-post" layout:fragment="postBasePanel(post, panel_class)" th:classappend="${panel_class} ?: 'panel-default'">
     <div class="panel-body">
         <div class="media">
             <div class="media-left">
@@ -41,10 +41,10 @@
 </div>
 
 <a class="hidden-link" th:href="@{/users/{userId}(userId=${user.id})}" th:fragment="userPanel(user)">
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-user">
         <div class="panel-body">
             <div class="media">
-                <div class="media-left">
+                <div class="media-left media-middle">
                     <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="img-rounded">
                 </div>
                 <div class="media-body">

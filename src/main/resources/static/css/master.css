@@ -17,3 +17,12 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
 #post textarea {
     resize: vertical;
 }
+
+.panel-user .media-body {
+    vertical-align: middle;
+}
+
+.panel-user .media-body h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
