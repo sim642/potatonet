@@ -13,7 +13,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">New post</div>
         <div class="panel-body">
-            <form id="post" th:action="@{/feed}" th:object="${post}" method="post">
+            <form id="post" th:action="@{/}" th:object="${post}" method="post">
                 <textarea class="form-control" rows="3" th:field="*{content}"></textarea>
                 <button id="postButton" type="submit" class="btn btn-default pull-right">Post</button>
             </form>

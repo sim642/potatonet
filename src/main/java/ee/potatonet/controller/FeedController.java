@@ -27,7 +27,7 @@ public class FeedController {
     this.userService = userService;
   }
 
-  @RequestMapping(value = "/feed", method = RequestMethod.GET)
+  @RequestMapping(value = "/", method = RequestMethod.GET)
   public String doGet(@CurrentUser User currentUser, Model model) {
     model.addAttribute("post", new Post());
     model.addAttribute("posts", postService.getUserFeedPosts(currentUser));
@@ -35,10 +35,10 @@ public class FeedController {
     return "feed";
   }
   
-  @RequestMapping(value = "/feed", method = RequestMethod.POST)
+  @RequestMapping(value = "/", method = RequestMethod.POST)
   public String doPost(@CurrentUser User currentUser, @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
-    return "redirect:/feed";
+    return "redirect:/";
   }
 
   @PostMapping("/post")
