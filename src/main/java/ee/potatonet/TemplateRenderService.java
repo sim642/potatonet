@@ -1,6 +1,5 @@
 package ee.potatonet;
 
-import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,9 +8,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.ExpressionContext;
-import org.thymeleaf.context.IExpressionContext;
-import org.thymeleaf.exceptions.TemplateProcessingException;
-import org.thymeleaf.linkbuilder.StandardLinkBuilder;
 import org.thymeleaf.spring4.expression.ThymeleafEvaluationContext;
 
 @Service
@@ -35,23 +31,5 @@ public class TemplateRenderService {
     context.setVariable(ThymeleafEvaluationContext.THYMELEAF_EVALUATION_CONTEXT_CONTEXT_VARIABLE_NAME, evaluationContext);
 
     return templateEngine.process(template, templateSelectors, context);
-  }
-
-  public static class LinkBuilder extends StandardLinkBuilder {
-    private final ServletContext servletContext;
-
-    public LinkBuilder(ServletContext servletContext) {
-      this.servletContext = servletContext;
-    }
-
-    @Override
-    protected String computeContextPath(IExpressionContext context, String base, Map<String, Object> parameters) {
-      try {
-        return super.computeContextPath(context, base, parameters);
-      }
-      catch (TemplateProcessingException e) {
-        return servletContext.getContextPath();
-      }
-    }
   }
 }
