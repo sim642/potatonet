@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,6 +54,9 @@ public class User implements UserDetails {
       inverseJoinColumns = @JoinColumn(name = "friendId")
   )
   private Set<User> incomingFriendRequests;
+
+  @ManyToMany(mappedBy = "incomingFriendRequests")
+  private Set<User> outgoingFriendRequests;
   
   @Transient
   private Set<? extends GrantedAuthority> authorities;
@@ -115,6 +117,10 @@ public class User implements UserDetails {
 
   public void setIncomingFriendRequests(Set<User> incomingFriendRequests) {
     this.incomingFriendRequests = incomingFriendRequests;
+  }
+
+  public Set<User> getOutgoingFriendRequests() {
+    return outgoingFriendRequests;
   }
 
   public Set<User> getFriends() {

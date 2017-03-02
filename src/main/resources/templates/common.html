@@ -32,10 +32,12 @@
 <div class="btn-group" role="group" th:fragment="friendButtons(user)">
     <th:block th:unless="${user.equals(currentUser)}">
         <th:block th:if="${!currentUser.friends.contains(user)}">
-            <button type="button" class="btn btn-primary btn-friend-add" th:data-user-id="${user.id}" th:if="${!currentUser.incomingFriendRequests.contains(user)}">Add friend</button>
+            <button type="button" class="btn btn-primary btn-friend-add" th:data-user-id="${user.id}" th:if="${!currentUser.incomingFriendRequests.contains(user) && !currentUser.outgoingFriendRequests.contains(user)}">Add friend</button>
 
             <button type="button" class="btn btn-success btn-friend-accept" th:data-friend-request-id="${user.id}" th:if="${currentUser.incomingFriendRequests.contains(user)}">Accept</button>
             <button type="button" class="btn btn-danger btn-friend-reject" th:data-friend-request-id="${user.id}" th:if="${currentUser.incomingFriendRequests.contains(user)}">Reject</button>
+
+            <button type="button" class="btn btn-default btn-friend-reject" th:data-friend-request-id="${user.id}" th:if="${currentUser.outgoingFriendRequests.contains(user)}">Cancel request</button>
         </th:block>
     </th:block>
 </div>
