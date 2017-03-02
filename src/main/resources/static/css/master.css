@@ -14,6 +14,10 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     text-decoration: none;
 }
 
+a.name-link:link, a.name-link:visited, a.name-link:hover, a.name-link:active {
+    text-decoration: none;
+}
+
 #post textarea {
     resize: vertical;
 }
@@ -29,4 +33,12 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
 
 .user-details .form-group {
     margin-bottom: 0;
+}
+
+.list-comments {
+    margin-bottom: 0;
+}
+
+.list-comments .media {
+    margin-top: 5px;
 }

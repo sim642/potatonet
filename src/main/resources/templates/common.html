@@ -13,7 +13,7 @@
             <div class="media-body">
                 <span class="pull-right text-muted" th:text="${post.creationDateTime}">2017-02-11 15:00:00</span>
                 <h4 class="media-heading">
-                    <a class="hidden-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
+                    <a class="name-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
                 </h4>
                 <th:block layout:fragment="content">
                     <p>Content</p>
@@ -26,6 +26,37 @@
 <div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
     <th:block layout:fragment="content">
         <p th:text="${post.content}"></p>
+
+        <ul class="media-list list-comments">
+            <li class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="img-rounded" src="http://placehold.it/24x24">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <span class="pull-right text-muted">2017-02-11 15:00:00</span>
+                    <span class="media-heading">
+                        <a class="name-link" href="#">Peeter Pakiraam</a>
+                    </span>
+                    comment comment comment comment
+                </div>
+            </li>
+            <li class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="img-rounded" src="http://placehold.it/24x24">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <span class="pull-right text-muted">2017-02-11 15:00:00</span>
+                    <span class="media-heading">
+                        <a class="name-link" href="#">Peeter Pakiraam</a>
+                    </span>
+                    comment comment comment comment
+                </div>
+            </li>
+        </ul>
     </th:block>
 </div>
 
