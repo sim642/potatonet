@@ -23,3 +23,12 @@ $(function () {
   });
 });
 
+$(document).ready(function(){
+    $('#postButton').attr('disabled',true);
+    $('#postContent').keyup(function(){
+        if($(this).val().length !=0)
+            $('#postButton').attr('disabled', false);
+        else
+            $('#postButton').attr('disabled',true);
+    })
+});
