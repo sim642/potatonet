@@ -73,6 +73,17 @@ public class UserService {
     save(potentialFriend);
   }
 
+  public void removeFriends(User user1, User user2) {
+    user1 = find(user1);
+    user2 = find(user2);
+
+    user1.getFriends().remove(user2);
+    user2.getFriends().remove(user1);
+
+    save(user1);
+    save(user2);
+  }
+
   public Long countUserIncomingFriendRequests(User user) {
     return userRepository.countIncomingFriendRequests(user);
   }

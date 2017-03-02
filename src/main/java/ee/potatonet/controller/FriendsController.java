@@ -3,6 +3,7 @@ package ee.potatonet.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,5 +41,12 @@ public class FriendsController {
   public void doIdPut(@ModelAttribute User user, @PathVariable("friendRequestId") Long friendRequestId) {
     User friendUser = userService.findById(friendRequestId);
     userService.addFriendship(user, friendUser);
+  }
+
+  @DeleteMapping("/{friendId}")
+  @ResponseBody
+  public void doIdDelete(@ModelAttribute User user, @PathVariable("friendId") Long friendId) {
+    User friend = userService.findById(friendId);
+    userService.removeFriends(user, friend);
   }
 }

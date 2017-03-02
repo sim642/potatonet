@@ -36,5 +36,15 @@ $(function () {
 
     return false;
   });
+
+  $(".btn-friend-remove").click(function () {
+    var friendId = $(this).attr("data-friend-id");
+    $.ajax({
+      url: "/users/" + currentUserId + "/friends/" + friendId,
+      method: "DELETE"
+    });
+
+    return false;
+  });
 });
 

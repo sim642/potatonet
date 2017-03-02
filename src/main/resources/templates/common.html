@@ -39,6 +39,8 @@
 
             <button type="button" class="btn btn-default btn-friend-reject" th:data-friend-request-id="${user.id}" th:if="${currentUser.outgoingFriendRequests.contains(user)}">Cancel request</button>
         </th:block>
+
+        <button type="button" class="btn btn-link btn-friend-remove" th:data-friend-id="${user.id}" th:if="${currentUser.friends.contains(user)}">Remove friend</button>
     </th:block>
 </div>
 
