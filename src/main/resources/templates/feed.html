@@ -22,8 +22,10 @@
         </th:block>
     </div>
 
-    <div id="feed" th:each="post : ${posts}">
-        <div th:replace="~{common :: postPanel (${post})}"></div>
+    <div id="feed">
+        <th:block th:each="post : ${posts}">
+            <div th:replace="~{common :: postPanel (${post})}"></div>
+        </th:block>
     </div>
 </div>
 
