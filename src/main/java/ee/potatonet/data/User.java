@@ -28,7 +28,7 @@ public class User implements UserDetails {
   private String password;
 
   @Enumerated(EnumType.STRING)
-  private Language language;
+  private Language language = Language.EE;
 
   @Embedded
   private EIDDetails eid;

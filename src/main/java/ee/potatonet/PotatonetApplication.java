@@ -15,6 +15,8 @@ import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
@@ -103,5 +105,10 @@ public class PotatonetApplication {
 	@Bean
 	public AvatarService avatarService(GravatarAvatarService gravatarAvatarService) {
 		return gravatarAvatarService;
+	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		return new SessionLocaleResolver();
 	}
 }

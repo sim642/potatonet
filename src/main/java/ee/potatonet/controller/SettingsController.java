@@ -1,5 +1,6 @@
 package ee.potatonet.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Controller
 public class SettingsController {
@@ -55,12 +57,12 @@ public class SettingsController {
   }
 
   @PostMapping("/settings/locale")
-  public String doPost(@ModelAttribute LanguageSettings languageSettings, @CurrentUser User currentUser) {
+  public String doPost(@ModelAttribute LanguageSettings languageSettings, @CurrentUser User currentUser, HttpSession httpSession) {
     currentUser = userService.find(currentUser);
     currentUser.setLanguage(languageSettings.getLanguage());
     userService.save(currentUser);
 
-    System.out.println(currentUser.getLanguage());
+    httpSession.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, languageSettings.getLanguage().getLocale());
     return "redirect:/settings";
   }
 
