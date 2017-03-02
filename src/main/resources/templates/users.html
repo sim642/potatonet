@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
 <head>
-    <title>people</title>
+        <title th:text="#{users.title}">people</title>
 </head>
 <body>
 
 <div layout:fragment="content">
-    <h3 th:text="#{users.people}">People</h3>
+    <h3 th:text="#{users.title}">People</h3>
     <th:block th:each="user : ${users}">
         <div th:replace="~{common :: userPanel (${user})}"></div>
     </th:block>
