@@ -4,7 +4,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+
+import ee.potatonet.data.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
-import ee.potatonet.data.repos.UserRepository;
 
 @Controller
 public class SettingsController {
@@ -32,12 +35,13 @@ public class SettingsController {
   }
 
   @RequestMapping(value = "/settings", method = RequestMethod.GET)
-  public String doGet(Model model) {
+  public String doGet(Model model, @CurrentUser User currentUser) {
     model.addAttribute("passwordSettings", new PasswordSettings());
+    model.addAttribute("languageSettings", new LanguageSettings(userService.find(currentUser).getLanguage()));
     return "settings";
   }
 
-  @PostMapping("/settings")
+  @PostMapping("/settings/password")
   public String doPost(@ModelAttribute @Valid PasswordSettings passwordSettings, BindingResult bindingResult, @CurrentUser User currentUser) { // WTF spring magic: http://stackoverflow.com/a/29075342
     if (bindingResult.hasErrors()) {
       return "settings";
@@ -48,6 +52,40 @@ public class SettingsController {
     userService.save(currentUser);
 
     return "redirect:/settings?success";
+  }
+
+  @PostMapping("/settings/locale")
+  public String doPost(@ModelAttribute LanguageSettings languageSettings, @CurrentUser User currentUser) {
+    currentUser = userService.find(currentUser);
+    currentUser.setLanguage(languageSettings.getLanguage());
+    userService.save(currentUser);
+
+    System.out.println(currentUser.getLanguage());
+    return "redirect:/settings";
+  }
+
+
+  public static class LanguageSettings {
+    private Language language;
+
+    public LanguageSettings() {
+    }
+
+    public LanguageSettings(Language language) {
+      this.language = language;
+    }
+
+    public Language getLanguage() {
+      return language;
+    }
+
+    public void setLanguage(Language language) {
+      this.language = language;
+    }
+
+    public List<Language> getAllLanguages() {
+      return Arrays.asList(Language.values());
+    }
   }
 
   public static class PasswordSettings {

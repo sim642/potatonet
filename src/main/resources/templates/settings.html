@@ -1,36 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{navbar}">
 <head>
     <title>settings</title>
 </head>
 <body>
 
 <div layout:fragment="content">
-    <form class="form-horizontal" th:action="@{/settings}" method="post" th:object="${passwordSettings}">
-        <div class="alert alert-danger" role="alert" th:each="error : ${#fields.errors('*')}" th:text="${error}">
-            Error
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-horizontal" th:action="@{/settings/password}" method="post" th:object="${passwordSettings}">
+                <div class="alert alert-danger" role="alert" th:each="error : ${#fields.errors('*')}"
+                     th:text="${error}">
+                    Error
+                </div>
+                <div class="alert alert-success" role="alert" th:if="${param.success}">
+                    Password changed
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password" th:field="*{password}"
+                               placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="passwordConfirm" class="col-sm-2 control-label">Password (confirm)</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="passwordConfirm" th:field="*{passwordConfirm}"
+                               placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="alert alert-success" role="alert" th:if="${param.success}">
-            Password changed
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-horizontal" th:action="@{/settings/locale}" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Locale</label>
+                    <div class="col-sm-10">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label th:each="language : ${languageSettings.allLanguages}" class="btn btn-default" th:classappend="${languageSettings.language.equals(language)}? 'active'">
+                                <input th:id="${language.name()}" th:value="${language.name()}" type="radio" name="language" autocomplete="off" th:selected="${languageSettings.language.equals(language)}? 'selected'" >
+                                <span th:text="${language.name()}"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="password" class="col-sm-2 control-label">Password</label>
-            <div class="col-sm-10">
-                <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="passwordConfirm" class="col-sm-2 control-label">Password (confirm)</label>
-            <div class="col-sm-10">
-                <input type="password" class="form-control" id="passwordConfirm" th:field="*{passwordConfirm}" placeholder="Password">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Save</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
 
 </body>
