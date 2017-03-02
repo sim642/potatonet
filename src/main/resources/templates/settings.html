@@ -14,26 +14,26 @@
                      th:text="${error}">
                     Error
                 </div>
-                <div class="alert alert-success" role="alert" th:if="${param.success}">
+                <div th:text="#{settings.password.changed}" class="alert alert-success" role="alert" th:if="${param.success}">
                     Password changed
                 </div>
                 <div class="form-group">
-                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <label th:text="#{settings.password.password}" for="password" class="col-sm-2 control-label">Password</label>
                     <div class="col-sm-10">
                         <input type="password" class="form-control" id="password" th:field="*{password}"
-                               placeholder="Password">
+                               th:placeholder="#{settings.password.placeholder}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="passwordConfirm" class="col-sm-2 control-label">Password (confirm)</label>
+                    <label th:text="#{settings.password.confirm}" for="passwordConfirm" class="col-sm-2 control-label">Password (confirm)</label>
                     <div class="col-sm-10">
                         <input type="password" class="form-control" id="passwordConfirm" th:field="*{passwordConfirm}"
-                               placeholder="Password">
+                               th:placeholder="#{settings.password.placeholder}">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default">Save</button>
+                        <button th:text="#{settings.button.save}" type="submit" class="btn btn-default">Save</button>
                     </div>
                 </div>
             </form>
@@ -44,7 +44,7 @@
         <div class="panel-body">
             <form class="form-horizontal" th:action="@{/settings/locale}" method="post">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Locale</label>
+                    <label th:text="#{settings.locale}" class="col-sm-2 control-label">Locale</label>
                     <div class="col-sm-10">
                         <div class="btn-group" data-toggle="buttons">
                             <label th:each="language : ${languageSettings.allLanguages}" class="btn btn-default" th:classappend="${languageSettings.language.equals(language)}? 'active'">
@@ -56,7 +56,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default">Save</button>
+                        <button th:text="#{settings.button.save}" type="submit" class="btn btn-default">Save</button>
                     </div>
                 </div>
             </form>

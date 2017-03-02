@@ -6,7 +6,7 @@
 <body>
 
 <div layout:fragment="content">
-    <h3>People</h3>
+    <h3 th:text="#{users.people}">People</h3>
     <th:block th:each="user : ${users}">
         <div th:replace="~{common :: userPanel (${user})}"></div>
     </th:block>

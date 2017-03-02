@@ -24,10 +24,10 @@
                     <a th:text="#{navbar.feed}" th:href="@{/}">Feed</a>
                 </li>
                 <li th:classappend="(*{active} == 'friends')? 'active' : _">
-                    <a th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">Friends <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span></a>
+                    <a th:text="#{navbar.friends}" th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">Friends <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span></a>
                 </li>
                 <li th:classappend="(*{active} == 'people')? 'active' : _">
-                    <a th:href="@{/users}">People</a>
+                    <a th:text="#{navbar.users}" th:href="@{/users}">People</a>
                 </li>
             </ul>
 
@@ -46,10 +46,10 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dLabel">
                         <li th:classappend="(*{active} == 'settings')? 'active' : _">
-                            <a th:href="@{/settings}">Settings</a>
+                            <a th:text="#{navbar.settings}" th:href="@{/settings}">Settings</a>
                         </li>
                         <li>
-                            <a th:href="@{/logout}">Logout</a>
+                            <a th:text="#{navbar.logout}" th:href="@{/logout}">Logout</a>
                         </li>
                     </ul>
                 </li>
