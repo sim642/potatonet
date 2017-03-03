@@ -1,14 +1,10 @@
 package ee.potatonet.oauth.google;
 
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -29,20 +25,24 @@ import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
-@Configuration
 @EnableOAuth2Client
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(100)
 public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
-  @Autowired
-  private Environment env;
-  @Autowired
-  OAuth2ClientContextFilter contextFilter;
 
-  @Resource
-  @Qualifier("accessTokenRequest")
-  private AccessTokenRequest accessTokenRequest;
+  private final Environment env;
+  private final OAuth2ClientContextFilter contextFilter;
+  private final AccessTokenRequest accessTokenRequest;
+  private final GoogleAccessAuthenticationConverter authenticationConverter;
+
+  @Autowired
+  public OAuth2SecurityConfiguration(Environment env, OAuth2ClientContextFilter contextFilter, AccessTokenRequest accessTokenRequest, GoogleAccessAuthenticationConverter authenticationConverter) {
+    this.env = env;
+    this.contextFilter = contextFilter;
+    this.accessTokenRequest = accessTokenRequest;
+    this.authenticationConverter = authenticationConverter;
+  }
 
   @Bean
   public OAuth2ProtectedResourceDetails googleResource() {
@@ -56,8 +56,8 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     details.setPreEstablishedRedirectUri(env.getProperty("oauth.google.preestablished.redirect.url"));
 
     details.setScope(new ArrayList<>(
-        Arrays.asList(
-            env.getProperty("oauth.google.auth.scope").split(","))
+            Arrays.asList(
+                env.getProperty("oauth.google.auth.scope").split(","))
         )
     );
 
@@ -75,7 +75,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Bean
   public OAuth2ClientAuthenticationProcessingFilter oAuth2AuthenticationProcessingFilter() {
-    OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter("/googleLogin");
+    OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.login-url"));
     filter.setRestTemplate(googleRestTemplate());
     filter.setTokenServices(tokenServices());
 
@@ -85,13 +85,14 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   public RemoteTokenServices tokenServices() {
     DefaultAccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
-    tokenConverter.setUserTokenConverter(new GoogleAccessAuthenticationConverter());
+    tokenConverter.setUserTokenConverter(authenticationConverter);
 
-    RemoteTokenServices tokenServices = new RemoteTokenServices();
+    GoogleRemoteTokenServices tokenServices = new GoogleRemoteTokenServices();
     tokenServices.setCheckTokenEndpointUrl("https://www.googleapis.com/oauth2/v1/tokeninfo");
-    tokenServices.setClientId(env.getProperty("${oauth.google.client.id}"));
-    tokenServices.setClientSecret(env.getProperty("${oauth.google.client.secret}"));
+    tokenServices.setClientId(env.getProperty("oauth.google.client.id"));
+    tokenServices.setClientSecret(env.getProperty("oauth.google.client.secret"));
     tokenServices.setAccessTokenConverter(tokenConverter);
+    tokenServices.setRestTemplate(googleRestTemplate());
 
     return tokenServices;
   }

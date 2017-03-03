@@ -1,34 +1,33 @@
 package ee.potatonet.oauth.google;
 
-import java.util.Map;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
+import org.springframework.stereotype.Component;
 
 import ee.potatonet.data.User;
+import ee.potatonet.data.UserService;
 
+@Component
 public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
-  public GoogleAccessAuthenticationConverter() {
-    setUserDetailsService(new UserDetailsService() {
-      @Override
-      public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println(username);
+  @Autowired
+  public GoogleAccessAuthenticationConverter(UserService userService) {
+    setUserDetailsService(googleId -> {
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      User currentUser;
+      if (principal == null) {
+        currentUser = userService.findOneByGoogleId(googleId);
       }
+      else {
+        currentUser = (User) principal;
+        currentUser.setGoogleId(googleId);
+        userService.save(currentUser);
+      }
+
+      return currentUser;
     });
-  }
-
-  public Authentication extractAuthentication(Map<String, ?> map) {
-    Authentication authentication = super.extractAuthentication(map);
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-    return new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), authentication.getAuthorities());
   }
 
 }
