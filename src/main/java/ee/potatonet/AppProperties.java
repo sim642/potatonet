@@ -15,6 +15,8 @@ public class AppProperties {
   private String trustStore;
   private String trustStorePassword;
 
+  private String googleUrl;
+
   public boolean getShowErrors() {
     return showErrors;
   }
@@ -61,5 +63,13 @@ public class AppProperties {
 
   public void setTrustStorePassword(String trustStorePassword) {
     this.trustStorePassword = trustStorePassword;
+  }
+
+  public String getGoogleUrl() {
+    return googleUrl;
+  }
+
+  public void setGoogleUrl(String googleUrl) {
+    this.googleUrl = googleUrl;
   }
 }
