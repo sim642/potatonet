@@ -36,6 +36,10 @@ public class UserService {
     return userRepository.findOneByEidEmail(eidEmail);
   }
 
+  public User findOneByGoogleId(String googleId) {
+    return userRepository.findOneByGoogleId(googleId);
+  }
+
   public User save(User user) {
     return userRepository.save(user);
   }

@@ -37,6 +37,7 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String password;
+  private String googleId;
 
   @Embedded
   private EIDDetails eid;
@@ -145,6 +146,14 @@ public class User implements UserDetails {
 
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
     this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
+  }
+
+  public String getGoogleId() {
+    return googleId;
+  }
+
+  public void setGoogleId(String googleId) {
+    this.googleId = googleId;
   }
 
   private static class AuthorityComparator implements Comparator<GrantedAuthority>,
