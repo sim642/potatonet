@@ -70,7 +70,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.addFilterAfter(contextFilter, ExceptionTranslationFilter.class)
-        .addFilterAfter(oAuth2AuthenticationProcessingFilter(), FilterSecurityInterceptor.class);
+        .addFilterBefore(oAuth2AuthenticationProcessingFilter(), FilterSecurityInterceptor.class);
   }
 
   @Bean
@@ -89,8 +89,8 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     RemoteTokenServices tokenServices = new RemoteTokenServices();
     tokenServices.setCheckTokenEndpointUrl("https://www.googleapis.com/oauth2/v1/tokeninfo");
-    tokenServices.setClientId("${oauth.google.client.id}");
-    tokenServices.setClientId("${oauth.google.client.secret}");
+    tokenServices.setClientId(env.getProperty("${oauth.google.client.id}"));
+    tokenServices.setClientSecret(env.getProperty("${oauth.google.client.secret}"));
     tokenServices.setAccessTokenConverter(tokenConverter);
 
     return tokenServices;
