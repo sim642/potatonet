@@ -1,7 +1,9 @@
 package ee.potatonet.oauth.google;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.stereotype.Component;
 
@@ -14,17 +16,21 @@ public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticati
   @Autowired
   public GoogleAccessAuthenticationConverter(UserService userService) {
     setUserDetailsService(googleId -> {
-      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
       User currentUser;
-      if (principal == null) {
+      if (authentication == null) {
         currentUser = userService.findOneByGoogleId(googleId);
+        if (currentUser == null) {
+          throw new UsernameNotFoundException("No user registered with your google account was found.");
+        }
       }
       else {
-        currentUser = (User) principal;
+        currentUser = (User) authentication.getPrincipal();
         currentUser.setGoogleId(googleId);
         userService.save(currentUser);
       }
+
 
       return currentUser;
     });

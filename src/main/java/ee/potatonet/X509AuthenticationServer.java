@@ -29,9 +29,7 @@ import ee.potatonet.eid.EIDDetails;
 import ee.potatonet.eid.EIDDetailsX509PrincipalExtractor;
 import ee.potatonet.eid.PrincipalExtractorPostProcessor;
 
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(99)
+
 public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -42,14 +40,12 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers("/css/**", "/img/**", "/js/**", "/favicon.ico");
+        web.ignoring().antMatchers("/css/**", "/img/**", "/js/**", "/favicon.ico");
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(emailUserDetailsService())
+        auth.userDetailsService(emailUserDetailsService())
             .passwordEncoder(passwordEncoder());
     }
 
@@ -79,8 +75,11 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //http.anonymous().disable(); //this shit breaks fucking everything :D
+
         http.authorizeRequests()
             .antMatchers("/login", "/googleLogin").permitAll()
             .anyRequest().authenticated();

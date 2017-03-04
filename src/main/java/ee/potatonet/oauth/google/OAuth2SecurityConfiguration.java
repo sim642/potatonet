@@ -4,7 +4,11 @@ package ee.potatonet.oauth.google;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -25,11 +29,14 @@ import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
+import ee.potatonet.X509AuthenticationServer;
+
+@Configuration
 @EnableOAuth2Client
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(100)
-public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
 
   private final Environment env;
   private final OAuth2ClientContextFilter contextFilter;
@@ -45,6 +52,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
+  @Scope("session")
   public OAuth2ProtectedResourceDetails googleResource() {
     AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
 
@@ -69,6 +77,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    super.configure(http);
     http.addFilterAfter(contextFilter, ExceptionTranslationFilter.class)
         .addFilterBefore(oAuth2AuthenticationProcessingFilter(), FilterSecurityInterceptor.class);
   }
@@ -98,6 +107,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
+  @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
   public OAuth2RestTemplate googleRestTemplate() {
     return new OAuth2RestTemplate(googleResource(), new DefaultOAuth2ClientContext(accessTokenRequest));
   }
