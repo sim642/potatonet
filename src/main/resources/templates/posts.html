@@ -1,0 +1,3 @@
+<th:block th:each="post : ${posts}" xmlns:th="http://www.thymeleaf.org">
+    <div th:replace="~{common :: postPanel (${post})}"></div>
+</th:block>

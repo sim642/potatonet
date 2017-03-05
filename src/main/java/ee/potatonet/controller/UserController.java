@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import ee.potatonet.data.PostService;
 import ee.potatonet.data.User;
@@ -33,7 +34,13 @@ public class UserController {
   @GetMapping
   public String doGet(@ModelAttribute User user, Model model) {
     model.addAttribute("user", user);
-    model.addAttribute("posts", postService.getUserProfilePosts(user));
+    model.addAttribute("posts", postService.getUserProfilePosts(user, null));
     return "user";
+  }
+
+  @GetMapping("/posts")
+  public String doGetPosts(@CurrentUser User currentUser, @RequestParam("beforePostId") Long beforePostId, Model model) {
+    model.addAttribute("posts", postService.getUserProfilePosts(currentUser, postService.findById(beforePostId)));
+    return "posts";
   }
 }

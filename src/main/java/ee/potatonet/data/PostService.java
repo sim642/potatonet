@@ -39,22 +39,28 @@ public class PostService {
     return findById(post.getId());
   }
 
-  public List<Post> getUserFeedPosts(User user) {
+  public List<Post> getUserFeedPosts(User user, Post beforePost) {
     user = userService.find(user);
 
     List<Post> friendsPosts = postRepository.findAllPostsFromFriends(user);
     List<Post> usersPosts = user.getPosts();
 
+    ZonedDateTime beforeDateTime = beforePost != null ? beforePost.getCreationDateTime() : ZonedDateTime.now();
     return Stream.concat(friendsPosts.stream(), usersPosts.stream())
+        .filter(post -> post.getCreationDateTime().isBefore(beforeDateTime))
         .sorted(Comparator.comparing(Post::getCreationDateTime).reversed())
+        .limit(50)
         .collect(Collectors.toList());
   }
 
-  public List<Post> getUserProfilePosts(User user) {
+  public List<Post> getUserProfilePosts(User user, Post beforePost) {
     user = userService.find(user);
 
+    ZonedDateTime beforeDateTime = beforePost != null ? beforePost.getCreationDateTime() : ZonedDateTime.now();
     return user.getPosts().stream()
+        .filter(post -> post.getCreationDateTime().isBefore(beforeDateTime))
         .sorted(Comparator.comparing(Post::getCreationDateTime).reversed())
+        .limit(50)
         .collect(Collectors.toList());
   }
 
