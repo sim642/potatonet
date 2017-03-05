@@ -78,7 +78,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
     http.authorizeRequests()
         .antMatchers("/login").permitAll()
         .antMatchers("/google").anonymous()
-        .anyRequest().hasAnyAuthority("ROLE_EID", "ROLE_EMAIL", "ROLE_GOOGLE_OAUTH");
+        .anyRequest().authenticated();
     http.x509()
         .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
         .withObjectPostProcessor(new AuthenticationSuccessHandlerPostProcessor(authenticationSuccessHandler()))

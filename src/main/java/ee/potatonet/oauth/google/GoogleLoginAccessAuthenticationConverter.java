@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import ee.potatonet.data.User;
@@ -24,7 +23,7 @@ public class GoogleLoginAccessAuthenticationConverter extends DefaultUserAuthent
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       User currentUser;
 
-      if (authentication != null && authentication instanceof PreAuthenticatedAuthenticationToken && authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_PRE_GOOGLE"))) { //ensure the request is coming from /google
+      if (authentication != null && authentication instanceof DisabledAuthenticationToken && authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_PRE_GOOGLE"))) { //ensure the request is coming from /google
         currentUser = userService.findOneByGoogleId(googleId);
         if (currentUser == null) {
           throw new UsernameNotFoundException("No user registered with your google account was found.");
