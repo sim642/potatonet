@@ -14,7 +14,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -41,31 +41,61 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
   private final Environment env;
   private final OAuth2ClientContextFilter contextFilter;
   private final AccessTokenRequest accessTokenRequest;
-  private final GoogleAccessAuthenticationConverter authenticationConverter;
+  private final GoogleLoginAccessAuthenticationConverter loginAuthenticationConverter;
+  private final GoogleRegisterAccessAuthenticationConverter registerAuthenticationConverter;
 
   @Autowired
-  public OAuth2SecurityConfiguration(Environment env, OAuth2ClientContextFilter contextFilter, AccessTokenRequest accessTokenRequest, GoogleAccessAuthenticationConverter authenticationConverter) {
+  public OAuth2SecurityConfiguration(Environment env, OAuth2ClientContextFilter contextFilter, AccessTokenRequest accessTokenRequest, GoogleLoginAccessAuthenticationConverter loginAuthenticationConverter, GoogleRegisterAccessAuthenticationConverter registerAuthenticationConverter) {
     this.env = env;
     this.contextFilter = contextFilter;
     this.accessTokenRequest = accessTokenRequest;
-    this.authenticationConverter = authenticationConverter;
+    this.loginAuthenticationConverter = loginAuthenticationConverter;
+    this.registerAuthenticationConverter = registerAuthenticationConverter;
   }
 
   @Bean
   @Scope("session")
-  public OAuth2ProtectedResourceDetails googleResource() {
+  public OAuth2ProtectedResourceDetails googleLoginResource() {
     AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
 
-    details.setClientId(env.getProperty("oauth.google.client.id"));
-    details.setClientSecret(env.getProperty("oauth.google.client.secret"));
-    details.setTokenName(env.getProperty("oauth.google.authorization.code"));
-    details.setUserAuthorizationUri(env.getProperty("oauth.google.userAuthorizationUri"));
-    details.setAccessTokenUri(env.getProperty("oauth.google.accessTokenUri"));
-    details.setPreEstablishedRedirectUri(env.getProperty("oauth.google.preestablished.redirect.url"));
+    details.setId("google-login");
+    details.setClientId(env.getProperty("oauth.google.login.client.id"));
+    details.setClientSecret(env.getProperty("oauth.google.login.client.secret"));
+    details.setTokenName(env.getProperty("oauth.google.login.authorization.code"));
+    details.setUserAuthorizationUri(env.getProperty("oauth.google.login.userAuthorizationUri"));
+    details.setAccessTokenUri(env.getProperty("oauth.google.login.accessTokenUri"));
+    details.setPreEstablishedRedirectUri(env.getProperty("oauth.google.login.preestablished.redirect.url"));
+    details.setUseCurrentUri(false);
 
     details.setScope(new ArrayList<>(
             Arrays.asList(
-                env.getProperty("oauth.google.auth.scope").split(","))
+                env.getProperty("oauth.google.login.auth.scope").split(","))
+        )
+    );
+
+    details.setAuthenticationScheme(AuthenticationScheme.query);
+    details.setClientAuthenticationScheme(AuthenticationScheme.form);
+
+    return details;
+  }
+
+  @Bean
+  @Scope("session")
+  public OAuth2ProtectedResourceDetails googleRegisterResource() {
+    AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
+
+    details.setId("google-register");
+    details.setClientId(env.getProperty("oauth.google.register.client.id"));
+    details.setClientSecret(env.getProperty("oauth.google.register.client.secret"));
+    details.setTokenName(env.getProperty("oauth.google.register.authorization.code"));
+    details.setUserAuthorizationUri(env.getProperty("oauth.google.register.userAuthorizationUri"));
+    details.setAccessTokenUri(env.getProperty("oauth.google.register.accessTokenUri"));
+    details.setPreEstablishedRedirectUri(env.getProperty("oauth.google.register.preestablished.redirect.url"));
+    details.setUseCurrentUri(false);
+
+    details.setScope(new ArrayList<>(
+            Arrays.asList(
+                env.getProperty("oauth.google.register.auth.scope").split(","))
         )
     );
 
@@ -79,36 +109,67 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
     http.addFilterAfter(contextFilter, ExceptionTranslationFilter.class)
-        .addFilterBefore(oAuth2AuthenticationProcessingFilter(), FilterSecurityInterceptor.class);
+        .addFilterBefore(googleLoginAuthenticationProcessingFilter(), FilterSecurityInterceptor.class)
+        .addFilterBefore(googleRegisterAuthenticationProcessingFilter(), FilterSecurityInterceptor.class);
   }
 
   @Bean
-  public OAuth2ClientAuthenticationProcessingFilter oAuth2AuthenticationProcessingFilter() {
-    OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.login-url"));
-    filter.setRestTemplate(googleRestTemplate());
-    filter.setTokenServices(tokenServices());
+  public OAuth2ClientAuthenticationProcessingFilter googleLoginAuthenticationProcessingFilter() {
+    OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.login-redirect-url"));
+    filter.setRestTemplate(googleLoginRestTemplate());
+    filter.setTokenServices(loginTokenServices());
 
     return filter;
   }
 
   @Bean
-  public RemoteTokenServices tokenServices() {
+  public OAuth2ClientAuthenticationProcessingFilter googleRegisterAuthenticationProcessingFilter() {
+    OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.register-redirect-url"));
+    filter.setRestTemplate(googleRegisterRestTemplate());
+    filter.setTokenServices(registerTokenServices());
+
+    return filter;
+  }
+
+  @Bean
+  public RemoteTokenServices loginTokenServices() {
     DefaultAccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
-    tokenConverter.setUserTokenConverter(authenticationConverter);
+    tokenConverter.setUserTokenConverter(loginAuthenticationConverter);
 
     GoogleRemoteTokenServices tokenServices = new GoogleRemoteTokenServices();
     tokenServices.setCheckTokenEndpointUrl("https://www.googleapis.com/oauth2/v1/tokeninfo");
-    tokenServices.setClientId(env.getProperty("oauth.google.client.id"));
-    tokenServices.setClientSecret(env.getProperty("oauth.google.client.secret"));
+    tokenServices.setClientId(env.getProperty("oauth.google.login.client.id"));
+    tokenServices.setClientSecret(env.getProperty("oauth.google.login.client.secret"));
     tokenServices.setAccessTokenConverter(tokenConverter);
-    tokenServices.setRestTemplate(googleRestTemplate());
+    tokenServices.setRestTemplate(googleLoginRestTemplate());
+
+    return tokenServices;
+  }
+
+  @Bean
+  public RemoteTokenServices registerTokenServices() {
+    DefaultAccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
+    tokenConverter.setUserTokenConverter(registerAuthenticationConverter);
+
+    GoogleRemoteTokenServices tokenServices = new GoogleRemoteTokenServices();
+    tokenServices.setCheckTokenEndpointUrl("https://www.googleapis.com/oauth2/v1/tokeninfo");
+    tokenServices.setClientId(env.getProperty("oauth.google.register.client.id"));
+    tokenServices.setClientSecret(env.getProperty("oauth.google.register.client.secret"));
+    tokenServices.setAccessTokenConverter(tokenConverter);
+    tokenServices.setRestTemplate(googleRegisterRestTemplate());
 
     return tokenServices;
   }
 
   @Bean
   @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-  public OAuth2RestTemplate googleRestTemplate() {
-    return new OAuth2RestTemplate(googleResource(), new DefaultOAuth2ClientContext(accessTokenRequest));
+  public OAuth2RestTemplate googleLoginRestTemplate() {
+    return new OAuth2RestTemplate(googleLoginResource(), new DefaultOAuth2ClientContext(accessTokenRequest));
+  }
+
+  @Bean
+  @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+  public OAuth2RestTemplate googleRegisterRestTemplate() {
+    return new OAuth2RestTemplate(googleRegisterResource(), new DefaultOAuth2ClientContext(accessTokenRequest));
   }
 }
