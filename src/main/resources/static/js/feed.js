@@ -21,14 +21,22 @@ $(function () {
       return false;
     });
 
-    $("#loadButton").click(function () {
-      var lastPostId = $("#feed .panel-post").last().attr("data-post-id");
+    var canLoad = true;
+    var $window = $(window);
+    $window.scroll(function () {
+      if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {
+        canLoad = false;
 
-      $.get("/posts", {
-        beforePostId: lastPostId
-      }, function (data) {
-        $("#feed").append($(data));
-      });
+        var lastPostId = $("#feed .panel-post").last().attr("data-post-id");
+
+        $.get("/posts", {
+          beforePostId: lastPostId
+        }, function (data) {
+          var $data = $(data);
+          $("#feed").append($data);
+          canLoad = $data.length > 0;
+        });
+      }
     });
   });
 });

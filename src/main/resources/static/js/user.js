@@ -11,14 +11,22 @@ $(function () {
     stomp.subscribe('/topic/posts/' + userId, onPosts);
   });
 
-  $("#loadButton").click(function () {
-    var lastPostId = $("#posts .panel-post").last().attr("data-post-id");
+  var canLoad = true;
+  var $window = $(window);
+  $window.scroll(function () {
+    if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {
+      canLoad = false;
 
-    $.get("/users/" + userId + "/posts", {
-      beforePostId: lastPostId
-    }, function (data) {
-      $("#posts").append($(data));
-    });
+      var lastPostId = $("#posts .panel-post").last().attr("data-post-id");
+
+      $.get("/users/" + userId + "/posts", {
+        beforePostId: lastPostId
+      }, function (data) {
+        var $data = $(data);
+        $("#posts").append($data);
+        canLoad = $data.length > 0;
+      });
+    }
   });
 });
 
