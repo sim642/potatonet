@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -42,11 +41,10 @@ public class PostService {
   public List<Post> getUserFeedPosts(User user, Post beforePost) {
     user = userService.find(user);
 
-    List<Post> friendsPosts = postRepository.findAllPostsFromFriends(user);
-    List<Post> usersPosts = user.getPosts();
+    List<Post> feedPosts = postRepository.findAllFeedPosts(user);
 
     ZonedDateTime beforeDateTime = beforePost != null ? beforePost.getCreationDateTime() : ZonedDateTime.now();
-    return Stream.concat(friendsPosts.stream(), usersPosts.stream())
+    return feedPosts.stream()
         .filter(post -> post.getCreationDateTime().isBefore(beforeDateTime))
         .sorted(Comparator.comparing(Post::getCreationDateTime).reversed())
         .limit(50)
