@@ -25,11 +25,12 @@ import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
-import ee.potatonet.DomainRedirectStrategy;
 import ee.potatonet.X509AuthenticationServer;
 
 @Configuration
@@ -43,18 +44,20 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
   private final OAuth2ClientContextFilter contextFilter;
   private final AccessTokenRequest accessTokenRequest;
   private final GoogleAccessAuthenticationConverter authenticationConverter;
+  private final RedirectStrategy redirectStrategy;
 
   @Autowired
   public OAuth2SecurityConfiguration(
       Environment env,
       OAuth2ClientContextFilter contextFilter,
       AccessTokenRequest accessTokenRequest,
-      GoogleAccessAuthenticationConverter authenticationConverter
-  ) {
+      GoogleAccessAuthenticationConverter authenticationConverter,
+      RedirectStrategy redirectStrategy) {
     this.env = env;
     this.contextFilter = contextFilter;
     this.accessTokenRequest = accessTokenRequest;
     this.authenticationConverter = authenticationConverter;
+    this.redirectStrategy = redirectStrategy;
   }
 
   @Bean
@@ -96,6 +99,8 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
         new OAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.redirect-url"));
     filter.setRestTemplate(googleRestTemplate());
     filter.setTokenServices(googleTokenServices());
+    filter.setAuthenticationSuccessHandler(new GoogleAuthSuccessHandler(redirectStrategy));
+    filter.setAuthenticationFailureHandler(new SimpleUrlAuthenticationFailureHandler("/login?failureoauth"));
 
     return filter;
   }

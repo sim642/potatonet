@@ -60,6 +60,9 @@ public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticati
       currentUser.setGoogleId(googleId);
       userService.save(currentUser);
 
+      List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_GOOGLE_REGISTER");
+      currentUser.setAuthorities(authorities);
+
       return currentUser;
     }
     else {
