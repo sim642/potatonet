@@ -11,7 +11,7 @@ import ee.potatonet.oauth.google.DisabledAuthenticationToken;
 @Controller
 public class GoogleLoginController {
   @GetMapping("/google")
-  public String doGet() {
+  public String login() {
     DisabledAuthenticationToken preAuthentication = new DisabledAuthenticationToken(
         RequestContextHolder.currentRequestAttributes().getSessionId(),
         "N/A",
