@@ -14,4 +14,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
   @Query(value = "SELECT * FROM V_FEED WHERE FEED_USER_ID=?1 AND CREATION_DATE_TIME<?2 LIMIT ?3", nativeQuery = true)
   List<Post> findAllFeedPosts(User user, ZonedDateTime beforeDateTime, int count);
+
+  @Query(value = "SELECT * FROM V_USER_FEED WHERE FEED_USER_ID=?1 AND CREATION_DATE_TIME<?2 LIMIT ?3", nativeQuery = true)
+  List<Post> findAllUserFeedPosts(User user, ZonedDateTime beforeDateTime, int count);
 }

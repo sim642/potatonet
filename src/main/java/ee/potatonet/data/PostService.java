@@ -2,9 +2,7 @@ package ee.potatonet.data;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -16,6 +14,8 @@ import ee.potatonet.data.repos.PostRepository;
 @Service
 @Transactional
 public class PostService {
+
+  private static final int FEED_COUNT = 50;
 
   private final PostRepository postRepository;
   private final UserService userService;
@@ -42,7 +42,7 @@ public class PostService {
     user = userService.find(user);
 
     ZonedDateTime beforeDateTime = beforePost != null ? beforePost.getCreationDateTime() : ZonedDateTime.now();
-    List<Post> feedPosts = postRepository.findAllFeedPosts(user, beforeDateTime, 50);
+    List<Post> feedPosts = postRepository.findAllFeedPosts(user, beforeDateTime, FEED_COUNT);
 
     return feedPosts;
   }
@@ -51,11 +51,9 @@ public class PostService {
     user = userService.find(user);
 
     ZonedDateTime beforeDateTime = beforePost != null ? beforePost.getCreationDateTime() : ZonedDateTime.now();
-    return user.getPosts().stream()
-        .filter(post -> post.getCreationDateTime().isBefore(beforeDateTime))
-        .sorted(Comparator.comparing(Post::getCreationDateTime).reversed())
-        .limit(50)
-        .collect(Collectors.toList());
+    List<Post> userFeedPosts = postRepository.findAllUserFeedPosts(user, beforeDateTime, FEED_COUNT);
+
+    return userFeedPosts;
   }
 
   public void savePostToUser(Post post, User user) {
