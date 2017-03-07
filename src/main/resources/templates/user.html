@@ -20,7 +20,7 @@
                     <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
 
                     <h2 th:text="${user.fullName}"></h2>
-                    <a th:text="#{user.friends}" class="btn btn-link" th:href="@{/users/{userId}/friends(userId=${user.id})}" role="button">Friends</a>
+                    <a th:text="#{friends.friends}" class="btn btn-link" th:href="@{/users/{userId}/friends(userId=${user.id})}" role="button">Friends</a>
                 </div>
             </div>
         </div>
