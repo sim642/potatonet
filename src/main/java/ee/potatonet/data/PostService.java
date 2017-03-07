@@ -41,14 +41,10 @@ public class PostService {
   public List<Post> getUserFeedPosts(User user, Post beforePost) {
     user = userService.find(user);
 
-    List<Post> feedPosts = postRepository.findAllFeedPosts(user);
-
     ZonedDateTime beforeDateTime = beforePost != null ? beforePost.getCreationDateTime() : ZonedDateTime.now();
-    return feedPosts.stream()
-        .filter(post -> post.getCreationDateTime().isBefore(beforeDateTime))
-        .sorted(Comparator.comparing(Post::getCreationDateTime).reversed())
-        .limit(50)
-        .collect(Collectors.toList());
+    List<Post> feedPosts = postRepository.findAllFeedPosts(user, beforeDateTime, 50);
+
+    return feedPosts;
   }
 
   public List<Post> getUserProfilePosts(User user, Post beforePost) {
