@@ -1,5 +1,7 @@
 package ee.potatonet.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Controller
@@ -29,11 +32,13 @@ public class SettingsController {
 
   private final PasswordEncoder passwordEncoder;
   private final UserService userService;
+  private final LocaleResolver localeResolver;
 
   @Autowired
-  public SettingsController(PasswordEncoder passwordEncoder, UserService userService) {
+  public SettingsController(PasswordEncoder passwordEncoder, UserService userService, LocaleResolver localeResolver) {
     this.passwordEncoder = passwordEncoder;
     this.userService = userService;
+    this.localeResolver = localeResolver;
   }
 
   @RequestMapping(value = "/settings", method = RequestMethod.GET)
@@ -57,12 +62,13 @@ public class SettingsController {
   }
 
   @PostMapping("/settings/locale")
-  public String doPost(@ModelAttribute LanguageSettings languageSettings, @CurrentUser User currentUser, HttpSession httpSession) {
+  public String doPost(@ModelAttribute LanguageSettings languageSettings, @CurrentUser User currentUser,
+                       HttpServletRequest req, HttpServletResponse resp) {
     currentUser = userService.find(currentUser);
     currentUser.setLanguage(languageSettings.getLanguage());
     userService.save(currentUser);
 
-    httpSession.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, languageSettings.getLanguage().getLocale());
+    localeResolver.setLocale(req, resp, languageSettings.getLanguage().getLocale());
     return "redirect:/settings";
   }
 

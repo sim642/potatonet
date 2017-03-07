@@ -30,6 +30,7 @@ import ee.potatonet.eid.AuthenticationSuccessHandlerPostProcessor;
 import ee.potatonet.eid.EIDDetails;
 import ee.potatonet.eid.EIDDetailsX509PrincipalExtractor;
 import ee.potatonet.eid.PrincipalExtractorPostProcessor;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.ServletException;
@@ -45,6 +46,9 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private RedirectStrategy redirectStrategy;
+
+    @Autowired
+    private LocaleResolver localeResolver;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -113,10 +117,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication auth) throws ServletException, IOException {
                 super.onAuthenticationSuccess(req, resp, auth);
-                req.getSession(true).setAttribute(
-                        SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME,
-                        ((User) auth.getPrincipal()).getLanguage().getLocale()
-                );
+                localeResolver.setLocale(req, resp, ((User) auth.getPrincipal()).getLanguage().getLocale());
             }
         };
         successHandler.setDefaultTargetUrl("/");

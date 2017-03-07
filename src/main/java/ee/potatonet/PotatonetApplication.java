@@ -1,6 +1,8 @@
 package ee.potatonet;
 
 import javax.sql.DataSource;
+
+import ee.potatonet.data.Language;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -16,7 +18,7 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
@@ -109,6 +111,8 @@ public class PotatonetApplication {
 
 	@Bean
 	public LocaleResolver localeResolver() {
-		return new SessionLocaleResolver();
+		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+		cookieLocaleResolver.setDefaultLocale(Language.EN.getLocale());
+		return cookieLocaleResolver;
 	}
 }
