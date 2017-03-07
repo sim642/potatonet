@@ -58,7 +58,7 @@ public class SettingsController {
     currentUser.setPassword(passwordEncoder.encode(passwordSettings.getPassword()));
     userService.save(currentUser);
 
-    return "redirect:/settings?success";
+    return "redirect:/settings?password_success";
   }
 
   @PostMapping("/settings/locale")
@@ -69,7 +69,7 @@ public class SettingsController {
     userService.save(currentUser);
 
     localeResolver.setLocale(req, resp, languageSettings.getLanguage().getLocale());
-    return "redirect:/settings";
+    return "redirect:/settings?locale_success";
   }
 
 
