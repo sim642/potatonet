@@ -1,7 +1,5 @@
 package ee.potatonet.data;
 
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
