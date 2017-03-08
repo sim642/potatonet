@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{navbar}">
+<head>
+    <title th:text="#{statistics.title}">Statistics</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="panel panel-primary">
+        <div id="map"></div>
+        <script th:src="@{js/statsmap.js}"></script>
+        <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN7T07aFItU7S1oytPivNkBU1Sw438VgE&callback=initMap"></script>
+    </div>
+</div>
+
+</body>
+</html>
