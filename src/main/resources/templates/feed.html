@@ -14,8 +14,8 @@
         <th:block layout:fragment="content">
             <form id="post" th:action="@{/}" th:object="${post}" method="post">
                 <div class="form-group">
-                    <label class="sr-only" for="postContent">Content</label>
-                    <textarea class="form-control" rows="1" id="postContent" th:field="*{content}"></textarea>
+                    <label class="sr-only" for="content">Content</label>
+                    <textarea class="form-control" rows="1" id="content" th:field="*{content}"></textarea>
                 </div>
                 <button th:text="#{feed.post}" id="postButton" type="submit" class="btn btn-default pull-right">Post</button>
             </form>
