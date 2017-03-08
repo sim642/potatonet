@@ -7,7 +7,7 @@
 
 <div layout:fragment="content">
     <th:block th:if="${currentUser.equals(user) && incomingFriendRequestCount > 0}">
-        <h3 th:text="#{friends.friend.requests}">Friend requests</h3>
+        <h3 th:text="#{friends.friend.requests}">Incoming friend requests</h3>
         <th:block th:each="friendRequest : ${user.incomingFriendRequests}">
             <div th:replace="~{common :: userPanel (${friendRequest})}"></div>
         </th:block>
@@ -16,6 +16,13 @@
     <h3 th:text="#{friends.friends}">Friends</h3>
     <th:block th:each="friend : ${user.friends}">
         <div th:replace="~{common :: userPanel (${friend})}"></div>
+    </th:block>
+
+    <th:block th:if="${currentUser.equals(user) && user.outgoingFriendRequests.size() > 0}">
+        <h3>Outgoing friend requests</h3>
+        <th:block th:each="friendRequest : ${user.outgoingFriendRequests}">
+            <div th:replace="~{common :: userPanel (${friendRequest})}"></div>
+        </th:block>
     </th:block>
 </div>
 

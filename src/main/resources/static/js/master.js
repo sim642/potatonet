@@ -7,34 +7,55 @@ $(function () {
     xhr.setRequestHeader(csrfHeader, csrfToken);
   });
 
-  $(".btn-friend-add").click(function () {
-    var userId = $(this).attr("data-user-id");
+  $(document).on("click", ".btn-friend-add", function () {
+    var $btns = $(this).closest(".btns-friend");
+    var userId = $btns.attr("data-user-id");
     $.ajax({
       url: "/users/" + userId + "/friendrequests",
       method: "POST"
+    }).done(function (data) {
+      $btns.replaceWith($(data));
     });
 
     return false;
   });
 
-  $(".btn-friend-accept").click(function () {
-    var friendRequestId = $(this).attr("data-friend-request-id");
+  $(document).on("click", ".btn-friend-accept", function () {
+    var $btns = $(this).closest(".btns-friend");
+    var friendRequestId = $btns.attr("data-user-id");
     $.ajax({
       url: "/users/" + currentUserId + "/friends/" + friendRequestId,
       method: "PUT"
+    }).done(function (data) {
+      $btns.replaceWith($(data));
     });
 
     return false;
   });
 
-  $(".btn-friend-reject").click(function () {
-    var friendRequestId = $(this).attr("data-friend-request-id");
+  $(document).on("click", ".btn-friend-reject", function () {
+    var $btns = $(this).closest(".btns-friend");
+    var friendRequestId = $btns.attr("data-user-id");
     $.ajax({
       url: "/users/" + currentUserId + "/friendrequests/" + friendRequestId,
       method: "DELETE"
+    }).done(function (data) {
+      $btns.replaceWith($(data));
+    });
+
+    return false;
+  });
+
+  $(document).on("click", ".btn-friend-remove", function () {
+    var $btns = $(this).closest(".btns-friend");
+    var friendId = $btns.attr("data-user-id");
+    $.ajax({
+      url: "/users/" + currentUserId + "/friends/" + friendId,
+      method: "DELETE"
+    }).done(function (data) {
+      $btns.replaceWith($(data));
     });
 
     return false;
   });
 });
-

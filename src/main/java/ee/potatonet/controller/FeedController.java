@@ -29,7 +29,7 @@ public class FeedController {
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String doGet(@CurrentUser User currentUser, Model model) {
-    model.addAttribute("post", new Post());
+    model.addAttribute("post", new Post(userService.find(currentUser), ""));
     model.addAttribute("posts", postService.getUserFeedPosts(currentUser));
     model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
     return "feed";
