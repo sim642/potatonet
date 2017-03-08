@@ -12,7 +12,16 @@ function storePost() {
   localStorage.setItem(currentUserId, JSON.stringify(userStorage));
 }
 
-function trySendStoredPost() {
+var trySendTimeout = null;
+
+function trySendStoredPost(callback) {
+  clearTimeout(trySendTimeout);
+
+  var endCallback = function () {
+    (callback || function(){})();
+    trySendTimeout = setTimeout(trySendStoredPost, 60 * 1000);
+  };
+
   var userStorage = JSON.parse(localStorage.getItem(currentUserId)) || {};
   var posts = (userStorage.posts || []);
   if (posts.length > 0) {
@@ -22,7 +31,11 @@ function trySendStoredPost() {
           userStorage.posts = posts;
           localStorage.setItem(currentUserId, JSON.stringify(userStorage));
           trySendStoredPost();
-        });
+        })
+        .fail(endCallback);
+  }
+  else {
+    endCallback();
   }
 }
 
@@ -39,12 +52,14 @@ $(function () {
     $("#post").submit(function (event) {
       var $content = $("#content");
 
-      $.post("/", $("#post").serialize())
-          .fail(storePost)
-          .always(function () {
-            $content.val("");
-            $('#postButton').attr('disabled', true);
-          });
+      trySendStoredPost(function () {
+        $.post("/", $("#post").serialize())
+            .fail(storePost)
+            .always(function () {
+              $content.val("");
+              $('#postButton').attr('disabled', true);
+            });
+      });
 
       return false;
     });
