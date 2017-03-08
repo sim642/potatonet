@@ -18,6 +18,7 @@ public class StatisticsController {
 
   @GetMapping("/statistics")
   public String doGet(Model model) {
+    model.addAttribute("coords", postService.getAllPostCoordinates());
     return "statistics";
   }
 }

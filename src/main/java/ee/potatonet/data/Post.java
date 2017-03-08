@@ -69,6 +69,10 @@ public class Post {
     coordinates.setLatitude(latitude);
   }
 
+  public Coordinates getCoordinates() {
+    return coordinates;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {

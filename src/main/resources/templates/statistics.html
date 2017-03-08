@@ -8,6 +8,9 @@
 <body>
 
 <div layout:fragment="content">
+    <script th:inline="javascript">
+	  var coords = [[${coords}]];
+    </script>
     <div class="panel panel-primary">
         <div id="map"></div>
         <script th:src="@{js/statsmap.js}"></script>
