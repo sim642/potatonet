@@ -13,6 +13,8 @@
     <div layout:replace="~{common :: postBasePanel(${post}, 'panel-primary')}">
         <th:block layout:fragment="content">
             <form id="post" th:action="@{/}" th:object="${post}" method="post">
+                <input type="hidden" th:field="*{latitude}">
+                <input type="hidden" th:field="*{longitude}">
                 <div class="form-group">
                     <label class="sr-only" for="postContent">Content</label>
                     <textarea class="form-control" rows="1" id="postContent" th:field="*{content}"></textarea>

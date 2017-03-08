@@ -19,7 +19,10 @@ public class Post {
   @NotNull
   @Size(min = 1, max = 32700)
   private String content;
-  
+
+  @Embedded
+  private Coordinates coordinates = new Coordinates();
+
   private ZonedDateTime creationDateTime;
 
   public Post(User user, String content) {
@@ -48,6 +51,22 @@ public class Post {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public Float getLongitude() {
+    return coordinates.getLongitude();
+  }
+
+  public void setLongitude(Float longitude) {
+    coordinates.setLongitude(longitude);
+  }
+
+  public Float getLatitude() {
+    return coordinates.getLatitude();
+  }
+
+  public void setLatitude(Float latitude) {
+    coordinates.setLatitude(latitude);
   }
 
   @Override
