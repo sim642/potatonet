@@ -1,40 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
 
-<div class="panel panel-default" th:fragment="post(postInfo)">
-    <div class="panel-heading">
-        <span th:text="${postInfo.user.fullName}"/>
-        <span class="pull-right" th:text="${postInfo.creationDateTime}">2017-02-11 15:00:00</span>
-    </div>
+<div class="panel panel-post" layout:fragment="postBasePanel(post, panel_class)" th:classappend="${panel_class} ?: 'panel-default'">
     <div class="panel-body">
         <div class="media">
             <div class="media-left">
-                <img class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(postInfo.user, 64)}">
+                <a th:href="@{/users/{userId}(userId=${post.user.id})}">
+                    <img class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(post.user, 64)}">
+                </a>
             </div>
             <div class="media-body">
-                <p th:text="${postInfo.content}"></p>
+                <span class="pull-right text-muted" th:text="${post.creationDateTime}">2017-02-11 15:00:00</span>
+                <h4 class="media-heading">
+                    <a class="hidden-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
+                </h4>
+                <th:block layout:fragment="content">
+                    <p>Content</p>
+                </th:block>
             </div>
         </div>
     </div>
 </div>
 
-<div class="btn-group" role="group" th:fragment="friendButtons(user)">
-    <th:block th:unless="${user.equals(currentUser)}">
-        <th:block th:if="${!currentUser.friends.contains(user)}">
-            <button th:text="#{friendrequest.add.friend}" type="button" class="btn btn-primary btn-friend-add" th:data-user-id="${user.id}" th:if="${!currentUser.incomingFriendRequests.contains(user)}">Add friend</button>
-
-            <button th:text="#{friendrequest.accept}" type="button" class="btn btn-success btn-friend-accept" th:data-friend-request-id="${user.id}" th:if="${currentUser.incomingFriendRequests.contains(user)}">Accept</button>
-            <button th:text="#{friendrequest.decline}" type="button" class="btn btn-danger btn-friend-reject" th:data-friend-request-id="${user.id}" th:if="${currentUser.incomingFriendRequests.contains(user)}">Reject</button>
-        </th:block>
+<div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
+    <th:block layout:fragment="content">
+        <p th:text="${post.content}"></p>
     </th:block>
 </div>
 
-<a class="panel-link" th:href="@{/users/{userId}(userId=${user.id})}" th:fragment="userPanel(user)">
-    <div class="panel panel-default">
+<div class="btn-group btns-friend" role="group" th:fragment="friendButtons(user)" th:data-user-id="${user.id}">
+    <th:block th:unless="${user.equals(currentUser)}">
+        <th:block th:if="${!currentUser.friends.contains(user)}">
+            <button th:text="#{friendrequest.add.friend}" type="button" class="btn btn-primary btn-friend-add" th:if="${!currentUser.incomingFriendRequests.contains(user) && !currentUser.outgoingFriendRequests.contains(user)}">Add friend</button>
+
+            <button th:text="#{friendrequest.accept}" type="button" class="btn btn-success btn-friend-accept" th:if="${currentUser.incomingFriendRequests.contains(user)}">Accept</button>
+            <button th:text="#{friendrequest.decline}" type="button" class="btn btn-danger btn-friend-reject" th:if="${currentUser.incomingFriendRequests.contains(user)}">Reject</button>
+
+            <button th:text="#{friendrequest.cancel}" type="button" class="btn btn-default btn-friend-reject" th:if="${currentUser.outgoingFriendRequests.contains(user)}">Cancel request</button>
+        </th:block>
+
+        <button th:text="#{friend.remove}" type="button" class="btn btn-link btn-friend-remove" th:if="${currentUser.friends.contains(user)}">Remove friend</button>
+    </th:block>
+</div>
+
+<a class="hidden-link" th:href="@{/users/{userId}(userId=${user.id})}" th:fragment="userPanel(user)">
+    <div class="panel panel-default panel-user">
         <div class="panel-body">
             <div class="media">
-                <div class="media-left">
+                <div class="media-left media-middle">
                     <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="img-rounded">
                 </div>
                 <div class="media-body">

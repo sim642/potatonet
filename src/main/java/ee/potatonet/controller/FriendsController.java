@@ -3,12 +3,12 @@ package ee.potatonet.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
@@ -36,9 +36,20 @@ public class FriendsController {
   }
 
   @PutMapping("/{friendRequestId}")
-  @ResponseBody
-  public void doIdPut(@ModelAttribute User user, @PathVariable("friendRequestId") Long friendRequestId) {
-    User friendUser = userService.findById(friendRequestId);
-    userService.addFriendship(user, friendUser);
+  public String doIdPut(@ModelAttribute User user, @PathVariable("friendRequestId") Long friendRequestId, Model model) {
+    User friendRequest = userService.findById(friendRequestId);
+    userService.addFriendship(user, friendRequest);
+
+    model.addAttribute("user", friendRequest);
+    return "common :: friendButtons";
+  }
+
+  @DeleteMapping("/{friendId}")
+  public String doIdDelete(@ModelAttribute User user, @PathVariable("friendId") Long friendId, Model model) {
+    User friend = userService.findById(friendId);
+    userService.removeFriends(user, friend);
+
+    model.addAttribute("user", friend);
+    return "common :: friendButtons";
   }
 }

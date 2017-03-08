@@ -98,13 +98,6 @@ public class PotatonetApplication {
 	}
 
 	@Bean
-	public TemplateEngine templateEngine() {
-		SpringTemplateEngine engine = new SpringTemplateEngine();
-		engine.addDialect(new LayoutDialect(new GroupingStrategy()));
-		return engine;
-	}
-
-	@Bean
 	public AvatarService avatarService(GravatarAvatarService gravatarAvatarService) {
 		return gravatarAvatarService;
 	}

@@ -9,7 +9,24 @@
     font-size: 63px;
 }
 
-a.panel-link:link, a.panel-link:visited, a.panel-link:hover, a.panel-link:active {
+a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:active {
     color: #333;
     text-decoration: none;
+}
+
+#post textarea {
+    resize: vertical;
+}
+
+.panel-user .media-body {
+    vertical-align: middle;
+}
+
+.panel-user .media-body h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.user-details .form-group {
+    margin-bottom: 0;
 }
