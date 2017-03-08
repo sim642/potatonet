@@ -15,7 +15,6 @@ public class AppProperties {
   private String trustStore;
   private String trustStorePassword;
 
-  private String googleLoginUrl;
 
   public boolean getShowErrors() {
     return showErrors;
@@ -63,13 +62,5 @@ public class AppProperties {
 
   public void setTrustStorePassword(String trustStorePassword) {
     this.trustStorePassword = trustStorePassword;
-  }
-
-  public String getGoogleLoginUrl() {
-    return googleLoginUrl;
-  }
-
-  public void setGoogleLoginUrl(String googleLoginUrl) {
-    this.googleLoginUrl = googleLoginUrl;
   }
 }
