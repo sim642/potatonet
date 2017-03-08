@@ -1,6 +1,8 @@
 package ee.potatonet.data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -14,6 +16,8 @@ public class Post {
   private User user;
 
   @Column(columnDefinition= "LONGVARCHAR")
+  @NotNull
+  @Size(min = 1, max = 32700)
   private String content;
   
   private ZonedDateTime creationDateTime;

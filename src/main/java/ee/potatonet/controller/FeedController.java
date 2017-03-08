@@ -17,6 +17,8 @@ import ee.potatonet.data.PostService;
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
 
+import javax.validation.Valid;
+
 @Controller
 public class FeedController {
 
@@ -38,14 +40,14 @@ public class FeedController {
   }
 
   @PostMapping(value = "/", headers = "X-Requested-With!=XMLHttpRequest")
-  public String doPost(@CurrentUser User currentUser, @ModelAttribute Post post) {
+  public String doPost(@CurrentUser User currentUser, @Valid @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
     return "redirect:/";
   }
 
   @PostMapping(value = "/", headers = "X-Requested-With=XMLHttpRequest")
   @ResponseBody
-  public void doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
+  public void doPostAjax(@CurrentUser User currentUser, @Valid @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
   }
 
