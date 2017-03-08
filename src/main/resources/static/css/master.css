@@ -30,3 +30,17 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
 .user-details .form-group {
     margin-bottom: 0;
 }
+
+
+/* https://www.w3schools.com/howto/howto_css_loader.asp */
+.loader-posts {
+    background: url('/img/potato-48.png');
+    width: 48px;
+    height: 48px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

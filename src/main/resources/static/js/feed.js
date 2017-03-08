@@ -20,24 +20,29 @@ $(function () {
 
       return false;
     });
+  });
 
-    var canLoad = true;
-    var $window = $(window);
-    $window.scroll(function () {
-      if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {
-        canLoad = false;
+  var canLoad = true;
+  var $window = $(window);
+  var $loader = $("#loader");
+  $loader.hide();
 
-        var lastPostId = $("#feed .panel-post").last().attr("data-post-id");
+  $window.scroll(function () {
+    if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {
+      canLoad = false;
 
-        $.get("/posts", {
-          beforePostId: lastPostId
-        }, function (data) {
-          var $data = $(data);
-          $("#feed").append($data);
-          canLoad = $data.length > 0;
-        });
-      }
-    });
+      var lastPostId = $("#feed .panel-post").last().attr("data-post-id");
+      $loader.show();
+
+      $.get("/posts", {
+        beforePostId: lastPostId
+      }, function (data) {
+        var $data = $(data);
+        $loader.hide();
+        $("#feed").append($data);
+        canLoad = $data.length > 0;
+      });
+    }
   });
 });
 
