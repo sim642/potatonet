@@ -2,10 +2,7 @@ package ee.potatonet.data;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -17,6 +14,8 @@ import ee.potatonet.data.repos.PostRepository;
 @Service
 @Transactional
 public class PostService {
+
+  private static final int FEED_COUNT = 50;
 
   private final PostRepository postRepository;
   private final UserService userService;
@@ -39,23 +38,22 @@ public class PostService {
     return findById(post.getId());
   }
 
-  public List<Post> getUserFeedPosts(User user) {
+  public List<Post> getUserFeedPosts(User user, Post beforePost) {
     user = userService.find(user);
 
-    List<Post> friendsPosts = postRepository.findAllPostsFromFriends(user);
-    List<Post> usersPosts = user.getPosts();
+    ZonedDateTime beforeDateTime = beforePost != null ? beforePost.getCreationDateTime() : ZonedDateTime.now();
+    List<Post> feedPosts = postRepository.findAllFeedPosts(user, beforeDateTime, FEED_COUNT);
 
-    return Stream.concat(friendsPosts.stream(), usersPosts.stream())
-        .sorted(Comparator.comparing(Post::getCreationDateTime).reversed())
-        .collect(Collectors.toList());
+    return feedPosts;
   }
 
-  public List<Post> getUserProfilePosts(User user) {
+  public List<Post> getUserProfilePosts(User user, Post beforePost) {
     user = userService.find(user);
 
-    return user.getPosts().stream()
-        .sorted(Comparator.comparing(Post::getCreationDateTime).reversed())
-        .collect(Collectors.toList());
+    ZonedDateTime beforeDateTime = beforePost != null ? beforePost.getCreationDateTime() : ZonedDateTime.now();
+    List<Post> userFeedPosts = postRepository.findAllUserFeedPosts(user, beforeDateTime, FEED_COUNT);
+
+    return userFeedPosts;
   }
 
   public void savePostToUser(Post post, User user) {

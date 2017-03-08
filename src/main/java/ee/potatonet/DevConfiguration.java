@@ -39,6 +39,10 @@ public class DevConfiguration {
     createPost(tiit, "Tere, ma Tiit");
     createPost(simmo, "Tere, ma Simmo");
 
+    for (int i = 0; i < 250; i++) {
+      createPost(simmo, String.format("Post %d", i));
+    }
+
     veiko.addFriend(tiit);
     veiko.addFriend(simmo);
     tiit.addFriend(simmo);

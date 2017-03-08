@@ -4,10 +4,12 @@ package ee.potatonet.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.potatonet.data.Post;
@@ -30,7 +32,7 @@ public class FeedController {
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String doGet(@CurrentUser User currentUser, Model model) {
     model.addAttribute("post", new Post(userService.find(currentUser), ""));
-    model.addAttribute("posts", postService.getUserFeedPosts(currentUser));
+    model.addAttribute("posts", postService.getUserFeedPosts(currentUser, null));
     model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
     return "feed";
   }
@@ -45,5 +47,11 @@ public class FeedController {
   @ResponseBody
   public void doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
+  }
+
+  @GetMapping("/posts")
+  public String doGetPosts(@CurrentUser User currentUser, @RequestParam("beforePostId") Long beforePostId, Model model) {
+    model.addAttribute("posts", postService.getUserFeedPosts(currentUser, postService.findById(beforePostId)));
+    return "posts";
   }
 }
