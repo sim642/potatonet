@@ -1,7 +1,11 @@
+var csrfToken = null;
+var csrfHeader = null;
+var currentUserId = null;
+
 $(function () {
-  var csrfToken = $("meta[name='_csrf']").attr("content");
-  var csrfHeader = $("meta[name='_csrf_header']").attr("content");
-  var currentUserId = $("meta[name='_current_user_id']").attr("content");
+  csrfToken = $("meta[name='_csrf']").attr("content");
+  csrfHeader = $("meta[name='_csrf_header']").attr("content");
+  currentUserId = $("meta[name='_current_user_id']").attr("content");
 
   $(document).ajaxSend(function(e, xhr, options) {
     xhr.setRequestHeader(csrfHeader, csrfToken);
