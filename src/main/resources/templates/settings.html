@@ -8,6 +8,9 @@
 
 <div layout:fragment="content">
     <div class="panel panel-default">
+        <div class="panel-heading" th:text="#{settings.heading.password}">
+            Password settings
+        </div>
         <div class="panel-body">
             <form class="form-horizontal" th:action="@{/settings/password}" method="post" th:object="${passwordSettings}">
                 <div class="alert alert-danger" role="alert" th:each="error : ${#fields.errors('*')}"
@@ -41,10 +44,13 @@
     </div>
 
     <div class="panel panel-default">
+        <div class="panel-heading" th:text="#{settings.heading.locale}">
+            Language settings
+        </div>
         <div class="panel-body">
             <form class="form-horizontal" th:action="@{/settings/locale}" method="post">
                 <div th:text="#{settings.locale.changed}" class="alert alert-success" role="alert" th:if="${param.locale_success}">
-                    Locale changed
+                    Language changed
                 </div>
                 <div class="form-group">
                     <label th:text="#{settings.locale}" class="col-sm-2 control-label">Locale</label>
