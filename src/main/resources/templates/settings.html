@@ -58,7 +58,7 @@
                         <div class="btn-group" data-toggle="buttons">
                             <label th:each="language : ${languageSettings.allLanguages}" class="btn btn-default" th:classappend="${languageSettings.language.equals(language)}? 'active'">
                                 <input th:id="${language.name()}" th:value="${language.name()}" type="radio" name="language" autocomplete="off" th:selected="${languageSettings.language.equals(language)}? 'selected'" >
-                                <span th:text="${language.name()}"></span>
+                                <span th:text="#{'settings.enum.language.' + ${language.name()}}"></span>
                             </label>
                         </div>
                     </div>

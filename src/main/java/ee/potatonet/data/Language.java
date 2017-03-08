@@ -3,8 +3,8 @@ package ee.potatonet.data;
 import java.util.Locale;
 
 public enum Language {
-  EE(Locale.forLanguageTag("et-EE")),
-  EN(Locale.ENGLISH);
+  EN(Locale.ENGLISH),
+  EE(Locale.forLanguageTag("et-EE"));
 
   private Locale locale;
 
