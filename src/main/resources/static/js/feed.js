@@ -4,12 +4,26 @@ function onFeed (msg) {
   $("#feed").prepend(msg.body);
 }
 
+function showStoredPostAlert() {
+  var userStorage = JSON.parse(localStorage.getItem(currentUserId)) || {};
+  var posts = (userStorage.posts || []);
+
+  $("#stored-count").text(posts.length);
+  if (posts.length > 0) {
+    $("#alert-stored").removeClass("hidden");
+  }
+  else {
+    $("#alert-stored").addClass("hidden");
+  }
+}
+
 function storePost() {
   var userStorage = JSON.parse(localStorage.getItem(currentUserId)) || {};
   var posts = (userStorage.posts || []);
   posts.push($("#post").serialize());
   userStorage.posts = posts;
   localStorage.setItem(currentUserId, JSON.stringify(userStorage));
+  showStoredPostAlert();
 }
 
 var trySendTimeout = null;
@@ -30,6 +44,7 @@ function trySendStoredPost(callback) {
         .done(function () {
           userStorage.posts = posts;
           localStorage.setItem(currentUserId, JSON.stringify(userStorage));
+          showStoredPostAlert();
           trySendStoredPost();
         })
         .fail(endCallback);

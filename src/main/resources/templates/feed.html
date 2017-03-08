@@ -22,6 +22,11 @@
         </th:block>
     </div>
 
+    <div id="alert-stored" class="alert alert-warning hidden" role="alert">
+        <span>Internet connection problem! Number of posts waiting to be posted:</span>
+        <span id="stored-count">0</span>
+    </div>
+
     <div id="feed">
         <th:block th:each="post : ${posts}">
             <div th:replace="~{common :: postPanel (${post})}"></div>
