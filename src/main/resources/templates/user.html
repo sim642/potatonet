@@ -23,13 +23,13 @@
 
                     <div class="form-horizontal user-details">
                         <div class="form-group">
-                            <label class="control-label col-md-2" for="gender">Gender</label>
+                            <label th:text="#{user.gender}" class="control-label col-md-2" for="gender">Gender</label>
                             <div class="col-md-10">
-                                <p class="form-control-static" id="gender" th:text="${user.eid.eidCode.gender}"></p>
+                                <p class="form-control-static" id="gender" th:text="#{'user.enum.gender.' + ${user.eid.eidCode.gender}}"></p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-2" for="birthday">Birthday</label>
+                            <label th:text="#{user.birthday}" class="control-label col-md-2" for="birthday">Birthday</label>
                             <div class="col-md-10">
                                 <p class="form-control-static" id="birthday" th:text="${user.eid.eidCode.birthDate}"></p>
                             </div>

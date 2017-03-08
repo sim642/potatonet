@@ -37,10 +37,10 @@
             <button th:text="#{friendrequest.accept}" type="button" class="btn btn-success btn-friend-accept" th:if="${currentUser.incomingFriendRequests.contains(user)}">Accept</button>
             <button th:text="#{friendrequest.decline}" type="button" class="btn btn-danger btn-friend-reject" th:if="${currentUser.incomingFriendRequests.contains(user)}">Reject</button>
 
-            <button type="button" class="btn btn-default btn-friend-reject" th:if="${currentUser.outgoingFriendRequests.contains(user)}">Cancel request</button>
+            <button th:text="#{friendrequest.cancel}" type="button" class="btn btn-default btn-friend-reject" th:if="${currentUser.outgoingFriendRequests.contains(user)}">Cancel request</button>
         </th:block>
 
-        <button type="button" class="btn btn-link btn-friend-remove" th:if="${currentUser.friends.contains(user)}">Remove friend</button>
+        <button th:text="#{friend.remove}" type="button" class="btn btn-link btn-friend-remove" th:if="${currentUser.friends.contains(user)}">Remove friend</button>
     </th:block>
 </div>
 
