@@ -49,8 +49,9 @@ public class SettingsController {
   }
 
   @PostMapping("/settings/password")
-  public String doPost(@ModelAttribute @Valid PasswordSettings passwordSettings, BindingResult bindingResult, @CurrentUser User currentUser) { // WTF spring magic: http://stackoverflow.com/a/29075342
+  public String doPost(@ModelAttribute @Valid PasswordSettings passwordSettings, BindingResult bindingResult, @CurrentUser User currentUser, Model model) { // WTF spring magic: http://stackoverflow.com/a/29075342
     if (bindingResult.hasErrors()) {
+      model.addAttribute("languageSettings", new LanguageSettings(userService.find(currentUser).getLanguage()));
       return "settings";
     }
 
