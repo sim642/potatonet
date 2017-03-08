@@ -2,7 +2,6 @@ package ee.potatonet.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
@@ -10,8 +9,6 @@ import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import ee.potatonet.data.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -21,11 +18,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.LocaleResolver;
 
+import ee.potatonet.data.Language;
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Controller
 public class SettingsController {
@@ -99,12 +96,12 @@ public class SettingsController {
 
   public static class PasswordSettings {
     @NotNull
-    @Size(min = 8)
+    @Size(min = 8, message = "{settings.password.validation.size}")
     private String password;
 
     private String passwordConfirm;
 
-    @AssertTrue
+    @AssertTrue(message = "{settings.password.validation.matching}")
     public boolean isMatching() {
       return Objects.equals(password, passwordConfirm);
     }
