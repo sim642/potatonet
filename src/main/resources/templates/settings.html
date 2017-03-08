@@ -50,7 +50,8 @@
                     <label for="password" class="col-sm-2 control-label">Connect with Google</label>
                     <div class="col-sm-10">
                         <a href="https://localhost:8443/googleLogin" th:href="@{{domain}/googleLogin(domain=${app.domain})}" class="btn btn-social btn-google">
-                            <span class="fa fa-google"></span> Sign in with Google
+                            <span class="fa fa-google"></span>
+                            <div th:text="#{login.google.sign.in}"></div>
                         </a>
                     </div>
                 </div>
