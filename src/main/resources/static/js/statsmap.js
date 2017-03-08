@@ -1,6 +1,6 @@
 function initMap() {
   var mapCenterLocation;
-  if (coords.length == 0) {
+  if (coords.length == 0 || coords[0].latitude == null) {
     // default center locations is Tartu(58.3776 N, 26.7290 E)
 	mapCenterLocation = {'latitude' : 58.3776, 'longitude' : 26.7290};
   } else {

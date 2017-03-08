@@ -15,7 +15,7 @@
         <div id="map"></div>
         <script th:src="@{js/statsmap.js}"></script>
         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN7T07aFItU7S1oytPivNkBU1Sw438VgE&callback=initMap"></script>
+        <script async defer th:src="@{https://maps.googleapis.com/maps/api/js(key=${app.googleApiKey}, callback=initMap)}"></script>
     </div>
 </div>
 
