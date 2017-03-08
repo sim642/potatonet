@@ -51,7 +51,7 @@
                             </div>
                         </div>
                         <hr/>
-                        <div class="row">
+                        <div class="row form-group">
                             <div class="col-sm-12">
                                 <a href="https://localhost:8446/" th:href="@{{domain}/login(domain=${app.domainEid})}" th:fragment="eidButton">
                                     <img th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
@@ -60,8 +60,8 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <a href="https://localhost:8443/google">
-                                    Google Login
+                                <a href="https://localhost:8443/google" class="btn btn-social btn-google">
+                                    <span class="fa fa-google"></span>   Sign in with Google
                                 </a>
                             </div>
                         </div>
