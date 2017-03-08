@@ -1,6 +1,8 @@
 package ee.potatonet;
 
+import java.io.IOException;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
@@ -27,6 +30,12 @@ import ee.potatonet.eid.AuthenticationSuccessHandlerPostProcessor;
 import ee.potatonet.eid.EIDDetails;
 import ee.potatonet.eid.EIDDetailsX509PrincipalExtractor;
 import ee.potatonet.eid.PrincipalExtractorPostProcessor;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -37,6 +46,9 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private RedirectStrategy redirectStrategy;
+
+    @Autowired
+    private LocaleResolver localeResolver;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -101,7 +113,13 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler() {
-        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication auth) throws ServletException, IOException {
+                super.onAuthenticationSuccess(req, resp, auth);
+                localeResolver.setLocale(req, resp, ((User) auth.getPrincipal()).getLanguage().getLocale());
+            }
+        };
         successHandler.setDefaultTargetUrl("/");
         successHandler.setAlwaysUseDefaultTargetUrl(false);
         successHandler.setRedirectStrategy(redirectStrategy);

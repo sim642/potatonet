@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
 <head>
-    <title>friends</title>
+    <title th:text="#{friends.friends}">friends</title>
 </head>
 <body>
 
 <div layout:fragment="content">
     <th:block th:if="${currentUser.equals(user) && incomingFriendRequestCount > 0}">
-        <h3>Friend requests</h3>
+        <h3 th:text="#{friends.friend.requests}">Friend requests</h3>
         <th:block th:each="friendRequest : ${user.incomingFriendRequests}">
             <div th:replace="~{common :: userPanel (${friendRequest})}"></div>
         </th:block>
     </th:block>
 
-    <h3>Friends</h3>
+    <h3 th:text="#{friends.friends}">Friends</h3>
     <th:block th:each="friend : ${user.friends}">
         <div th:replace="~{common :: userPanel (${friend})}"></div>
     </th:block>

@@ -1,17 +1,6 @@
 package ee.potatonet.data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +26,9 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String password;
+
+  @Enumerated(EnumType.STRING)
+  private Language language = Language.EN;
 
   @Embedded
   private EIDDetails eid;
@@ -145,6 +137,14 @@ public class User implements UserDetails {
 
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
     this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
+  }
+
+  public Language getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(Language language) {
+    this.language = language;
   }
 
   private static class AuthorityComparator implements Comparator<GrantedAuthority>,

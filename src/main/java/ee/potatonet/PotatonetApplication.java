@@ -1,6 +1,8 @@
 package ee.potatonet;
 
 import javax.sql.DataSource;
+
+import ee.potatonet.data.Language;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -15,6 +17,8 @@ import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
@@ -103,5 +107,12 @@ public class PotatonetApplication {
 	@Bean
 	public AvatarService avatarService(GravatarAvatarService gravatarAvatarService) {
 		return gravatarAvatarService;
+	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+		cookieLocaleResolver.setDefaultLocale(Language.EN.getLocale());
+		return cookieLocaleResolver;
 	}
 }
