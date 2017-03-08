@@ -25,6 +25,7 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String password;
+  private String googleId;
 
   @Enumerated(EnumType.STRING)
   private Language language = Language.EN;
@@ -153,6 +154,14 @@ public class User implements UserDetails {
     this.language = language;
   }
 
+  public String getGoogleId() {
+    return googleId;
+  }
+
+  public void setGoogleId(String googleId) {
+    this.googleId = googleId;
+  }
+
   private static class AuthorityComparator implements Comparator<GrantedAuthority>,
       Serializable {
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
@@ -203,7 +212,7 @@ public class User implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
+    return authorities;
   }
 
   @Override

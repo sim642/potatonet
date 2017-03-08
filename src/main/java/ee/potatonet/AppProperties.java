@@ -15,6 +15,7 @@ public class AppProperties {
   private String trustStore;
   private String trustStorePassword;
 
+
   public boolean getShowErrors() {
     return showErrors;
   }
