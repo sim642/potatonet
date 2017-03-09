@@ -3,6 +3,7 @@
 <body>
 
 <div class="panel panel-post" layout:fragment="postBasePanel(post, panel_class)" th:classappend="${panel_class} ?: 'panel-default'" th:data-post-id="${post.id}">
+
     <div class="panel-body">
         <div class="media">
             <div class="media-left">
@@ -11,7 +12,21 @@
                 </a>
             </div>
             <div class="media-body">
-                <a th:href="@{/posts/{id}(id=${post.id})}" class="pull-right text-muted" th:text="${post.creationDateTime}">2017-02-11 15:00:00</a>
+                <a th:href="@{/posts/{id}(id=${post.id})}" class="pull-right btn btn-link text-muted" th:text="${post.creationDateTime}">2017-02-11 15:00:00</a>
+                <button type="button" class="pull-right btn btn-link" data-toggle="modal" data-target="#mapModal"
+                        th:if="${post.coordinates.latitude != null}"
+                        th:attr="data-latitude=${post.coordinates.latitude}, data-longitude=${post.coordinates.longitude}">Location </button>
+
+                <div class="modal fade" id="mapModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div id="mapImage"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <h4 class="media-heading">
                     <a class="hidden-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
                 </h4>
@@ -22,6 +37,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
     <th:block layout:fragment="content">

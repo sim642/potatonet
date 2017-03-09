@@ -38,10 +38,14 @@
       fallback.load({
         feedjs: [
           '/js/feed.js'
+        ],
+        modaljs: [
+          'js/modal.js'
         ]
       }, {
         shim: {
-          'feedjs': ['Stomp', 'SockJS']
+          'feedjs': ['Stomp', 'SockJS'],
+          'modaljs': ['jQuery', 'jQuery.fn.modal']
         }
       });
     </script>
