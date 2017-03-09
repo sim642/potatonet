@@ -73,6 +73,6 @@ public class PostService {
   }
 
   public List<Coordinates> getAllPostCoordinates() {
-    return postRepository.findAll().stream().map(Post::getCoordinates).collect(Collectors.toList());
+    return postRepository.findAllPostCoordinates();
   }
 }
