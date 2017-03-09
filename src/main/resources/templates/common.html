@@ -11,7 +11,7 @@
                 </a>
             </div>
             <div class="media-body">
-                <span class="pull-right text-muted" th:text="${post.creationDateTime}">2017-02-11 15:00:00</span>
+                <span class="pull-right text-muted" th:text="${{post.creationDateTime}}">2017-02-11 15:00:00</span>
                 <h4 class="media-heading">
                     <a class="hidden-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
                 </h4>
