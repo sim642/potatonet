@@ -8,6 +8,7 @@
 <div layout:fragment="content">
     <script th:inline="javascript">
         var userIds = [[${userIds}]];
+        var key = [[${app.googleApiKey}]];
     </script>
 
     <div layout:replace="~{common :: postBasePanel(${post}, 'panel-primary')}">
@@ -53,7 +54,7 @@
 		  '/js/modal.js'
 		],
 		'google.maps.Map': [
-		  'https://maps.googleapis.com/maps/api/js?key=AIzaSyBHnDywDhoFk4USBPDxssRKwzMEC7CZi08'
+		  'https://maps.googleapis.com/maps/api/js?key=' + key
 		]
 	  }, {
 		shim: {
