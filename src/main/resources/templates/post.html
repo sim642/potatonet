@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{navbar}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
 <head>
-    <title th:text="#{statistics.title}">Statistics</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <title th:text="#{feed.title}">feed</title>
 </head>
 <body>
 
 <div layout:fragment="content">
     <script th:inline="javascript">
-	  var coords = [[${coords}]];
+	  var coords = [ [[${post.coordinates}]] ];
     </script>
+    <div th:replace="~{common :: postPanel (${post})}"></div>
+
     <div class="panel panel-primary">
         <div id="map"></div>
         <script th:src="@{/js/statsmap.js}"></script>

@@ -12,11 +12,9 @@ function initMap() {
 	center: {lat: mapCenterLocation.latitude, lng: mapCenterLocation.longitude}
   });
 
-  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  var markers = coords.map(function (location, i) {
+  var markers = coords.map(function (location) {
 	return new google.maps.Marker({
-	  position: new google.maps.LatLng(location.latitude, location.longitude),
-	  label: labels[i % labels.length]
+	  position: new google.maps.LatLng(location.latitude, location.longitude)
 	});
   });
 
