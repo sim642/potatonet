@@ -54,9 +54,3 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
 .modal {
     text-align: center;
 }
-
-.modal-dialog {
-    width: auto;
-    margin: 50px auto;
-    display: inline-block;
-}

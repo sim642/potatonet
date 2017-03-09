@@ -30,24 +30,37 @@
         </th:block>
     </div>
     <div id="loader" class="loader-posts center-block"></div>
+
+    <div class="modal fade" id="mapModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <th:block layout:fragment="fallback">
     <script th:src="@{/js/fallback-websocket.js}"></script>
     <script>
-      fallback.load({
-        feedjs: [
-          '/js/feed.js'
-        ],
-        modaljs: [
-          'js/modal.js'
-        ]
-      }, {
-        shim: {
-          'feedjs': ['Stomp', 'SockJS'],
-          'modaljs': ['jQuery', 'jQuery.fn.modal']
-        }
-      });
+	  fallback.load({
+		feedjs: [
+		  '/js/feed.js'
+		],
+		modaljs: [
+		  '/js/modal.js'
+		],
+		'google.maps.Map': [
+		  'https://maps.googleapis.com/maps/api/js?key=AIzaSyBHnDywDhoFk4USBPDxssRKwzMEC7CZi08'
+		]
+	  }, {
+		shim: {
+		  'feedjs': ['Stomp', 'SockJS'],
+		  'modaljs': ['jQuery', 'jQuery.fn.modal', 'google.maps.Map']
+		}
+	  });
     </script>
 </th:block>
 

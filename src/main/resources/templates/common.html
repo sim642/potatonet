@@ -17,16 +17,6 @@
                         th:if="${post.coordinates.latitude != null}"
                         th:attr="data-latitude=${post.coordinates.latitude}, data-longitude=${post.coordinates.longitude}">Location </button>
 
-                <div class="modal fade" id="mapModal">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div id="mapImage"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <h4 class="media-heading">
                     <a class="hidden-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
                 </h4>
@@ -37,7 +27,6 @@
         </div>
     </div>
 </div>
-
 
 
 <div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
