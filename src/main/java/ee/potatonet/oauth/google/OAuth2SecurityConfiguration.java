@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,24 +37,24 @@ import ee.potatonet.X509AuthenticationServer;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
 
-  private final Environment env;
   private final OAuth2ClientContextFilter contextFilter;
   private final AccessTokenRequest accessTokenRequest;
   private final GoogleAccessAuthenticationConverter authenticationConverter;
   private final RedirectStrategy redirectStrategy;
+  private final GoogleProperties googleProperties;
 
   @Autowired
   public OAuth2SecurityConfiguration(
-      Environment env,
       OAuth2ClientContextFilter contextFilter,
       AccessTokenRequest accessTokenRequest,
       GoogleAccessAuthenticationConverter authenticationConverter,
-      RedirectStrategy redirectStrategy) {
-    this.env = env;
+      RedirectStrategy redirectStrategy,
+      GoogleProperties googleProperties) {
     this.contextFilter = contextFilter;
     this.accessTokenRequest = accessTokenRequest;
     this.authenticationConverter = authenticationConverter;
     this.redirectStrategy = redirectStrategy;
+    this.googleProperties = googleProperties;
   }
 
   @Bean
@@ -64,17 +63,16 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
     AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
 
     details.setId("google-login");
-    details.setClientId(env.getProperty("oauth.google.client.id"));
-    details.setClientSecret(env.getProperty("oauth.google.client.secret"));
-    details.setTokenName(env.getProperty("oauth.google.authorization.code"));
-    details.setUserAuthorizationUri(env.getProperty("oauth.google.userAuthorizationUri"));
-    details.setAccessTokenUri(env.getProperty("oauth.google.accessTokenUri"));
-    details.setPreEstablishedRedirectUri(env.getProperty("oauth.google.preestablished.redirect.url"));
+    details.setClientId(googleProperties.getClientId());
+    details.setClientSecret(googleProperties.getClientSecret());
+    details.setTokenName(googleProperties.getAuthorizationCode());
+    details.setUserAuthorizationUri(googleProperties.getUserAuthorizationUri());
+    details.setAccessTokenUri(googleProperties.getAccessTokenUri());
+    details.setPreEstablishedRedirectUri(googleProperties.getPreestablishedRedirectUrl());
     details.setUseCurrentUri(false);
 
     details.setScope(new ArrayList<>(
-            Arrays.asList(
-                env.getProperty("oauth.google.auth.scope").split(","))
+            Arrays.asList(googleProperties.getAuthScope().split(","))
         )
     );
 
@@ -94,7 +92,7 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
   @Bean
   public OAuth2ClientAuthenticationProcessingFilter googleAuthenticationProcessingFilter() {
     GoogleOAuth2ClientAuthenticationProcessingFilter filter =
-        new GoogleOAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.redirect-url"));
+        new GoogleOAuth2ClientAuthenticationProcessingFilter(googleProperties.getRedirectUrl());
     filter.setRestTemplate(googleRestTemplate());
     filter.setTokenServices(googleTokenServices());
     filter.setAuthenticationSuccessHandler(new GoogleAuthSuccessHandler(redirectStrategy, authenticationSuccessHandler()));
@@ -110,8 +108,8 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
 
     GoogleRemoteTokenServices tokenServices = new GoogleRemoteTokenServices();
     tokenServices.setCheckTokenEndpointUrl("https://www.googleapis.com/oauth2/v1/tokeninfo");
-    tokenServices.setClientId(env.getProperty("oauth.google.client.id"));
-    tokenServices.setClientSecret(env.getProperty("oauth.google.client.secret"));
+    tokenServices.setClientId(googleProperties.getClientId());
+    tokenServices.setClientSecret(googleProperties.getClientSecret());
     tokenServices.setAccessTokenConverter(tokenConverter);
     tokenServices.setRestTemplate(googleRestTemplate());
 
