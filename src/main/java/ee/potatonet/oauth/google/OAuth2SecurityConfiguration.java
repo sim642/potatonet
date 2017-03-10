@@ -94,7 +94,7 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
   @Bean
   public OAuth2ClientAuthenticationProcessingFilter googleAuthenticationProcessingFilter() {
     GoogleOAuth2ClientAuthenticationProcessingFilter filter =
-        new GoogleOAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.redirect-url"), redirectStrategy);
+        new GoogleOAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.redirect-url"));
     filter.setRestTemplate(googleRestTemplate());
     filter.setTokenServices(googleTokenServices());
     filter.setAuthenticationSuccessHandler(new GoogleAuthSuccessHandler(redirectStrategy, authenticationSuccessHandler()));
