@@ -13,7 +13,7 @@
             </div>
             <div class="media-body">
                 <a th:href="@{/posts/{id}(id=${post.id})}" class="pull-right btn btn-link text-muted" th:text="${post.creationDateTime}">2017-02-11 15:00:00</a>
-                <button type="button" class="pull-right btn btn-link" data-toggle="modal" data-target="#mapModal"
+                <button type="button" class="pull-right btn btn-link btn-modal-map" data-toggle="modal" data-target="#mapModal"
                         th:if="${post.coordinates.latitude != null}"
                         th:attr="data-latitude=${post.coordinates.latitude}, data-longitude=${post.coordinates.longitude}">Location </button>
 
