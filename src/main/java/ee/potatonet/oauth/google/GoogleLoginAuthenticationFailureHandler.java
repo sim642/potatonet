@@ -9,8 +9,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 
 public class GoogleLoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 	@Override
-	public void onAuthenticationFailure(HttpServletRequest request,
-																			HttpServletResponse response, AuthenticationException exception)
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
 		getRedirectStrategy().sendRedirect(
 				request, response,
