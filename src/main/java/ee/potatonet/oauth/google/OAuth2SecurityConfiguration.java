@@ -28,8 +28,6 @@ import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 import ee.potatonet.X509AuthenticationServer;
 
@@ -99,7 +97,7 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
         new GoogleOAuth2ClientAuthenticationProcessingFilter(env.getProperty("oauth.google.redirect-url"), redirectStrategy);
     filter.setRestTemplate(googleRestTemplate());
     filter.setTokenServices(googleTokenServices());
-    filter.setAuthenticationSuccessHandler(new GoogleAuthSuccessHandler(redirectStrategy));
+    filter.setAuthenticationSuccessHandler(new GoogleAuthSuccessHandler(redirectStrategy, authenticationSuccessHandler()));
     filter.setAuthenticationFailureHandler(new GoogleLoginAuthenticationFailureHandler());
 
     return filter;
