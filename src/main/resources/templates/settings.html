@@ -89,5 +89,19 @@
     </div>
 </div>
 
+<th:block layout:fragment="fallback">
+    <script>
+	  fallback.load({
+		settings: [
+		  '/js/settings.js'
+		]
+	  }, {
+		shim: {
+		  'settings': ['jQuery', 'jQuery.fn.modal']
+		}
+	  });
+    </script>
+</th:block>
+
 </body>
 </html>
