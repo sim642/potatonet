@@ -13,3 +13,10 @@ a.panel-link:link, a.panel-link:visited, a.panel-link:hover, a.panel-link:active
     color: #333;
     text-decoration: none;
 }
+.btn-google{
+    height: 2.7em;
+}
+
+.btn-google:hover {
+    box-shadow: 0 0 6px #4285F4;
+}
