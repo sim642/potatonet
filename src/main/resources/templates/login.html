@@ -60,9 +60,8 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <a href="https://localhost:8443/google" th:href="@{{domain}/google(domain=${app.domain})}" class="btn btn-social btn-google">
-                                    <span class="fa fa-google"></span>
-                                    <div th:text="#{login.google.sign.in}"></div>
+                                <a href="https://localhost:8443/login/google/pre" th:href="@{{domain}/login/google/pre(domain=${app.domain})}">
+                                   <img th:src="@{/img/google-login.png}" class="btn-google"/>
                                 </a>
                             </div>
                         </div>

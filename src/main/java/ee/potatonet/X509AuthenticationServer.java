@@ -47,7 +47,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/css/**", "/img/**", "/js/**", "/fonts/**", "/favicon.ico");
+    web.ignoring().antMatchers("/css/**", "/img/**", "/js/**", "/favicon.ico");
   }
 
   @Override
@@ -87,7 +87,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
         .antMatchers("/login").permitAll()
-        .antMatchers("/google").anonymous()
+        .antMatchers("/login/google/pre").anonymous()
         .anyRequest().authenticated();
     http.x509()
         .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))

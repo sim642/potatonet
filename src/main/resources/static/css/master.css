@@ -44,3 +44,12 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.btn-google{
+    height: 2.7em;
+}
+
+.btn-google:hover {
+    box-shadow: 0 0 6px #4285F4;
+}
+
