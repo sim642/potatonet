@@ -77,7 +77,7 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
         .antMatchers("/login").permitAll()
-        .antMatchers("/google").anonymous()
+        .antMatchers("/login/google/pre").anonymous()
         .anyRequest().authenticated();
     http.x509()
         .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
