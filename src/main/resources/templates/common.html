@@ -15,8 +15,7 @@
 
                 <a th:text="${{post.creationDateTime}}"
                    class="pull-right btn btn-link btn-modal-map" data-toggle="modal" data-target="#mapModal"
-                   th:if="${post.coordinates.latitude != null}"
-                   th:attr="data-latitude=${post.coordinates.latitude}, data-longitude=${post.coordinates.longitude}">2017-02-11 15:00:00</a>
+                   th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">2017-02-11 15:00:00</a>
 
                 <h4 class="media-heading">
                     <a class="hidden-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>

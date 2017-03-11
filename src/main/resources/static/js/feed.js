@@ -65,27 +65,24 @@ $(function () {
     trySendStoredPost();
 
 	$("#post").submit(function (event) {
-	  var func = function () {
-		var $content = $("#content");
-		trySendStoredPost(function () {
-		  $.post("/", $("#post").serialize())
-			  .fail(storePost)
-			  .always(function () {
-				$content.val("");
-				$('#postButton').attr('disabled', true);
-			  });
-		});
-	  };
-
 	  if ("geolocation" in navigator) {
 		navigator.geolocation.getCurrentPosition(function (position) {
 		  $("#longitude").val(position.coords.longitude);
 		  $("#latitude").val(position.coords.latitude);
-		  func();
+		}, function error(err) {
+		  // Most likely geolocation being disabled by user.
+		  console.warn(err);
 		});
-	  } else {
-		func();
 	  }
+	  var $content = $("#content");
+	  trySendStoredPost(function () {
+		$.post("/", $("#post").serialize())
+			.fail(storePost)
+			.always(function () {
+			  $content.val("");
+			  $('#postButton').attr('disabled', true);
+			});
+	  });
 	  return false;
 	});
   });
