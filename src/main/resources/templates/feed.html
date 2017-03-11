@@ -8,11 +8,14 @@
 <div layout:fragment="content">
     <script th:inline="javascript">
         var userIds = [[${userIds}]];
+        var key = [[${app.googleApiKey}]];
     </script>
 
     <div layout:replace="~{common :: postBasePanel(${post}, 'panel-primary')}">
         <th:block layout:fragment="content">
             <form id="post" th:action="@{/}" th:object="${post}" method="post">
+                <input type="hidden" th:field="*{latitude}">
+                <input type="hidden" th:field="*{longitude}">
                 <div class="form-group">
                     <label class="sr-only" for="content">Content</label>
                     <textarea class="form-control" rows="1" id="content" th:field="*{content}"></textarea>
@@ -33,20 +36,41 @@
         </th:block>
     </div>
     <div id="loader" class="loader-posts center-block"></div>
+
+    <div class="modal fade" id="mapModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Post location</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <th:block layout:fragment="fallback">
     <script th:src="@{/js/fallback-websocket.js}"></script>
     <script>
-      fallback.load({
-        feedjs: [
-          '/js/feed.js'
-        ]
-      }, {
-        shim: {
-          'feedjs': ['Stomp', 'SockJS']
-        }
-      });
+	  fallback.load({
+		feedjs: [
+		  '/js/feed.js'
+		],
+		modaljs: [
+		  '/js/modal.js'
+		],
+		'google.maps.Map': [
+		  'https://maps.googleapis.com/maps/api/js?key=' + key
+		]
+	  }, {
+		shim: {
+		  'feedjs': ['Stomp', 'SockJS'],
+		  'modaljs': ['jQuery', 'jQuery.fn.modal', 'google.maps.Map']
+		}
+	  });
     </script>
 </th:block>
 

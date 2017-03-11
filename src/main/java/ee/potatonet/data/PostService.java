@@ -3,6 +3,8 @@ package ee.potatonet.data;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -68,5 +70,9 @@ public class PostService {
 
     String output = templateRenderService.render("common", Collections.singleton("postPanel"), Collections.singletonMap("post", post));
     simpMessagingTemplate.convertAndSend("/topic/posts/" + user.getId(), output);
+  }
+
+  public List<Coordinates> getAllPostCoordinates() {
+    return postRepository.findAllPostCoordinates();
   }
 }

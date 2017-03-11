@@ -29,6 +29,9 @@
                 <li th:classappend="(*{active} == 'users')? 'active' : _">
                     <a th:text="#{users.title}" th:href="@{/users}">People</a>
                 </li>
+                <li th:classappend="(*{active} == 'statistics')? 'active' : _">
+                    <a th:text="#{statistics.title}" th:href="@{/statistics}">Statistics</a>
+                </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

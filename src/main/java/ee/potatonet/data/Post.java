@@ -1,13 +1,6 @@
 package ee.potatonet.data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
@@ -27,6 +20,9 @@ public class Post {
   @NotNull
   @Size(min = 1, max = 32700)
   private String content;
+
+  @Embedded
+  private Coordinates coordinates = new Coordinates();
 
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private ZonedDateTime creationDateTime;
@@ -57,6 +53,26 @@ public class Post {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public Float getLongitude() {
+    return coordinates.getLongitude();
+  }
+
+  public void setLongitude(Float longitude) {
+    coordinates.setLongitude(longitude);
+  }
+
+  public Float getLatitude() {
+    return coordinates.getLatitude();
+  }
+
+  public void setLatitude(Float latitude) {
+    coordinates.setLatitude(latitude);
+  }
+
+  public Coordinates getCoordinates() {
+    return coordinates;
   }
 
   @Override
