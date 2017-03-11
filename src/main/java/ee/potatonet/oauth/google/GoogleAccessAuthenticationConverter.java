@@ -1,7 +1,9 @@
 package ee.potatonet.oauth.google;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,33 +16,43 @@ import org.springframework.stereotype.Component;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
+import org.springframework.web.servlet.LocaleResolver;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
+  private final MessageSource messageSource;
+  private final LocaleResolver localeResolver;
+
   @Autowired
-  public GoogleAccessAuthenticationConverter(UserService userService) {
+  public GoogleAccessAuthenticationConverter(UserService userService, MessageSource messageSource,
+                                             HttpServletRequest req, LocaleResolver localeResolver) {
+    this.localeResolver = localeResolver;
+    this.messageSource = messageSource;
+
     setUserDetailsService(googleId -> {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
       if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-        throw new UsernameNotFoundException("Problem authenticating with oauth");
+        throw new UsernameNotFoundException(messageSource.getMessage("oauth.problem", null, localeResolver.resolveLocale(req)));
       }
       else if (authentication.isAuthenticated()) {
-        return register(googleId, authentication, userService);
+        return register(googleId, authentication, userService, req);
       }
       else {
-        return login(googleId, authentication, userService);
+        return login(googleId, authentication, userService, req);
       }
     });
   }
 
-  private User login(String googleId, Authentication authentication, UserService userService) throws UsernameNotFoundException {
+  private User login(String googleId, Authentication authentication, UserService userService, HttpServletRequest req) throws UsernameNotFoundException {
     User currentUser;
     if (authentication instanceof DisabledAuthenticationToken && authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_PRE_GOOGLE"))) { //ensure the request is coming from /google
       currentUser = userService.findOneByGoogleId(googleId);
       if (currentUser == null) {
-        throw new UsernameNotFoundException("No user registered with your google account was found.");
+        throw new UsernameNotFoundException(messageSource.getMessage("oauth.nouser", null, localeResolver.resolveLocale(req)));
       }
       else {
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_GOOGLE_OAUTH");
@@ -48,13 +60,13 @@ public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticati
       }
     }
     else {
-      throw new UsernameNotFoundException("This url was requested from a wrong place");
+      throw new UsernameNotFoundException(messageSource.getMessage("oauth.wrongurl", null, localeResolver.resolveLocale(req)));
     }
 
     return currentUser;
   }
 
-  private User register(String googleId, Authentication authentication, UserService userService) throws UsernameNotFoundException {
+  private User register(String googleId, Authentication authentication, UserService userService, HttpServletRequest req) throws UsernameNotFoundException {
     if (authentication.getPrincipal() instanceof User) {
       User currentUser = (User) authentication.getPrincipal();
       currentUser.setGoogleId(googleId);
@@ -66,7 +78,7 @@ public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticati
       return currentUser;
     }
     else {
-      throw new UsernameNotFoundException("Problems finding current user");
+      throw new UsernameNotFoundException(messageSource.getMessage("oauth.problem", null, localeResolver.resolveLocale(req)));
     }
   }
 }

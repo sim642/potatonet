@@ -20,7 +20,7 @@
                 <div th:text="#{settings.password.changed}" class="alert alert-success" role="alert" th:if="${param.password_success}">
                     Password changed
                 </div>
-                <div class="alert alert-success" role="alert" th:if="${param.successoauth}">
+                <div th:text="#{google.register.success}" class="alert alert-success" role="alert" th:if="${param.successoauth}">
                     Google account successfully registered
                 </div>
                 <div class="alert alert-danger" role="alert" th:if="${param.failureoauth}" th:text="${param.failureoauth}">
