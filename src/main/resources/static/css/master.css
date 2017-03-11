@@ -57,3 +57,7 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     /* TODO: Make this scalable! */
     height: 500px;
 }
+
+.no-padding {
+    padding: 0 !important;
+}

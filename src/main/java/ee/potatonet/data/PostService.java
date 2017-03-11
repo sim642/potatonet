@@ -3,8 +3,6 @@ package ee.potatonet.data;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -66,7 +64,7 @@ public class PostService {
     post = postRepository.save(post);
 
     user.getPosts().add(post);
-    userService.save(user);
+    user = userService.save(user);
 
     String output = templateRenderService.render("common", Collections.singleton("postPanel"), Collections.singletonMap("post", post));
     simpMessagingTemplate.convertAndSend("/topic/posts/" + user.getId(), output);
@@ -74,5 +72,18 @@ public class PostService {
 
   public List<Coordinates> getAllPostCoordinates() {
     return postRepository.findAllPostCoordinates();
+  }
+
+  public void toggleLike(User user, Long postId) {
+    user = userService.find(user);
+    Post post = this.findById(postId);
+
+    if (post.getLikingUsers().contains(user)) {
+      postRepository.removeLike(user, post);
+    }
+    else {
+      postRepository.saveLike(user, post);
+    }
+
   }
 }

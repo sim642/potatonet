@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +39,18 @@ public class FeedController {
     model.addAttribute("posts", postService.getUserFeedPosts(currentUser, null));
     model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
     return "feed";
+  }
+
+  @PutMapping(value = "/like/{postId}", headers = "X-Requested-With!=XMLHttpRequest")
+  public String doLike(@CurrentUser User currentUser, @PathVariable("postId") long postId) {
+    postService.toggleLike(currentUser, postId);
+    return "redirect:/";
+  }
+
+  @PutMapping(value = "/like/{postId}", headers = "X-Requested-With=XMLHttpRequest")
+  @ResponseBody
+  public void doLikeAjax(@CurrentUser User currentUser, @PathVariable("postId") long postId) {
+    postService.toggleLike(currentUser, postId);
   }
 
   @PostMapping(value = "/", headers = "X-Requested-With!=XMLHttpRequest")
