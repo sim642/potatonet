@@ -7,6 +7,9 @@
 <body>
 
 <div layout:fragment="content">
+    <script th:inline="javascript">
+	  var passwordReqString = [[#{settings.password.requirements}]];
+    </script>
     <div class="panel panel-default">
         <div class="panel-heading" th:text="#{settings.heading.password}">
             Password settings
@@ -87,6 +90,20 @@
         </div>
     </div>
 </div>
+
+<th:block layout:fragment="fallback">
+    <script>
+	  fallback.load({
+		settings: [
+		  '/js/settings.js'
+		]
+	  }, {
+		shim: {
+		  'settings': ['jQuery', 'jQuery.fn.modal']
+		}
+	  });
+    </script>
+</th:block>
 
 </body>
 </html>
