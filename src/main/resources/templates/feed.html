@@ -43,7 +43,7 @@
 
         <noscript>
             <div class="col-md-12 text-center">
-                <a class="btn btn-primary" th:href="@{/(beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button">Show older posts</a>
+                <a class="btn btn-primary" th:href="@{/(beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button" th:text="#{feed.more}">Show older posts</a>
             </div>
         </noscript>
     </div>
