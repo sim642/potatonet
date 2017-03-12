@@ -7,8 +7,9 @@
 
 <div layout:fragment="content">
     <script th:inline="javascript">
+        var key = [[${app.googleApiKey}]];
         var userId = [[${user.id}]];
-		var key = [[${app.googleApiKey}]];
+        var userIds = [[${userIds}]];
     </script>
     <div class="panel panel-default">
         <div class="panel-body">
@@ -54,6 +55,18 @@
         </th:block>
     </div>
 
+    <div class="row">
+        <div id="loader">
+            <div class="loader-posts center-block"></div>
+        </div>
+
+        <noscript>
+            <div class="col-md-12 text-center">
+                <a class="btn btn-primary" th:href="@{/users/{userId}(userId=${user.id},beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button">Show older posts</a>
+            </div>
+        </noscript>
+    </div>
+
     <!-- TODO: This modal div element could be made into reusable element -->
     <div class="modal fade" id="mapModal">
         <div class="modal-dialog" role="document">
@@ -68,8 +81,6 @@
             </div>
         </div>
     </div>
-
-    <div id="loader" class="loader-posts center-block"></div>
 </div>
 
 <th:block layout:fragment="fallback">

@@ -1,5 +1,6 @@
 package ee.potatonet.controller;
 
+import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +33,16 @@ public class UserController {
   }
 
   @GetMapping
-  public String doGet(@ModelAttribute User user, Model model) {
+  public String doGet(@ModelAttribute User user, @RequestParam(value = "beforePostId", required = false) Long beforePostId, Model model) {
     model.addAttribute("user", user);
-    model.addAttribute("posts", postService.getUserProfilePosts(user, null));
+    if (beforePostId != null) {
+      model.addAttribute("posts", postService.getUserProfilePosts(user, postService.findById(beforePostId)));
+      model.addAttribute("userIds", Collections.emptyList());
+    }
+    else {
+      model.addAttribute("posts", postService.getUserProfilePosts(user, null));
+      model.addAttribute("userIds", Collections.singletonList(user.getId()));
+    }
     return "user";
   }
 

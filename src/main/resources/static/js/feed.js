@@ -97,7 +97,6 @@ $(function () {
   var canLoad = true;
   var $window = $(window);
   var $loader = $("#loader");
-  $loader.hide();
 
   $window.scroll(function () {
 	if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {

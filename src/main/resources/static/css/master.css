@@ -60,3 +60,7 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
 .no-padding {
     padding: 0 !important;
 }
+
+#loader {
+    display: none;
+}
