@@ -14,7 +14,7 @@
         <div class="panel-body">
             <div class="media">
                 <div class="media-left">
-                    <img src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="img-rounded">
+                    <img alt="User avatar image" src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="img-rounded">
                 </div>
                 <div class="media-body">
                     <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
@@ -23,13 +23,13 @@
 
                     <div class="form-horizontal user-details">
                         <div class="form-group">
-                            <label th:text="#{user.gender}" class="control-label col-md-2" for="gender">Gender</label>
+                            <label th:text="#{user.gender}" class="control-label col-md-2">Gender</label>
                             <div class="col-md-10">
                                 <p class="form-control-static" id="gender" th:text="#{'user.enum.gender.' + ${user.eid.eidCode.gender}}"></p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label th:text="#{user.birthday}" class="control-label col-md-2" for="birthday">Birthday</label>
+                            <label th:text="#{user.birthday}" class="control-label col-md-2">Birthday</label>
                             <div class="col-md-10">
                                 <p class="form-control-static" id="birthday" th:text="${user.eid.eidCode.birthDate}"></p>
                             </div>

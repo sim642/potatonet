@@ -53,7 +53,7 @@
                     <label class="col-sm-2 control-label" th:text="#{google.connect}"></label>
                     <div class="col-sm-10">
                         <a href="https://localhost:8443/login/google" th:href="@{{domain}/login/google(domain=${app.domain})}">
-                            <img th:src="@{/img/google-login.png}" class="btn-google"/>
+                            <img alt="Google login button" th:src="@{/img/google-login.png}" class="btn-google"/>
                         </a>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                     <div class="col-sm-10">
                         <div class="btn-group" data-toggle="buttons">
                             <label th:each="language : ${languageSettings.allLanguages}" class="btn btn-default" th:classappend="${languageSettings.language.equals(language)}? 'active'">
-                                <input th:id="${language.name()}" th:value="${language.name()}" type="radio" name="language" autocomplete="off" th:selected="${languageSettings.language.equals(language)}? 'selected'" >
+                                <input th:id="${language.name()}" th:value="${language.name()}" type="radio" name="language" th:checked="${languageSettings.language.equals(language)}? 'checked'">
                                 <span th:text="#{'settings.enum.language.' + ${language.name()}}"></span>
                             </label>
                         </div>

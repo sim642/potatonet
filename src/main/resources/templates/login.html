@@ -8,7 +8,7 @@
 <div layout:fragment="content">
     <div class="row">
         <div class="col-md-9">
-            <img class="img-responsive" th:src="@{/img/potato-md.png}"
+            <img alt="Potato logo" class="img-responsive" th:src="@{/img/potato-md.png}"
                  srcset="/img/potato-xxs.png 480w,
                          /img/potato-xs.png 768w,
                          /img/potato-sm.png 992w,
@@ -54,14 +54,14 @@
                         <div class="row form-group">
                             <div class="col-sm-12">
                                 <a href="https://localhost:8446/" th:href="@{{domain}/login/eid(domain=${app.domainEid})}" th:fragment="eidButton">
-                                    <img th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
+                                    <img alt="ID-card button" th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
                                 </a>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
                                 <a href="https://localhost:8443/login/google/pre" th:href="@{{domain}/login/google/pre(domain=${app.domain})}">
-                                   <img th:src="@{/img/google-login.png}" class="btn-google"/>
+                                   <img alt="Google login button" th:src="@{/img/google-login.png}" class="btn-google"/>
                                 </a>
                             </div>
                         </div>
