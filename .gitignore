@@ -25,3 +25,6 @@ nbdist/
 
 ### Database ###
 /data/
+
+### JRebel ###
+rebel.xml

@@ -1,39 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
 <head>
-    <title>friends</title>
+    <title th:text="#{friends.friends}">friends</title>
 </head>
 <body>
 
 <div layout:fragment="content">
-    <h3>Friend requests</h3>
-    <div th:each="friendRequest : ${currentUser.incomingFriendRequests}">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="btn-group pull-right" role="group">
-                    <form th:action="@{/friends/accept/{id}(id=${friendRequest.id})}" method="post">
-                        <button type="submit" class="btn btn-success">Accept</button>
-                    </form>
-                    <form th:action="@{/friends/reject/{id}(id=${friendRequest.id})}" method="post">
-                        <button type="submit" class="btn btn-danger">Reject</button>
-                    </form>
-                </div>
+    <th:block th:if="${currentUser.equals(user) && incomingFriendRequestCount > 0}">
+        <h3 th:text="#{friends.incoming.friend.requests}">Incoming friend requests</h3>
+        <th:block th:each="friendRequest : ${user.incomingFriendRequests}">
+            <div th:replace="~{common :: userPanel (${friendRequest})}"></div>
+        </th:block>
+    </th:block>
 
-                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friendRequest, 64)}" class=" pull-left">
-                <h3 th:text="${friendRequest.fullName}"></h3>
-            </div>
-        </div>
-    </div>
+    <h3 th:text="#{friends.friends}">Friends</h3>
+    <th:block th:each="friend : ${user.friends}">
+        <div th:replace="~{common :: userPanel (${friend})}"></div>
+    </th:block>
 
-    <h3>Friends</h3>
-    <div th:each="friend : ${currentUser.friends}">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(friend, 64)}" class=" pull-left">
-                <h3 th:text="${friend.fullName}"></h3>
-            </div>
-        </div>
-    </div>
+    <th:block th:if="${currentUser.equals(user) && user.outgoingFriendRequests.size() > 0}">
+        <h3 th:text="#{friends.outgoing.friend.requests}">Outgoing friend requests</h3>
+        <th:block th:each="friendRequest : ${user.outgoingFriendRequests}">
+            <div th:replace="~{common :: userPanel (${friendRequest})}"></div>
+        </th:block>
+    </th:block>
 </div>
 
 </body>

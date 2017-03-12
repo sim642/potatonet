@@ -14,6 +14,8 @@ import ee.potatonet.data.UserService;
 import ee.potatonet.eid.EIDCodeDetails;
 import ee.potatonet.eid.EIDDetails;
 
+import java.util.Random;
+
 @Configuration
 @Profile("dev")
 public class DevConfiguration {
@@ -23,6 +25,7 @@ public class DevConfiguration {
   @Autowired
   private UserService userService;
 
+  private final Random random = new Random(1337L);
 
   @PostConstruct
   public void mockSetUp() {
@@ -38,6 +41,10 @@ public class DevConfiguration {
     createPost(veiko, "Tere, ma Veiko");
     createPost(tiit, "Tere, ma Tiit");
     createPost(simmo, "Tere, ma Simmo");
+
+    for (int i = 0; i < 250; i++) {
+      createPost(simmo, String.format("Post %d", i));
+    }
 
     veiko.addFriend(tiit);
     veiko.addFriend(simmo);
@@ -57,6 +64,9 @@ public class DevConfiguration {
 
   private void createPost(User user, String content) {
     Post post = new Post();
+    // Test post coordinates near Estonia
+    post.setLatitude(random.nextFloat() +  58.0f);
+    post.setLongitude(random.nextFloat() +  26.0f);
     post.setContent(content);
     postService.savePostToUser(post, user);
   }

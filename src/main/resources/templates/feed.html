@@ -1,27 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{navbar}">
 <head>
-    <title>feed</title>
+    <title th:text="#{feed.title}">feed</title>
 </head>
 <body>
 
 <div layout:fragment="content">
     <script th:inline="javascript">
         var userIds = [[${userIds}]];
+        var key = [[${app.googleApiKey}]];
     </script>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">New post</div>
-        <div class="panel-body">
-            <form id="post" th:action="@{/feed}" th:object="${post}" method="post">
-                <textarea class="form-control" rows="3" th:field="*{content}"></textarea>
-                <button id="postButton" type="submit" class="btn btn-default pull-right">Post</button>
+    <div layout:replace="~{common :: postBasePanel(${post}, 'panel-primary')}">
+        <th:block layout:fragment="content">
+            <form id="post" th:action="@{/}" th:object="${post}" method="post">
+                <input type="hidden" th:field="*{latitude}">
+                <input type="hidden" th:field="*{longitude}">
+                <div class="form-group">
+                    <label class="sr-only" for="content">Content</label>
+                    <textarea class="form-control" rows="1" id="content" th:field="*{content}"></textarea>
+                </div>
+                <button th:text="#{feed.post}" id="postButton" type="submit" class="btn btn-default pull-right">Post</button>
             </form>
-        </div>
+        </th:block>
     </div>
 
-    <div id="feed" th:each="postInfo : ${posts}">
-        <div th:replace="~{common :: post (${postInfo})}">
+    <div id="alert-stored" class="alert alert-warning hidden" role="alert">
+        <span th:text="#{feed.alert.stored}"></span>
+        <span id="stored-count">0</span>
+    </div>
+
+    <div id="feed">
+        <th:block th:each="post : ${posts}">
+            <div th:replace="~{common :: postPanel (${post})}"></div>
+        </th:block>
+    </div>
+
+    <div class="row">
+        <div id="loader">
+            <div class="loader-posts center-block"></div>
+        </div>
+
+        <noscript>
+            <div class="col-md-12 text-center">
+                <a class="btn btn-primary" th:href="@{/(beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button" th:text="#{feed.more}">Show older posts</a>
+            </div>
+        </noscript>
+    </div>
+
+    <div class="modal fade" id="mapModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" th:text="#{post.location}">Post location</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="map"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -29,15 +66,22 @@
 <th:block layout:fragment="fallback">
     <script th:src="@{/js/fallback-websocket.js}"></script>
     <script>
-      fallback.load({
-        feedjs: [
-          '/js/feed.js'
-        ]
-      }, {
-        shim: {
-          'feedjs': ['Stomp', 'SockJS']
-        }
-      });
+	  fallback.load({
+		feedjs: [
+		  '/js/feed.js'
+		],
+		modaljs: [
+		  '/js/modal.js'
+		],
+		'google.maps.Map': [
+		  'https://maps.googleapis.com/maps/api/js?key=' + key
+		]
+	  }, {
+		shim: {
+		  'feedjs': ['Stomp', 'SockJS'],
+		  'modaljs': ['jQuery', 'jQuery.fn.modal', 'google.maps.Map']
+		}
+	  });
     </script>
 </th:block>
 

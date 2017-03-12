@@ -10,6 +10,7 @@ import ee.potatonet.data.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
   User findOneByEidEmail(String eidEmail);
+  User findOneByGoogleId(String googleId);
 
   @Query(
       "select count(*) from User user " +

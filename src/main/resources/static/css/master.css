@@ -1,7 +1,66 @@
 .btn-eid {
     height: 2.5em;
 }
+.panel-body  {
+    word-break:break-all
+}
 
 #login-title {
     font-size: 63px;
+}
+
+a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:active {
+    color: #333;
+    text-decoration: none;
+}
+
+#post textarea {
+    resize: vertical;
+}
+
+.panel-user .media-body {
+    vertical-align: middle;
+}
+
+.panel-user .media-body h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.user-details .form-group {
+    margin-bottom: 0;
+}
+
+
+/* https://www.w3schools.com/howto/howto_css_loader.asp */
+.loader-posts {
+    background: url('/img/potato-48.png');
+    width: 48px;
+    height: 48px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-google{
+    height: 2.7em;
+}
+
+.btn-google:hover {
+    box-shadow: 0 0 6px #4285F4;
+}
+
+#map {
+    height:80vh
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+#loader {
+    display: none;
 }

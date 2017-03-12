@@ -36,6 +36,10 @@ public class UserService {
     return userRepository.findOneByEidEmail(eidEmail);
   }
 
+  public User findOneByGoogleId(String googleId) {
+    return userRepository.findOneByGoogleId(googleId);
+  }
+
   public User save(User user) {
     return userRepository.save(user);
   }
@@ -71,6 +75,17 @@ public class UserService {
     potentialFriend.getIncomingFriendRequests().add(asker);
 
     save(potentialFriend);
+  }
+
+  public void removeFriends(User user1, User user2) {
+    user1 = find(user1);
+    user2 = find(user2);
+
+    user1.getFriends().remove(user2);
+    user2.getFriends().remove(user1);
+
+    save(user1);
+    save(user2);
   }
 
   public Long countUserIncomingFriendRequests(User user) {

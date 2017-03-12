@@ -1,6 +1,8 @@
 package ee.potatonet;
 
 import javax.sql.DataSource;
+
+import ee.potatonet.data.Language;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -15,6 +17,8 @@ import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
@@ -46,6 +50,12 @@ public class PotatonetApplication {
 				collection.addPattern("/*");
 				securityConstraint.addCollection(collection);
 				context.addConstraint(securityConstraint);
+			}
+
+			@Override
+			protected void customizeConnector(Connector connector) {
+				super.customizeConnector(connector);
+				connector.setParseBodyMethods("POST,PUT,DELETE");
 			}
 		};
 		tomcat.addAdditionalTomcatConnectors(createSslConnector());
@@ -88,14 +98,14 @@ public class PotatonetApplication {
 	}
 
 	@Bean
-	public TemplateEngine templateEngine() {
-		SpringTemplateEngine engine = new SpringTemplateEngine();
-		engine.addDialect(new LayoutDialect(new GroupingStrategy()));
-		return engine;
+	public AvatarService avatarService(GravatarAvatarService gravatarAvatarService) {
+		return gravatarAvatarService;
 	}
 
 	@Bean
-	public AvatarService avatarService(GravatarAvatarService gravatarAvatarService) {
-		return gravatarAvatarService;
+	public LocaleResolver localeResolver() {
+		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+		cookieLocaleResolver.setDefaultLocale(Language.EN.getLocale());
+		return cookieLocaleResolver;
 	}
 }

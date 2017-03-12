@@ -1,21 +1,24 @@
 package ee.potatonet.controller;
 
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.potatonet.data.Post;
 import ee.potatonet.data.PostService;
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
+
+import javax.validation.Valid;
 
 @Controller
 public class FeedController {
@@ -29,24 +32,35 @@ public class FeedController {
     this.userService = userService;
   }
 
-  @RequestMapping(value = "/feed", method = RequestMethod.GET)
-  public String doGet(@CurrentUser User currentUser, Model model) {
-    model.addAttribute("post", new Post());
-    model.addAttribute("posts", postService.getUserFeedPosts(currentUser));
-    model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
+  @RequestMapping(value = "/", method = RequestMethod.GET)
+  public String doGet(@CurrentUser User currentUser, @RequestParam(value = "beforePostId", required = false) Long beforePostId, Model model) {
+    model.addAttribute("post", new Post(userService.find(currentUser), ""));
+    if (beforePostId != null) {
+      model.addAttribute("posts", postService.getUserFeedPosts(currentUser, postService.findById(beforePostId)));
+      model.addAttribute("userIds", Collections.emptyList());
+    }
+    else {
+      model.addAttribute("posts", postService.getUserFeedPosts(currentUser, null));
+      model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
+    }
     return "feed";
   }
-  
-  @RequestMapping(value = "/feed", method = RequestMethod.POST)
-  public String doPost(@CurrentUser User currentUser, @ModelAttribute Post post) {
+
+  @PostMapping(value = "/", headers = "X-Requested-With!=XMLHttpRequest")
+  public String doPost(@CurrentUser User currentUser, @Valid @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
-    return "redirect:/feed";
+    return "redirect:/";
   }
 
-  @PostMapping("/post")
+  @PostMapping(value = "/", headers = "X-Requested-With=XMLHttpRequest")
   @ResponseBody
-  public String doPostAjax(@CurrentUser User currentUser, @ModelAttribute Post post) {
+  public void doPostAjax(@CurrentUser User currentUser, @Valid @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
-    return "";
+  }
+
+  @GetMapping("/posts")
+  public String doGetPosts(@CurrentUser User currentUser, @RequestParam("beforePostId") Long beforePostId, Model model) {
+    model.addAttribute("posts", postService.getUserFeedPosts(currentUser, postService.findById(beforePostId)));
+    return "posts";
   }
 }

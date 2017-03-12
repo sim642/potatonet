@@ -1,17 +1,6 @@
 package ee.potatonet.data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +25,10 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String password;
+  private String googleId;
+
+  @Enumerated(EnumType.STRING)
+  private Language language = Language.EN;
 
   @Embedded
   private EIDDetails eid;
@@ -55,6 +47,9 @@ public class User implements UserDetails {
       inverseJoinColumns = @JoinColumn(name = "friendId")
   )
   private Set<User> incomingFriendRequests;
+
+  @ManyToMany(mappedBy = "incomingFriendRequests")
+  private Set<User> outgoingFriendRequests;
   
   @Transient
   private Set<? extends GrantedAuthority> authorities;
@@ -117,6 +112,10 @@ public class User implements UserDetails {
     this.incomingFriendRequests = incomingFriendRequests;
   }
 
+  public Set<User> getOutgoingFriendRequests() {
+    return outgoingFriendRequests;
+  }
+
   public Set<User> getFriends() {
     return friends;
   }
@@ -145,6 +144,22 @@ public class User implements UserDetails {
 
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
     this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
+  }
+
+  public Language getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(Language language) {
+    this.language = language;
+  }
+
+  public String getGoogleId() {
+    return googleId;
+  }
+
+  public void setGoogleId(String googleId) {
+    this.googleId = googleId;
   }
 
   private static class AuthorityComparator implements Comparator<GrantedAuthority>,
@@ -197,7 +212,7 @@ public class User implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
+    return authorities;
   }
 
   @Override

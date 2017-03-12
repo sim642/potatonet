@@ -15,26 +15,29 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-                <img th:src="@{/img/potato-48.png}"/>
+                <img alt="Navbar potato logo" th:src="@{/img/potato-48.png}"/>
             </a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li th:classappend="(*{active} == 'feed')? 'active' : _">
-                    <a th:href="@{/feed}">Feed</a>
+                    <a th:text="#{feed.title}" th:href="@{/}">Feed</a>
                 </li>
                 <li th:classappend="(*{active} == 'friends')? 'active' : _">
-                    <a th:href="@{/friends}">Friends <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span></a>
+                    <a th:text="#{friends.friends}" th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">Friends <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span></a>
                 </li>
-                <li th:classappend="(*{active} == 'people')? 'active' : _">
-                    <a th:href="@{/people}">People</a>
+                <li th:classappend="(*{active} == 'users')? 'active' : _">
+                    <a th:text="#{users.title}" th:href="@{/users}">People</a>
+                </li>
+                <li th:classappend="(*{active} == 'statistics')? 'active' : _">
+                    <a th:text="#{statistics.title}" th:href="@{/statistics}">Statistics</a>
                 </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li th:classappend="(*{active} == 'profile')? 'active' : _">
-                    <a th:href="@{/profile}">
-                        <img src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
+                <li th:classappend="(*{active} == 'user')? 'active' : _">
+                    <a th:href="@{/users/{userId}(userId=${currentUser.id})}">
+                        <img alt="User avatar image" src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
                         <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.User"*/-->
                         <span th:text="${currentUser.fullName}"></span>
                     </a>
@@ -46,10 +49,10 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dLabel">
                         <li th:classappend="(*{active} == 'settings')? 'active' : _">
-                            <a th:href="@{/settings}">Settings</a>
+                            <a th:text="#{settings.title}" th:href="@{/settings}">Settings</a>
                         </li>
                         <li>
-                            <a th:href="@{/logout}">Logout</a>
+                            <a th:text="#{navbar.logout}" th:href="@{/logout}">Logout</a>
                         </li>
                     </ul>
                 </li>
