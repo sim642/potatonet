@@ -50,22 +50,23 @@
     </th:block>
 </div>
 
-<a class="hidden-link" th:href="@{/users/{userId}(userId=${user.id})}" th:fragment="userPanel(user)">
-    <div class="panel panel-default panel-user">
-        <div class="panel-body">
-            <div class="media">
-                <div class="media-left media-middle">
+<div class="panel panel-default panel-user" th:fragment="userPanel(user)">
+    <div class="panel-body">
+        <div class="media">
+            <div class="media-left media-middle">
+                <a th:href="@{/users/{userId}(userId=${user.id})}">
                     <img alt="User avatar image" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="img-rounded">
-                </div>
-                <div class="media-body">
-                    <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
-
+                </a>
+            </div>
+            <div class="media-body">
+                <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
+                <a class="hidden-link" th:href="@{/users/{userId}(userId=${user.id})}">
                     <h3 th:text="${user.fullName}"></h3>
-                </div>
+                </a>
             </div>
         </div>
     </div>
-</a>
+</div>
 
 </body>
 </html>
