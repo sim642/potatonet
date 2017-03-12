@@ -8,13 +8,14 @@ $(function () {
   var sockJs = new SockJS('/stomp');
   stomp = Stomp.over(sockJs);
   stomp.connect({}, function () {
-    stomp.subscribe('/topic/posts/' + userId, onPosts);
+    $.each(userIds, function (i, userId) {
+      stomp.subscribe('/topic/posts/' + userId, onPosts);
+    });
   });
 
   var canLoad = true;
   var $window = $(window);
   var $loader = $("#loader");
-  $loader.hide();
 
   $window.scroll(function () {
     if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {

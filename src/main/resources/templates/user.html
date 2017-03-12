@@ -8,6 +8,7 @@
 <div layout:fragment="content">
     <script th:inline="javascript">
         var userId = [[${user.id}]];
+        var userIds = [[${userIds}]];
     </script>
 
     <div class="panel panel-default">
@@ -53,7 +54,18 @@
             <div th:replace="~{common :: postPanel (${post})}"></div>
         </th:block>
     </div>
-    <div id="loader" class="loader-posts center-block"></div>
+
+    <div class="row">
+        <div id="loader">
+            <div class="loader-posts center-block"></div>
+        </div>
+
+        <noscript>
+            <div class="col-md-12 text-center">
+                <a class="btn btn-primary" th:href="@{/users/{userId}(userId=${user.id},beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button">Show older posts</a>
+            </div>
+        </noscript>
+    </div>
 </div>
 
 <th:block layout:fragment="fallback">
