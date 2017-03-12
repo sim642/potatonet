@@ -1,6 +1,7 @@
 package ee.potatonet.controller;
 
 
+import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,10 +31,16 @@ public class FeedController {
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public String doGet(@CurrentUser User currentUser, Model model) {
+  public String doGet(@CurrentUser User currentUser, @RequestParam(value = "beforePostId", required = false) Long beforePostId, Model model) {
     model.addAttribute("post", new Post(userService.find(currentUser), ""));
-    model.addAttribute("posts", postService.getUserFeedPosts(currentUser, null));
-    model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
+    if (beforePostId != null) {
+      model.addAttribute("posts", postService.getUserFeedPosts(currentUser, postService.findById(beforePostId)));
+      model.addAttribute("userIds", Collections.emptyList());
+    }
+    else {
+      model.addAttribute("posts", postService.getUserFeedPosts(currentUser, null));
+      model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
+    }
     return "feed";
   }
 
