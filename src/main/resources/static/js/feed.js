@@ -64,16 +64,7 @@ $(function () {
 
     trySendStoredPost();
 
-	$("#post").submit(function (event) {
-	  if ("geolocation" in navigator) {
-		navigator.geolocation.getCurrentPosition(function (position) {
-		  $("#longitude").val(position.coords.longitude);
-		  $("#latitude").val(position.coords.latitude);
-		}, function error(err) {
-		  // Most likely geolocation being disabled by user.
-		  console.warn(err);
-		});
-	  }
+	var sendPost = function() {
 	  var $content = $("#content");
 	  trySendStoredPost(function () {
 		$.post("/", $("#post").serialize())
@@ -83,6 +74,22 @@ $(function () {
 			  $('#postButton').attr('disabled', true);
 			});
 	  });
+	};
+
+	$("#post").submit(function (event) {
+	  if ("geolocation" in navigator) {
+		navigator.geolocation.getCurrentPosition(function (position) {
+		  $("#longitude").val(position.coords.longitude);
+		  $("#latitude").val(position.coords.latitude);
+		  sendPost();
+		}, function error(err) {
+		  // Most likely geolocation being disabled by user.
+		  sendPost();
+		  console.warn(err);
+		});
+	  } else {
+		sendPost();
+	  }
 	  return false;
 	});
   });
