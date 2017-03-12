@@ -44,3 +44,7 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+#loader {
+    display: none;
+}

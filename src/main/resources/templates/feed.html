@@ -27,14 +27,18 @@
             <div th:replace="~{common :: postPanel (${post})}"></div>
         </th:block>
     </div>
-    <div id="loader" class="loader-posts center-block"></div>
-    <noscript>
-        <div class="row text-center">
-            <div class="col-md-12">
+
+    <div class="row">
+        <div id="loader">
+            <div class="loader-posts center-block"></div>
+        </div>
+
+        <noscript>
+            <div class="col-md-12 text-center">
                 <a class="btn btn-primary" th:href="@{/(beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button">Show older posts</a>
             </div>
-        </div>
-    </noscript>
+        </noscript>
+    </div>
 </div>
 
 <th:block layout:fragment="fallback">
