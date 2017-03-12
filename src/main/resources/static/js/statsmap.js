@@ -13,11 +13,9 @@ function initMap() {
   });
 
   var markers = coords.map(function (location) {
-    if (location != null) {
-	  return new google.maps.Marker({
-		position: new google.maps.LatLng(location.latitude, location.longitude)
-	  });
-	}
+	return new google.maps.Marker({
+	  position: new google.maps.LatLng(location.latitude, location.longitude)
+	});
   });
 
   var markerCluster = new MarkerClusterer(map, markers,

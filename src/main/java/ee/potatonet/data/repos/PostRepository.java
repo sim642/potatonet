@@ -20,6 +20,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   @Query(value = "SELECT * FROM V_USER_FEED WHERE FEED_USER_ID=?1 AND CREATION_DATE_TIME<?2 LIMIT ?3", nativeQuery = true)
   List<Post> findAllUserFeedPosts(User user, ZonedDateTime beforeDateTime, int count);
 
-  @Query(value = "select post.coordinates from Post post")
+  @Query(value = "select post.coordinates from Post post where post.coordinates.longitude is not null and post.coordinates.latitude is not null")
   List<Coordinates> findAllPostCoordinates();
 }
