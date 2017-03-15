@@ -3,15 +3,13 @@ package ee.potatonet.data;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ee.potatonet.TemplateRenderService;
 import ee.potatonet.data.repos.PostRepository;
+import ee.potatonet.thymeleaf.TemplateRenderService;
 
 @Service
 @Transactional

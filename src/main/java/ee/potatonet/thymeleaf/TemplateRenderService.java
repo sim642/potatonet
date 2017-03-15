@@ -1,4 +1,4 @@
-package ee.potatonet;
+package ee.potatonet.thymeleaf;
 
 import java.util.HashMap;
 import java.util.Map;

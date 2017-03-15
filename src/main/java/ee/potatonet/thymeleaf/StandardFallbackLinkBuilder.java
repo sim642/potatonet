@@ -1,4 +1,4 @@
-package ee.potatonet;
+package ee.potatonet.thymeleaf;
 
 import javax.servlet.ServletContext;
 import java.util.Map;
