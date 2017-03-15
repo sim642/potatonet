@@ -1,20 +1,19 @@
 package ee.potatonet;
 
 import javax.annotation.PostConstruct;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import ee.potatonet.auth.eid.EIDCodeDetails;
+import ee.potatonet.auth.eid.EIDDetails;
 import ee.potatonet.data.Post;
 import ee.potatonet.data.PostService;
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
-import ee.potatonet.eid.EIDCodeDetails;
-import ee.potatonet.eid.EIDDetails;
-
-import java.util.Random;
 
 @Configuration
 @Profile("dev")

@@ -1,7 +1,7 @@
-package ee.potatonet.oauth.google;
+package ee.potatonet.auth.google;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -13,12 +13,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.LocaleResolver;
 
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
-import org.springframework.web.servlet.LocaleResolver;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticationConverter {

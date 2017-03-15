@@ -1,4 +1,4 @@
-package ee.potatonet.eid;
+package ee.potatonet.auth.eid;
 
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

@@ -1,4 +1,4 @@
-package ee.potatonet.eid;
+package ee.potatonet.auth.eid;
 
 import java.io.IOException;
 import java.security.cert.CertificateParsingException;

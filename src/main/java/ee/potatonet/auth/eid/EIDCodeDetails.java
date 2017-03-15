@@ -1,15 +1,9 @@
-package ee.potatonet.eid;
+package ee.potatonet.auth.eid;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.PostLoad;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Embeddable

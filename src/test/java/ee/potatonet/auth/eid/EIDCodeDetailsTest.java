@@ -1,6 +1,6 @@
-package ee.potatonet.eid;
+package ee.potatonet.auth.eid;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
 import org.junit.Test;

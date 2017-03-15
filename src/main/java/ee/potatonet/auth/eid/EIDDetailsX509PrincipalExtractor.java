@@ -1,4 +1,4 @@
-package ee.potatonet.eid;
+package ee.potatonet.auth.eid;
 
 import java.security.cert.X509Certificate;
 import org.apache.commons.lang3.text.WordUtils;

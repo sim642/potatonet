@@ -1,4 +1,4 @@
-package ee.potatonet.oauth.google;
+package ee.potatonet.auth.google;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

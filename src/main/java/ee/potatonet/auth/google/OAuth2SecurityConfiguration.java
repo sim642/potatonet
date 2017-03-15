@@ -1,4 +1,4 @@
-package ee.potatonet.oauth.google;
+package ee.potatonet.auth.google;
 
 
 import java.util.ArrayList;

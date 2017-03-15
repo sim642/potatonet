@@ -1,4 +1,4 @@
-package ee.potatonet.eid;
+package ee.potatonet.auth.eid;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;

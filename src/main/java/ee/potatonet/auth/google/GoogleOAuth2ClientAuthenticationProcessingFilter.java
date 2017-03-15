@@ -1,4 +1,4 @@
-package ee.potatonet.oauth.google;
+package ee.potatonet.auth.google;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

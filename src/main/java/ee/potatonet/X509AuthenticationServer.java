@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,12 +25,12 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.LocaleResolver;
 
+import ee.potatonet.auth.eid.AuthenticationSuccessHandlerPostProcessor;
+import ee.potatonet.auth.eid.EIDDetails;
+import ee.potatonet.auth.eid.EIDDetailsX509PrincipalExtractor;
+import ee.potatonet.auth.eid.PrincipalExtractorPostProcessor;
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
-import ee.potatonet.eid.AuthenticationSuccessHandlerPostProcessor;
-import ee.potatonet.eid.EIDDetails;
-import ee.potatonet.eid.EIDDetailsX509PrincipalExtractor;
-import ee.potatonet.eid.PrincipalExtractorPostProcessor;
 
 
 public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {

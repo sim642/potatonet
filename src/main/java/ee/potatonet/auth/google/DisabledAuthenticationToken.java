@@ -1,4 +1,4 @@
-package ee.potatonet.oauth.google;
+package ee.potatonet.auth.google;
 
 import java.util.Collection;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
