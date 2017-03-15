@@ -1,17 +1,15 @@
-package ee.potatonet;
+package ee.potatonet.configuration;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
@@ -19,30 +17,33 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.servlet.LocaleResolver;
 
+import ee.potatonet.auth.PotatonetAuthenticationSuccessHandler;
 import ee.potatonet.auth.eid.AuthenticationSuccessHandlerPostProcessor;
 import ee.potatonet.auth.eid.EIDDetails;
 import ee.potatonet.auth.eid.EIDDetailsX509PrincipalExtractor;
 import ee.potatonet.auth.eid.PrincipalExtractorPostProcessor;
+import ee.potatonet.auth.google.GoogleHttpConfigurer;
 import ee.potatonet.data.User;
 import ee.potatonet.data.UserService;
 
 
-public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Autowired
   private UserService userService;
 
   @Autowired
-  private RedirectStrategy redirectStrategy;
+  private PotatonetAuthenticationSuccessHandler authenticationSuccessHandler;
 
   @Autowired
-  private LocaleResolver localeResolver;
+  private GoogleHttpConfigurer<HttpSecurity> googleHttpConfigurer;
+
 
   @Override
   public void configure(WebSecurity web) throws Exception {
@@ -90,35 +91,20 @@ public class X509AuthenticationServer extends WebSecurityConfigurerAdapter {
         .anyRequest().authenticated();
     http.x509()
         .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
-        .withObjectPostProcessor(new AuthenticationSuccessHandlerPostProcessor(authenticationSuccessHandler()))
+        .withObjectPostProcessor(new AuthenticationSuccessHandlerPostProcessor(authenticationSuccessHandler))
         .authenticationUserDetailsService(authenticationUserDetailsService());
     http.formLogin()
         .loginPage("/login")
         .usernameParameter("email")
         .passwordParameter("password")
         .loginProcessingUrl("/login")
-        .successHandler(authenticationSuccessHandler())
+        .successHandler(authenticationSuccessHandler)
         .permitAll();
     http.logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         .logoutSuccessUrl("/login")
         .permitAll();
-  }
-
-
-  @Bean
-  public SavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler() {
-    SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler() {
-      @Override
-      public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication auth) throws ServletException, IOException {
-        super.onAuthenticationSuccess(req, resp, auth);
-        localeResolver.setLocale(req, resp, ((User) auth.getPrincipal()).getLanguage().getLocale());
-      }
-    };
-    successHandler.setDefaultTargetUrl("/");
-    successHandler.setAlwaysUseDefaultTargetUrl(false);
-    successHandler.setRedirectStrategy(redirectStrategy);
-    return successHandler;
+    http.apply(googleHttpConfigurer);
   }
 
   @Bean

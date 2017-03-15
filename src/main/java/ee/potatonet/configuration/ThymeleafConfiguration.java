@@ -1,4 +1,4 @@
-package ee.potatonet;
+package ee.potatonet.configuration;
 
 import javax.servlet.ServletContext;
 import java.util.Collection;
@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import ee.potatonet.StandardFallbackLinkBuilder;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
 

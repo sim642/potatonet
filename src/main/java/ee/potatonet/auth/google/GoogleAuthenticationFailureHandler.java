@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
-public class GoogleLoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class GoogleAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

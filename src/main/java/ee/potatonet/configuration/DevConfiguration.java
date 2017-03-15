@@ -1,4 +1,4 @@
-package ee.potatonet;
+package ee.potatonet.configuration;
 
 import javax.annotation.PostConstruct;
 import java.util.Random;

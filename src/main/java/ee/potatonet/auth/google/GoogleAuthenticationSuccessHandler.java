@@ -13,11 +13,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 
-public class GoogleAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class GoogleAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
   private final AuthenticationSuccessHandler delegate;
 
-  public GoogleAuthSuccessHandler(RedirectStrategy redirectStrategy, AuthenticationSuccessHandler delegate) {
+  public GoogleAuthenticationSuccessHandler(RedirectStrategy redirectStrategy, AuthenticationSuccessHandler delegate) {
     super();
     this.delegate = delegate;
     setRedirectStrategy(redirectStrategy);

@@ -1,4 +1,4 @@
-package ee.potatonet;
+package ee.potatonet.configuration;
 
 import java.util.List;
 import org.springframework.context.annotation.Configuration;

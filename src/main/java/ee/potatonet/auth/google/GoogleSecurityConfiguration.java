@@ -4,15 +4,11 @@ package ee.potatonet.auth.google;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -25,36 +21,40 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-
-import ee.potatonet.X509AuthenticationServer;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableOAuth2Client
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
+public class GoogleSecurityConfiguration {
 
   private final OAuth2ClientContextFilter contextFilter;
   private final AccessTokenRequest accessTokenRequest;
   private final GoogleAccessAuthenticationConverter authenticationConverter;
   private final RedirectStrategy redirectStrategy;
   private final GoogleProperties googleProperties;
+  private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
   @Autowired
-  public OAuth2SecurityConfiguration(
+  public GoogleSecurityConfiguration(
       OAuth2ClientContextFilter contextFilter,
       AccessTokenRequest accessTokenRequest,
       GoogleAccessAuthenticationConverter authenticationConverter,
       RedirectStrategy redirectStrategy,
-      GoogleProperties googleProperties) {
+      GoogleProperties googleProperties,
+      AuthenticationSuccessHandler authenticationSuccessHandler) {
     this.contextFilter = contextFilter;
     this.accessTokenRequest = accessTokenRequest;
     this.authenticationConverter = authenticationConverter;
     this.redirectStrategy = redirectStrategy;
     this.googleProperties = googleProperties;
+    this.authenticationSuccessHandler = authenticationSuccessHandler;
+  }
+
+  @Bean
+  public GoogleHttpConfigurer<HttpSecurity> googleHttpConfigurer() {
+    return new GoogleHttpConfigurer<HttpSecurity>()
+        .contextFilter(contextFilter)
+        .authenticationProcessingFilter(googleAuthenticationProcessingFilter());
   }
 
   @Bean
@@ -82,21 +82,14 @@ public class OAuth2SecurityConfiguration extends X509AuthenticationServer {
     return details;
   }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    super.configure(http);
-    http.addFilterAfter(contextFilter, ExceptionTranslationFilter.class)
-        .addFilterBefore(googleAuthenticationProcessingFilter(), FilterSecurityInterceptor.class);
-  }
-
   @Bean
   public OAuth2ClientAuthenticationProcessingFilter googleAuthenticationProcessingFilter() {
     GoogleOAuth2ClientAuthenticationProcessingFilter filter =
         new GoogleOAuth2ClientAuthenticationProcessingFilter(googleProperties.getRedirectUrl());
     filter.setRestTemplate(googleRestTemplate());
     filter.setTokenServices(googleTokenServices());
-    filter.setAuthenticationSuccessHandler(new GoogleAuthSuccessHandler(redirectStrategy, authenticationSuccessHandler()));
-    filter.setAuthenticationFailureHandler(new GoogleLoginAuthenticationFailureHandler());
+    filter.setAuthenticationSuccessHandler(new GoogleAuthenticationSuccessHandler(redirectStrategy, authenticationSuccessHandler));
+    filter.setAuthenticationFailureHandler(new GoogleAuthenticationFailureHandler());
 
     return filter;
   }
