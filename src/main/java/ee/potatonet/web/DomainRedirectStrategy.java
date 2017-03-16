@@ -1,4 +1,4 @@
-package ee.potatonet;
+package ee.potatonet.web;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.web.DefaultRedirectStrategy;
