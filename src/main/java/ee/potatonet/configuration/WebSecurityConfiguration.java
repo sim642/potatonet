@@ -1,6 +1,5 @@
 package ee.potatonet.configuration;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,24 +9,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ee.potatonet.auth.PotatonetAuthenticationSuccessHandler;
 import ee.potatonet.auth.eid.AuthenticationSuccessHandlerPostProcessor;
-import ee.potatonet.auth.eid.EIDDetails;
+import ee.potatonet.auth.eid.EIDAuthenticationUserDetailsService;
 import ee.potatonet.auth.eid.EIDDetailsX509PrincipalExtractor;
 import ee.potatonet.auth.eid.PrincipalExtractorPostProcessor;
+import ee.potatonet.auth.email.EmailUserDetailsService;
 import ee.potatonet.auth.google.GoogleHttpConfigurer;
-import ee.potatonet.data.model.User;
-import ee.potatonet.data.service.UserService;
 
 
 @Configuration
@@ -36,13 +28,16 @@ import ee.potatonet.data.service.UserService;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Autowired
-  private UserService userService;
-
-  @Autowired
   private PotatonetAuthenticationSuccessHandler authenticationSuccessHandler;
 
   @Autowired
   private GoogleHttpConfigurer<HttpSecurity> googleHttpConfigurer;
+
+  @Autowired
+  private EmailUserDetailsService emailUserDetailsService;
+
+  @Autowired
+  private EIDAuthenticationUserDetailsService eidAuthenticationUserDetailsService;
 
 
   @Override
@@ -52,36 +47,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(emailUserDetailsService())
+    auth.userDetailsService(emailUserDetailsService)
         .passwordEncoder(passwordEncoder());
   }
-
-
-  @Bean
-  public UserDetailsService emailUserDetailsService() {
-    return email -> {
-      System.out.println(email);
-
-      List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_EMAIL");
-
-      User exisitingUser = userService.findOneByEidEmail(email);
-      if (exisitingUser != null) {
-        System.out.println("User logged in: " + exisitingUser);
-        exisitingUser.setAuthorities(authorities);
-
-        return exisitingUser;
-      }
-      else {
-        throw new UsernameNotFoundException(email);
-      }
-    };
-  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -90,9 +58,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .antMatchers("/login/google/pre").anonymous()
         .anyRequest().authenticated();
     http.x509()
-        .withObjectPostProcessor(new PrincipalExtractorPostProcessor(eidDetailsX509PrincipalExtractor()))
-        .withObjectPostProcessor(new AuthenticationSuccessHandlerPostProcessor(authenticationSuccessHandler))
-        .authenticationUserDetailsService(authenticationUserDetailsService());
+        .withObjectPostProcessor(new PrincipalExtractorPostProcessor(new EIDDetailsX509PrincipalExtractor()))
+        .authenticationUserDetailsService(eidAuthenticationUserDetailsService)
+        .withObjectPostProcessor(new AuthenticationSuccessHandlerPostProcessor(authenticationSuccessHandler));
     http.formLogin()
         .loginPage("/login")
         .usernameParameter("email")
@@ -108,33 +76,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public EIDDetailsX509PrincipalExtractor eidDetailsX509PrincipalExtractor() {
-    return new EIDDetailsX509PrincipalExtractor();
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
-
-  @Bean
-  public AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> authenticationUserDetailsService() {
-    return token -> {
-      EIDDetails eidDetails = (EIDDetails) token.getPrincipal();
-      System.out.println(eidDetails);
-
-      List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_EID");
-
-      User exisitingUser = userService.findOneByEidEmail(eidDetails.getEmail());
-      if (exisitingUser != null) {
-        System.out.println("User logged in: " + exisitingUser);
-        exisitingUser.setAuthorities(authorities);
-
-        return exisitingUser;
-      }
-      else {
-        User newUser = new User(eidDetails);
-        newUser.setAuthorities(authorities);
-
-        System.out.println("Created user: " + newUser);
-        return userService.save(newUser);
-      }
-    };
-  }
-
 }
