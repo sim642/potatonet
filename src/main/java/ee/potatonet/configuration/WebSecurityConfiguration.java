@@ -14,10 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ee.potatonet.auth.PotatonetAuthenticationSuccessHandler;
-import ee.potatonet.auth.eid.AuthenticationSuccessHandlerPostProcessor;
 import ee.potatonet.auth.eid.EIDAuthenticationUserDetailsService;
-import ee.potatonet.auth.eid.EIDDetailsX509PrincipalExtractor;
-import ee.potatonet.auth.eid.PrincipalExtractorPostProcessor;
+import ee.potatonet.auth.eid.EIDHttpConfigurer;
 import ee.potatonet.auth.email.EmailUserDetailsService;
 import ee.potatonet.auth.google.GoogleHttpConfigurer;
 
@@ -57,10 +55,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .antMatchers("/login").permitAll()
         .antMatchers("/login/google/pre").anonymous()
         .anyRequest().authenticated();
-    http.x509()
-        .withObjectPostProcessor(new PrincipalExtractorPostProcessor(new EIDDetailsX509PrincipalExtractor()))
+    http.apply(new EIDHttpConfigurer<>())
         .authenticationUserDetailsService(eidAuthenticationUserDetailsService)
-        .withObjectPostProcessor(new AuthenticationSuccessHandlerPostProcessor(authenticationSuccessHandler));
+        .authenticationSuccessHandler(authenticationSuccessHandler);
     http.formLogin()
         .loginPage("/login")
         .usernameParameter("email")
