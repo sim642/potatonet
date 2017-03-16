@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import ee.potatonet.data.service.PostService;
 
 @Controller
+@RequestMapping("/statistics")
 public class StatisticsController {
 
   private final PostService postService;
@@ -17,7 +19,7 @@ public class StatisticsController {
     this.postService = postService;
   }
 
-  @GetMapping("/statistics")
+  @GetMapping
   public String doGet(Model model) {
     model.addAttribute("coords", postService.getAllPostCoordinates());
     return "statistics";

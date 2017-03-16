@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,6 +20,7 @@ import ee.potatonet.data.service.PostService;
 import ee.potatonet.data.service.UserService;
 
 @Controller
+@RequestMapping("/")
 public class FeedController {
 
   private final PostService postService;
@@ -32,7 +32,7 @@ public class FeedController {
     this.userService = userService;
   }
 
-  @RequestMapping(value = "/", method = RequestMethod.GET)
+  @GetMapping
   public String doGet(@CurrentUser User currentUser, @RequestParam(value = "beforePostId", required = false) Long beforePostId, Model model) {
     model.addAttribute("post", new Post(userService.find(currentUser), ""));
     if (beforePostId != null) {
@@ -46,13 +46,13 @@ public class FeedController {
     return "feed";
   }
 
-  @PostMapping(value = "/", headers = "X-Requested-With!=XMLHttpRequest")
+  @PostMapping(headers = "X-Requested-With!=XMLHttpRequest")
   public String doPost(@CurrentUser User currentUser, @Valid @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
     return "redirect:/";
   }
 
-  @PostMapping(value = "/", headers = "X-Requested-With=XMLHttpRequest")
+  @PostMapping(headers = "X-Requested-With=XMLHttpRequest")
   @ResponseBody
   public void doPostAjax(@CurrentUser User currentUser, @Valid @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
