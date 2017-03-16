@@ -7,9 +7,9 @@
 <div layout:fragment="content">
     <h2>:(</h2>
     <h3 th:text="#{error.generic}">Something went wrong!</h3>
-    <!--/*@thymesVar id="errorDetails" type="ee.potatonet.controller.ErrorDetails"*/-->
+    <!--/*@thymesVar id="errorDetails" type="ee.potatonet.controller.PotatonetErrorController.ErrorDetails"*/-->
     <h4 th:text="${errorDetails.status + ' ' + errorDetails.error}"/>
-    <pre th:if="${showErrors}" th:text="${errorDetails.timeStamp + ' ' + errorDetails.message + ' '+ errorDetails.trace}"/>
+    <pre th:if="${app.showErrors}" th:text="${errorDetails.timestamp + ' ' + errorDetails.message + ' '+ errorDetails.trace}"/>
 </div>
 </body>
 </html>
