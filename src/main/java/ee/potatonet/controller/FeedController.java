@@ -18,6 +18,7 @@ import ee.potatonet.data.model.Post;
 import ee.potatonet.data.model.User;
 import ee.potatonet.data.service.PostService;
 import ee.potatonet.data.service.UserService;
+import ee.potatonet.web.MappingUtils;
 
 @Controller
 @RequestMapping("/")
@@ -46,13 +47,13 @@ public class FeedController {
     return "feed";
   }
 
-  @PostMapping(headers = "X-Requested-With!=XMLHttpRequest")
+  @PostMapping(headers = MappingUtils.NON_AJAX_HEADERS)
   public String doPost(@CurrentUser User currentUser, @Valid @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
     return "redirect:/";
   }
 
-  @PostMapping(headers = "X-Requested-With=XMLHttpRequest")
+  @PostMapping(headers = MappingUtils.AJAX_HEADERS)
   @ResponseBody
   public void doPostAjax(@CurrentUser User currentUser, @Valid @ModelAttribute Post post) {
     postService.savePostToUser(post, currentUser);
