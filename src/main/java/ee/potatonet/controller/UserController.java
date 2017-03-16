@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ee.potatonet.controller.advice.CurrentUser;
 import ee.potatonet.data.model.User;
 import ee.potatonet.data.service.PostService;
 import ee.potatonet.data.service.UserService;

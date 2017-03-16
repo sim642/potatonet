@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ee.potatonet.controller.advice.CurrentUser;
 import ee.potatonet.data.model.Post;
 import ee.potatonet.data.model.User;
 import ee.potatonet.data.service.PostService;

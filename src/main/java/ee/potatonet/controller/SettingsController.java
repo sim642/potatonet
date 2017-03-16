@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.LocaleResolver;
 
+import ee.potatonet.controller.advice.CurrentUser;
 import ee.potatonet.data.model.Language;
 import ee.potatonet.data.model.User;
 import ee.potatonet.data.service.UserService;

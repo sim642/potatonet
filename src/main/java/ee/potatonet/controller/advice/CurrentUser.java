@@ -1,4 +1,4 @@
-package ee.potatonet.controller;
+package ee.potatonet.controller.advice;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

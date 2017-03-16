@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ee.potatonet.controller.advice.CurrentUser;
 import ee.potatonet.data.model.User;
 
 @Controller

@@ -1,4 +1,4 @@
-package ee.potatonet.controller;
+package ee.potatonet.controller.advice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
