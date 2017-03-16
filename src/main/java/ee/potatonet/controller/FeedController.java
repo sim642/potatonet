@@ -1,6 +1,7 @@
 package ee.potatonet.controller;
 
 
+import javax.validation.Valid;
 import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ee.potatonet.data.Post;
-import ee.potatonet.data.PostService;
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
-
-import javax.validation.Valid;
+import ee.potatonet.data.model.Post;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.service.PostService;
+import ee.potatonet.data.service.UserService;
 
 @Controller
 public class FeedController {

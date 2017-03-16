@@ -38,7 +38,7 @@
                 <li th:classappend="(*{active} == 'user')? 'active' : _">
                     <a th:href="@{/users/{userId}(userId=${currentUser.id})}">
                         <img alt="User avatar image" src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
-                        <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.User"*/-->
+                        <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.model.User"*/-->
                         <span th:text="${currentUser.fullName}"></span>
                     </a>
                 </li>

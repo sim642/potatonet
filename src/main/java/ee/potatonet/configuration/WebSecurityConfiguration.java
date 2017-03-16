@@ -26,8 +26,8 @@ import ee.potatonet.auth.eid.EIDDetails;
 import ee.potatonet.auth.eid.EIDDetailsX509PrincipalExtractor;
 import ee.potatonet.auth.eid.PrincipalExtractorPostProcessor;
 import ee.potatonet.auth.google.GoogleHttpConfigurer;
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.service.UserService;
 
 
 @Configuration

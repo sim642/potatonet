@@ -1,4 +1,4 @@
-package ee.potatonet.data;
+package ee.potatonet.data.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;

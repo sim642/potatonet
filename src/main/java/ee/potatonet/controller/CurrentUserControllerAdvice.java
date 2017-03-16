@@ -5,8 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.service.UserService;
 
 @ControllerAdvice
 public class CurrentUserControllerAdvice {

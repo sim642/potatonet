@@ -1,4 +1,4 @@
-package ee.potatonet.data;
+package ee.potatonet.data.service;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -8,7 +8,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ee.potatonet.data.repos.PostRepository;
+import ee.potatonet.data.model.Coordinates;
+import ee.potatonet.data.model.Post;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.repository.PostRepository;
 import ee.potatonet.thymeleaf.TemplateRenderService;
 
 @Service

@@ -1,11 +1,12 @@
 package ee.potatonet.controller;
 
-import ee.potatonet.data.Post;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import ee.potatonet.data.model.Post;
 
 @Controller
 @RequestMapping("/posts")

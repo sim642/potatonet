@@ -1,4 +1,4 @@
-package ee.potatonet.data;
+package ee.potatonet.data.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ee.potatonet.data.repos.UserRepository;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.repository.UserRepository;
 
 @Service
 @Transactional

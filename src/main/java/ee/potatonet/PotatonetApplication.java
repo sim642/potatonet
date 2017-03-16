@@ -1,8 +1,6 @@
 package ee.potatonet;
 
 import javax.sql.DataSource;
-
-import ee.potatonet.data.Language;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -19,11 +17,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import nz.net.ultraq.thymeleaf.LayoutDialect;
-import nz.net.ultraq.thymeleaf.decorators.strategies.GroupingStrategy;
+import ee.potatonet.data.model.Language;
+import ee.potatonet.data.service.avatar.AvatarService;
+import ee.potatonet.data.service.avatar.GravatarAvatarService;
 
 @SpringBootApplication
 public class PotatonetApplication {

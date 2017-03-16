@@ -1,4 +1,4 @@
-package ee.potatonet.data;
+package ee.potatonet.data.model;
 
 import java.util.Locale;
 

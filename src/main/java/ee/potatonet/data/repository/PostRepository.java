@@ -1,15 +1,14 @@
-package ee.potatonet.data.repos;
+package ee.potatonet.data.repository;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-
-import ee.potatonet.data.Coordinates;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import ee.potatonet.data.Post;
-import ee.potatonet.data.User;
+import ee.potatonet.data.model.Coordinates;
+import ee.potatonet.data.model.Post;
+import ee.potatonet.data.model.User;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {

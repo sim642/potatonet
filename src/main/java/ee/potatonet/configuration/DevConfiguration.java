@@ -10,10 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ee.potatonet.auth.eid.EIDCodeDetails;
 import ee.potatonet.auth.eid.EIDDetails;
-import ee.potatonet.data.Post;
-import ee.potatonet.data.PostService;
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
+import ee.potatonet.data.model.Post;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.service.PostService;
+import ee.potatonet.data.service.UserService;
 
 @Configuration
 @Profile("dev")

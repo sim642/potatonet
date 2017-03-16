@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
-import ee.potatonet.data.User;
+import ee.potatonet.data.model.User;
 
 @Component
 public class PotatonetAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {

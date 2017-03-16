@@ -15,8 +15,8 @@ import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticat
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.service.UserService;
 
 @Component
 public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticationConverter {
