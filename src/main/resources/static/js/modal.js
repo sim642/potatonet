@@ -4,7 +4,11 @@ $('#mapModal').on('show.bs.modal', function (event) {
   var post = $(event.relatedTarget);
   var latitude = post.data('latitude');
   var longitude = post.data('longitude');
-  initMap(longitude, latitude);
+  if (typeof latitude !== 'undefined' && latitude != -91 && longitude != -181) {
+	initMap(longitude, latitude);
+  } else {
+    $('#map').text("No location information available for this post!");
+  }
 
   if (!mapModalPopping) {
     var $post = post.closest(".panel-post");

@@ -8,7 +8,7 @@
         <div class="media">
             <div class="media-left">
                 <a th:href="@{/users/{userId}(userId=${post.user.id})}">
-                    <img class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(post.user, 64)}">
+                    <img alt="User avatar image" class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(post.user, 64)}">
                 </a>
             </div>
             <div class="media-body">
@@ -21,9 +21,8 @@
             </div>
             <div class="media-right" th:unless="${post.id == null}">
                 <a th:text="${{post.creationDateTime}}"
-                   class="no-padding pull-down pull-right btn btn-link btn-modal-map " data-toggle="modal" data-target="#mapModal"
-                   th:if="${post.coordinates.latitude != null}"
-                   th:attr="data-latitude=${post.coordinates.latitude}, data-longitude=${post.coordinates.longitude}">2017-02-11 15:00:00</a>
+                   class="pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
+                   th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">2017-02-11 15:00:00</a>
 
                 <form id="like" th:action="@{/like/{id}(id=${post.id})}" th:method="PUT">
                     <div class="pull-right">
@@ -69,22 +68,23 @@
     </th:block>
 </div>
 
-<a class="hidden-link" th:href="@{/users/{userId}(userId=${user.id})}" th:fragment="userPanel(user)">
-    <div class="panel panel-default panel-user">
-        <div class="panel-body">
-            <div class="media">
-                <div class="media-left media-middle">
-                    <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="img-rounded">
-                </div>
-                <div class="media-body">
-                    <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
-
+<div class="panel panel-default panel-user" th:fragment="userPanel(user)">
+    <div class="panel-body">
+        <div class="media">
+            <div class="media-left media-middle">
+                <a th:href="@{/users/{userId}(userId=${user.id})}">
+                    <img alt="User avatar image" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="img-rounded">
+                </a>
+            </div>
+            <div class="media-body">
+                <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
+                <a class="hidden-link" th:href="@{/users/{userId}(userId=${user.id})}">
                     <h3 th:text="${user.fullName}"></h3>
-                </div>
+                </a>
             </div>
         </div>
     </div>
-</a>
+</div>
 
 </body>
 </html>

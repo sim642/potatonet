@@ -64,27 +64,31 @@ $(function () {
 
     trySendStoredPost();
 
-	$("#post").submit(function (event) {
-	  var func = function () {
-		var $content = $("#content");
-		trySendStoredPost(function () {
-		  $.post("/", $("#post").serialize())
-			  .fail(storePost)
-			  .always(function () {
-				$content.val("");
-				$('#postButton').attr('disabled', true);
-			  });
-		});
-	  };
+	var sendPost = function() {
+	  var $content = $("#content");
+	  trySendStoredPost(function () {
+		$.post("/", $("#post").serialize())
+			.fail(storePost)
+			.always(function () {
+			  $content.val("");
+			  $('#postButton').attr('disabled', true);
+			});
+	  });
+	};
 
+	$("#post").submit(function (event) {
 	  if ("geolocation" in navigator) {
 		navigator.geolocation.getCurrentPosition(function (position) {
 		  $("#longitude").val(position.coords.longitude);
 		  $("#latitude").val(position.coords.latitude);
-		  func();
+		  sendPost();
+		}, function error(err) {
+		  // Most likely geolocation being disabled by user.
+		  sendPost();
+		  console.warn(err);
 		});
 	  } else {
-		func();
+		sendPost();
 	  }
 	  return false;
 	});
@@ -93,7 +97,6 @@ $(function () {
   var canLoad = true;
   var $window = $(window);
   var $loader = $("#loader");
-  $loader.hide();
 
   $window.scroll(function () {
 	if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {

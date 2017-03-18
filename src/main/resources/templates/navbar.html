@@ -15,7 +15,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-                <img th:src="@{/img/potato-48.png}"/>
+                <img alt="Navbar potato logo" th:src="@{/img/potato-48.png}"/>
             </a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
@@ -37,7 +37,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li th:classappend="(*{active} == 'user')? 'active' : _">
                     <a th:href="@{/users/{userId}(userId=${currentUser.id})}">
-                        <img src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
+                        <img alt="User avatar image" src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
                         <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.User"*/-->
                         <span th:text="${currentUser.fullName}"></span>
                     </a>
