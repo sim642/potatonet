@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,7 +52,14 @@ public class User implements UserDetails {
 
   @ManyToMany(mappedBy = "incomingFriendRequests")
   private Set<User> outgoingFriendRequests;
-  
+
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(name = "POST_LIKE",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "post_id")
+  )
+  private Set<Post> likedPosts;
+
   @Transient
   private Set<? extends GrantedAuthority> authorities;
 
@@ -160,6 +169,14 @@ public class User implements UserDetails {
 
   public void setGoogleId(String googleId) {
     this.googleId = googleId;
+  }
+
+  public Set<Long> getLikedPostsIds() {
+    return likedPosts.stream().map(Post::getId).collect(Collectors.toSet());
+  }
+
+  public void setLikedPosts(Set<Post> likedPosts) {
+    this.likedPosts = likedPosts;
   }
 
   private static class AuthorityComparator implements Comparator<GrantedAuthority>,

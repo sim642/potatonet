@@ -75,15 +75,6 @@ public class PostService {
   }
 
   public void toggleLike(User user, Long postId) {
-    user = userService.find(user);
-    Post post = this.findById(postId);
-
-    if (post.getLikingUsers().contains(user)) {
-      postRepository.removeLike(user, post);
-    }
-    else {
-      postRepository.saveLike(user, post);
-    }
-
+    postRepository.toggleLike(postId, user.getId());
   }
 }

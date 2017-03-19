@@ -19,7 +19,7 @@
                     <p>Content</p>
                 </th:block>
             </div>
-            <div class="media-right" th:unless="${post.id == null}">
+            <div class="media-right" th:unless="${post.id == null || currentUser == null}">
                 <a th:text="${{post.creationDateTime}}"
                    class="pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
                    th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">2017-02-11 15:00:00</a>
@@ -27,11 +27,11 @@
                 <form id="like" th:action="@{/like/{id}(id=${post.id})}" th:method="PUT">
                     <div class="pull-right">
                         <button
-                                th:classappend="${post.likingUsers.contains(currentUser)} ? 'btn-info' : 'btn-secondary'"
+                                th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'btn-info' : 'btn-secondary'"
                                 id="likeButton" type="submit"
                                 class="btn">
                             <span th:text="#{post.like}"></span>
-                            <span th:text="${post.likingUsers.size()}" class="badge">0</span>
+                            <span th:text="${post.likeCount}" class="badge">0</span>
                         </button>
                    </div>
                 </form>

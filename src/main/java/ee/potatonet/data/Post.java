@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -36,16 +37,10 @@ public class Post {
   @Size(min = 1, max = 32700)
   private String content;
 
+  private int likeCount;
+
   @Embedded
   private Coordinates coordinates = new Coordinates();
-
-  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
-  @JoinTable(
-      name="POST_LIKE",
-      joinColumns = @JoinColumn(name="post_id"),
-      inverseJoinColumns = @JoinColumn(name="user_id")
-  )
-  private List<User> likingUsers = new ArrayList<>();
 
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private ZonedDateTime creationDateTime;
@@ -134,11 +129,11 @@ public class Post {
     this.creationDateTime = creationDateTime;
   }
 
-  public List<User> getLikingUsers() {
-    return likingUsers;
+  public int getLikeCount() {
+    return likeCount;
   }
 
-  public void setLikingUsers(List<User> likingUsers) {
-    this.likingUsers = likingUsers;
+  public void setLikeCount(int likeCount) {
+    this.likeCount = likeCount;
   }
 }
