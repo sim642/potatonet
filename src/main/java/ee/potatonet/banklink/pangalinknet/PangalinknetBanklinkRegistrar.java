@@ -1,5 +1,10 @@
 package ee.potatonet.banklink.pangalinknet;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.URL;
+import java.security.KeyPair;
+import org.bouncycastle.openssl.PEMReader;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,19 +24,34 @@ public class PangalinknetBanklinkRegistrar implements BanklinkRegistrar {
 
   @Override
   public void registerBanklinks(BanklinkRegistry registry) {
-    UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(properties.getUrl()).pathSegment("api", "project");
+    UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(properties.getUrl());
+    UriComponentsBuilder apiProjectUri = uri.cloneBuilder().pathSegment("api", "project");
 
-    Projects projects = restTemplate.getForObject(uriComponentsBuilder.toUriString(), ProjectsDTO.class).getData();
+    Projects projects = restTemplate.getForObject(apiProjectUri.toUriString(), ProjectsDTO.class).getData();
     projects.getList().forEach(listProject -> {
-      Project project = restTemplate.getForObject(uriComponentsBuilder.cloneBuilder().pathSegment(listProject.getId()).toUriString(), ProjectDTO.class).getData();
+      try {
+        UriComponentsBuilder apiProject = apiProjectUri.cloneBuilder().pathSegment(listProject.getId());
+        Project project = restTemplate.getForObject(apiProject.toUriString(), ProjectDTO.class).getData();
 
-      PangalinknetBanklink banklink = new PangalinknetBanklink();
-      banklink.setClientId(project.getClientId());
-      banklink.setUrl(project.getPaymentUrl());
-      banklink.setAccountNumber(project.getAccountNr());
-      banklink.setAccountName(project.getAccountOwner());
+        PangalinknetBanklink banklink = new PangalinknetBanklink();
+        banklink.setClientId(project.getClientId());
 
-      registry.registerBanklink(project.getId(), banklink);
+        UriComponentsBuilder paymentUri = uri.cloneBuilder().replacePath(new URL(project.getPaymentUrl()).getPath());
+        banklink.setUrl(paymentUri.toUriString());
+
+        banklink.setAccountNumber(project.getAccountNr());
+        banklink.setAccountName(project.getAccountOwner());
+
+        try (PEMReader pemReader = new PEMReader(new StringReader(project.getPrivateKey()))) {
+          KeyPair keyPair = (KeyPair) pemReader.readObject();
+          banklink.setPrivateKey(keyPair.getPrivate());
+        }
+
+        registry.registerBanklink(project.getId(), banklink);
+      }
+      catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     });
   }
 }
