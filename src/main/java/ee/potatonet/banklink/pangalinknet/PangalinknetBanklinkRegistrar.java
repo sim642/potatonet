@@ -34,6 +34,7 @@ public class PangalinknetBanklinkRegistrar implements BanklinkRegistrar {
         Project project = restTemplate.getForObject(apiProject.toUriString(), ProjectDTO.class).getData();
 
         PangalinknetBanklink banklink = new PangalinknetBanklink();
+        banklink.setDisplayName(project.getName());
         banklink.setClientId(project.getClientId());
 
         UriComponentsBuilder paymentUri = uri.cloneBuilder().replacePath(new URL(project.getPaymentUrl()).getPath());

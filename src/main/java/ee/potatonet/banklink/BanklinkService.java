@@ -13,11 +13,11 @@ import java.security.SignatureException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import ee.potatonet.banklink.pangalinknet.PangalinknetBanklinkRegistrar;
@@ -44,18 +44,19 @@ public class BanklinkService {
 
   @Autowired
   public BanklinkService(BanklinkProperties banklinkProperties) {
-    registry = new DefaultBanklinkRegistry();
+    this.registry = new DefaultBanklinkRegistry();
     this.banklinkProperties = banklinkProperties;
+  }
+
+  @Bean
+  public BanklinkRegistry banklinkRegistry() {
+    return registry;
   }
 
   @PostConstruct
   public void postConstruct() {
     new PropertiesBanklinkRegistrar(banklinkProperties.getProperties()).registerBanklinks(registry);
     new PangalinknetBanklinkRegistrar(banklinkProperties.getPangalinknet()).registerBanklinks(registry);
-  }
-
-  public Collection<String> getBanklinkNames() {
-    return registry.getBanklinkNames();
   }
 
   public BanklinkParams getPaymentParams(String banklinkName, Payment payment) {

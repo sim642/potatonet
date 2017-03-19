@@ -2,10 +2,20 @@ package ee.potatonet.banklink;
 
 public abstract class AbstractBanklink implements Banklink {
 
+  protected String displayName;
   protected String clientId;
   protected String url;
   protected String accountNumber;
   protected String accountName;
+
+  @Override
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
 
   @Override
   public String getClientId() {

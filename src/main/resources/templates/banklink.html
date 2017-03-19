@@ -18,7 +18,7 @@
 
     <form class="banklinks" th:action="@{/banklink/params}" method="post">
         <div class="btn-group" role="group" aria-label="banklinks">
-            <button type="submit" class="btn btn-default" name="banklink" th:each="banklinkName : ${@banklinkService.getBanklinkNames()}" th:value="${banklinkName}" th:text="${banklinkName}"></button>
+            <button type="submit" class="btn btn-default" name="banklink" th:each="name : ${@banklinkRegistry.getBanklinkNames()}" th:with="banklink=${@banklinkRegistry.getBanklink(name)}" th:value="${name}" th:text="${banklink.displayName}"></button>
         </div>
     </form>
 </div>

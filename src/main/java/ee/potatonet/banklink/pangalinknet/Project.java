@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 class Project {
 
   private String id;
+  private String name;
 
   private String clientId;
   private String paymentUrl;
@@ -22,6 +23,14 @@ class Project {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getClientId() {
