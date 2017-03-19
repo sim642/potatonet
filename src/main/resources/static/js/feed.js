@@ -1,7 +1,10 @@
 var stomp = null;
 
 function onFeed(msg) {
-  $("#feed").prepend(msg.body);
+  var postId = msg.body;
+  $.get("/posts/" + postId, function (data) {
+    $("#feed").prepend($(data));
+  });
 }
 
 function showStoredPostAlert() {
