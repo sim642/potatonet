@@ -1,7 +1,5 @@
 package ee.potatonet.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -25,8 +24,20 @@ public class BanklinkController {
   private BanklinkService banklinkService;
 
   @GetMapping
-  public String doGet(Model model, CsrfToken csrfToken) {
-    UriComponentsBuilder uriComponentsBuilder = ServletUriComponentsBuilder.fromCurrentRequestUri().queryParam(csrfToken.getParameterName(), csrfToken.getToken());
+  public String doGet() {
+    return "banklink";
+  }
+
+  @PostMapping
+  public String doPost(@RequestParam Map<String, String> params, Model model) {
+    model.addAttribute("vk_params", params);
+    return "banklink";
+  }
+
+  @GetMapping("/params")
+  @ResponseBody
+  public BanklinkService.BanklinkParams doGetParams(@RequestParam("banklinkName") String banklinkName, CsrfToken csrfToken) {
+    UriComponentsBuilder uriComponentsBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/banklink").queryParam(csrfToken.getParameterName(), csrfToken.getToken());
 
     Payment payment = new Payment();
     payment.setStamp("123456");
@@ -37,31 +48,6 @@ public class BanklinkController {
     payment.setCancelUrl(uriComponentsBuilder.cloneBuilder().queryParam("cancel").toUriString());
     payment.setLanguage("ENG");
 
-    model.addAttribute("vk_params", banklinkService.getPaymentParams("testpank", payment));
-    return "banklink";
-  }
-
-  @PostMapping
-  public String doPost(@RequestParam Map<String, String> params, Model model, CsrfToken csrfToken) {
-    model.addAttribute("vk_params2", params);
-    return doGet(model, csrfToken);
-  }
-
-  private static String encode(Map<String, String> params) {
-    try {
-      StringBuilder sb = new StringBuilder();
-      for (Map.Entry<String, String> entry : params.entrySet()) {
-        if (sb.length() > 0)
-          sb.append("&");
-
-        sb.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-        sb.append("=");
-        sb.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-      }
-      return sb.toString();
-    }
-    catch (UnsupportedEncodingException e) {
-      throw new RuntimeException(e);
-    }
+    return banklinkService.getPaymentParams(banklinkName, payment);
   }
 }

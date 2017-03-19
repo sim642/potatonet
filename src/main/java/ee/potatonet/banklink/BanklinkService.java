@@ -13,6 +13,7 @@ import java.security.SignatureException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
@@ -51,7 +52,11 @@ public class BanklinkService {
     new PropertiesBanklinkRegistrar(banklinkProperties.getProperties()).registerBanklinks(registry);
   }
 
-  public Map<String, String> getPaymentParams(String banklinkName, Payment payment) {
+  public Collection<String> getBanklinkNames() {
+    return registry.getBanklinkNames();
+  }
+
+  public BanklinkParams getPaymentParams(String banklinkName, Payment payment) {
     Banklink banklink = registry.getBanklink(banklinkName);
 
     Map<String, String> params = new LinkedHashMap<>();
@@ -73,9 +78,14 @@ public class BanklinkService {
     params.put("VK_ENCODING", "UTF-8");
     params.put("VK_LANG", payment.getLanguage());
 
-    return params;
+    BanklinkParams banklinkParams = new BanklinkParams();
+    banklinkParams.setParams(params);
+    banklinkParams.setUrl(banklink.getUrl());
+
+    return banklinkParams;
   }
 
+  // http://www.pangaliit.ee/et/arveldused/viitenumber
   private static String getReference(String stamp) {
     return stamp + get731(stamp);
   }
@@ -104,6 +114,28 @@ public class BanklinkService {
     }
     catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  public static class BanklinkParams {
+
+    private Map<String, String> params;
+    private String url;
+
+    public Map<String, String> getParams() {
+      return params;
+    }
+
+    public void setParams(Map<String, String> params) {
+      this.params = params;
+    }
+
+    public String getUrl() {
+      return url;
+    }
+
+    public void setUrl(String url) {
+      this.url = url;
     }
   }
 }
