@@ -104,11 +104,6 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.5</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.code.spring-crypto-utils</groupId>
-			<artifactId>spring-crypto-utils</artifactId>
-			<version>1.4.0</version>
-		</dependency>
 	</dependencies>
 
 	<build>
