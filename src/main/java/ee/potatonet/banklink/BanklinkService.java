@@ -20,6 +20,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ee.potatonet.banklink.pangalinknet.PangalinknetBanklinkRegistrar;
 import ee.potatonet.banklink.properties.PropertiesBanklinkRegistrar;
 
 @Service
@@ -50,6 +51,7 @@ public class BanklinkService {
   @PostConstruct
   public void postConstruct() {
     new PropertiesBanklinkRegistrar(banklinkProperties.getProperties()).registerBanklinks(registry);
+    new PangalinknetBanklinkRegistrar(banklinkProperties.getPangalinknet()).registerBanklinks(registry);
   }
 
   public Collection<String> getBanklinkNames() {
