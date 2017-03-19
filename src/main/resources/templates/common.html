@@ -29,9 +29,11 @@
                         <button
                                 th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'btn-info' : 'btn-secondary'"
                                 id="likeButton" type="submit"
-                                class="btn">
+                                class="btn like-btn btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
                             <span th:text="#{post.like}"></span>
-                            <span th:text="${post.likeCount}" class="badge">0</span>
+                            <span th:text="${post.likeCount}" class="label" th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'label-default' : 'label-info'"
+                            >0</span>
                         </button>
                    </div>
                 </form>
