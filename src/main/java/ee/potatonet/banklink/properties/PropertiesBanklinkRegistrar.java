@@ -22,6 +22,9 @@ public class PropertiesBanklinkRegistrar implements BanklinkRegistrar {
 
   @Override
   public void registerBanklinks(BanklinkRegistry registry) {
+    if (properties == null)
+      return;
+
     try {
       KeyStore keyStore = KeyStore.getInstance("JKS");
       keyStore.load(properties.getKeyStore().getInputStream(), properties.getKeyStorePassword().toCharArray());

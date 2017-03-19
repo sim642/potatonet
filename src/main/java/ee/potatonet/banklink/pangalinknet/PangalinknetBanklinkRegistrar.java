@@ -24,6 +24,9 @@ public class PangalinknetBanklinkRegistrar implements BanklinkRegistrar {
 
   @Override
   public void registerBanklinks(BanklinkRegistry registry) {
+    if (properties == null)
+      return;
+
     UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(properties.getUrl());
     UriComponentsBuilder apiProjectUri = uri.cloneBuilder().pathSegment("api", "project");
 
