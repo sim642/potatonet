@@ -4,7 +4,7 @@
 
 <div class="panel panel-post" layout:fragment="postBasePanel(post, panel_class)" th:classappend="${panel_class} ?: 'panel-default'" th:data-post-id="${post.id}">
 
-    <div class="panel-body">
+    <div class="panel-body" >
         <div class="media">
             <div class="media-left">
                 <a th:href="@{/users/{userId}(userId=${post.user.id})}">
@@ -23,19 +23,8 @@
                 <a th:text="${{post.creationDateTime}}"
                    class="pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
                    th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">2017-02-11 15:00:00</a>
-
-                <form id="like" th:action="@{/like/{id}(id=${post.id})}" th:method="PUT">
-                    <div class="pull-right">
-                        <button
-                                th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'btn-info' : 'btn-secondary'"
-                                id="likeButton" type="submit"
-                                class="btn like-btn btn-sm">
-                            <span class="glyphicon glyphicon-thumbs-up"></span>
-                            <span th:text="#{post.like}"></span>
-                            <span th:text="${post.likeCount}" class="label" th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'label-default' : 'label-info'"
-                            >0</span>
-                        </button>
-                   </div>
+                <form class="like pull-right" th:action="@{/like/{id}(id=${post.id})}" th:method="PUT">
+                    <button th:replace="~{common :: likeButton (${post})}"></button>
                 </form>
             </div>
         </div>
@@ -48,6 +37,16 @@
         <p th:text="${post.content}"></p>
     </th:block>
 </div>
+
+
+<button th:fragment="likeButton(post)"
+        th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'btn-info' : 'btn-secondary'"
+        id="likeButton" type="submit"
+        class="btn like-btn btn-sm">
+    <span class="glyphicon glyphicon-thumbs-up"></span>
+    <span th:text="#{post.like}"></span>
+    <span th:text="${post.likeCount}" class="label" th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'label-default' : 'label-info'">0</span>
+</button>
 
 <div class="btn-group btns-friend" role="group" th:fragment="friendButtons(user)" th:data-user-id="${user.id}">
     <th:block th:unless="${user.equals(currentUser)}">
@@ -87,6 +86,8 @@
         </div>
     </div>
 </div>
+
+
 
 </body>
 </html>

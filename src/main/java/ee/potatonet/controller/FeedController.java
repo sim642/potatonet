@@ -48,16 +48,12 @@ public class FeedController {
     return "feed";
   }
 
-  @PutMapping(value = "/like/{postId}", headers = "X-Requested-With!=XMLHttpRequest")
-  public String doLike(@CurrentUser User currentUser, @PathVariable("postId") long postId) {
-    postService.toggleLike(currentUser, postId);
-    return "redirect:/";
-  }
-
   @PutMapping(value = "/like/{postId}", headers = "X-Requested-With=XMLHttpRequest")
-  @ResponseBody
-  public void doLikeAjax(@CurrentUser User currentUser, @PathVariable("postId") long postId) {
+  public String doLikeAjax(@CurrentUser User currentUser, @PathVariable("postId") long postId, Model model) {
     postService.toggleLike(currentUser, postId);
+    model.addAttribute("post", postService.findById(postId));
+
+    return "common :: likeButton";
   }
 
   @PostMapping(value = "/", headers = "X-Requested-With!=XMLHttpRequest")
