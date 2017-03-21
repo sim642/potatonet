@@ -30,6 +30,9 @@ public class PangalinknetBanklinkRegistrar implements BanklinkRegistrar {
     UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(properties.getUrl());
     UriComponentsBuilder apiProjectUri = uri.cloneBuilder().pathSegment("api", "project");
 
+    if (properties.getApiKey() != null)
+      apiProjectUri.queryParam("access_token", properties.getApiKey());
+
     Projects projects = restTemplate.getForObject(apiProjectUri.toUriString(), ProjectsDTO.class).getData();
     projects.getList().forEach(listProject -> {
       try {
