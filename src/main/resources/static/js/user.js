@@ -1,7 +1,10 @@
 var stomp = null;
 
 function onPosts (msg) {
-  $("#posts").prepend(msg.body);
+  var postId = msg.body;
+  $.get("/posts/" + postId, function (data) {
+    $("#posts").prepend($(data));
+  });
 }
 
 $(function () {

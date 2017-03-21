@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ee.potatonet.auth.eid.EIDDetails;
 
@@ -52,6 +53,13 @@ public class User extends TransientAuthoritiesUser {
 
   @ManyToMany(mappedBy = "incomingFriendRequests")
   private Set<User> outgoingFriendRequests;
+
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(name = "POST_LIKE",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "post_id")
+  )
+  private Set<Post> likedPosts;
 
   public User() {
 
@@ -137,6 +145,14 @@ public class User extends TransientAuthoritiesUser {
 
   public void setGoogleId(String googleId) {
     this.googleId = googleId;
+  }
+
+  public Set<Long> getLikedPostsIds() {
+    return likedPosts.stream().map(Post::getId).collect(Collectors.toSet());
+  }
+
+  public void setLikedPosts(Set<Post> likedPosts) {
+    this.likedPosts = likedPosts;
   }
 
   @Override

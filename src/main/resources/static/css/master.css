@@ -64,3 +64,11 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
 #loader {
     display: none;
 }
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.like-btn {
+    margin-top: 1em;
+}

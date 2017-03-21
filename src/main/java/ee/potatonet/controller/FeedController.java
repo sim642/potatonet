@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,6 +47,14 @@ public class FeedController {
       model.addAttribute("userIds", userService.getUserFeedUserIds(currentUser));
     }
     return "feed";
+  }
+
+  @PutMapping(value = "/like/{postId}", headers = MappingUtils.AJAX_HEADERS)
+  public String doLikeAjax(@CurrentUser User currentUser, @PathVariable("postId") long postId, Model model) {
+    postService.toggleLike(currentUser, postId);
+    model.addAttribute("post", postService.findById(postId));
+
+    return "common :: likeButton";
   }
 
   @PostMapping(headers = MappingUtils.NON_AJAX_HEADERS)

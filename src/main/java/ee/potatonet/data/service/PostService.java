@@ -1,7 +1,6 @@
 package ee.potatonet.data.service;
 
 import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -12,7 +11,6 @@ import ee.potatonet.data.model.Coordinates;
 import ee.potatonet.data.model.Post;
 import ee.potatonet.data.model.User;
 import ee.potatonet.data.repository.PostRepository;
-import ee.potatonet.thymeleaf.TemplateRenderService;
 
 @Service
 @Transactional
@@ -22,14 +20,12 @@ public class PostService {
 
   private final PostRepository postRepository;
   private final UserService userService;
-  private final TemplateRenderService templateRenderService;
   private final SimpMessagingTemplate simpMessagingTemplate;
 
   @Autowired
-  public PostService(PostRepository postRepository, UserService userService, TemplateRenderService templateRenderService, SimpMessagingTemplate simpMessagingTemplate) {
+  public PostService(PostRepository postRepository, UserService userService, SimpMessagingTemplate simpMessagingTemplate) {
     this.postRepository = postRepository;
     this.userService = userService;
-    this.templateRenderService = templateRenderService;
     this.simpMessagingTemplate = simpMessagingTemplate;
   }
 
@@ -67,13 +63,16 @@ public class PostService {
     post = postRepository.save(post);
 
     user.getPosts().add(post);
-    userService.save(user);
+    user = userService.save(user);
 
-    String output = templateRenderService.render("common", Collections.singleton("postPanel"), Collections.singletonMap("post", post));
-    simpMessagingTemplate.convertAndSend("/topic/posts/" + user.getId(), output);
+    simpMessagingTemplate.convertAndSend("/topic/posts/" + user.getId(), post.getId());
   }
 
   public List<Coordinates> getAllPostCoordinates() {
     return postRepository.findAllPostCoordinates();
+  }
+
+  public void toggleLike(User user, Long postId) {
+    postRepository.toggleLike(postId, user.getId());
   }
 }

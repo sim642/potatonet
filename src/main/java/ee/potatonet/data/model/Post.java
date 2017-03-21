@@ -29,6 +29,8 @@ public class Post {
   @Size(min = 1, max = 32700)
   private String content;
 
+  private int likeCount;
+
   @Embedded
   private Coordinates coordinates = new Coordinates();
 
@@ -117,5 +119,13 @@ public class Post {
 
   public void setCreationDateTime(ZonedDateTime creationDateTime) {
     this.creationDateTime = creationDateTime;
+  }
+
+  public int getLikeCount() {
+    return likeCount;
+  }
+
+  public void setLikeCount(int likeCount) {
+    this.likeCount = likeCount;
   }
 }

@@ -67,6 +67,9 @@
     <script th:src="@{/js/fallback-websocket.js}"></script>
     <script>
 	  fallback.load({
+        likejs: [
+          '/js/like.js'
+        ],
 		feedjs: [
 		  '/js/feed.js'
 		],
@@ -79,7 +82,8 @@
 	  }, {
 		shim: {
 		  'feedjs': ['Stomp', 'SockJS'],
-		  'modaljs': ['jQuery', 'jQuery.fn.modal', 'google.maps.Map']
+		  'modaljs': ['jQuery', 'jQuery.fn.modal', 'google.maps.Map'],
+		  'likejs': ['jQuery', 'jQuery.fn.modal' ]
 		}
 	  });
     </script>
