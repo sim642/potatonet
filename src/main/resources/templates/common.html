@@ -20,9 +20,11 @@
                 </th:block>
             </div>
             <div class="media-right" th:unless="${post.id == null || currentUser == null}">
-                <a th:text="${{post.creationDateTime}}"
-                   class="pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
-                   th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">2017-02-11 15:00:00</a>
+                <a class="pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
+                   th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                    <span th:text="${{post.creationDateTime}}">2017-02-11 15:00:00</span>
+                </a>
                 <form class="like pull-right" th:action="@{/like/{id}(id=${post.id})}" th:method="PUT">
                     <button th:replace="~{common :: likeButton (${post})}"></button>
                 </form>

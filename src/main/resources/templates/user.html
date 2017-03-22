@@ -38,7 +38,10 @@
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
                                 <p class="form-control-static">
-                                    <a th:text="#{friends.friends}" class="btn btn-link" th:href="@{/users/{userId}/friends(userId=${user.id})}" role="button">Friends</a>
+                                    <a class="btn btn-link" th:href="@{/users/{userId}/friends(userId=${user.id})}" role="button">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        <span th:text="#{friends.friends}">Friends</span>
+                                    </a>
                                 </p>
                             </div>
                         </div>
