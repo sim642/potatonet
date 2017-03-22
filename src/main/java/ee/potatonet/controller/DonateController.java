@@ -17,36 +17,42 @@ import ee.potatonet.banklink.BanklinkService;
 import ee.potatonet.banklink.Payment;
 
 @Controller
-@RequestMapping("/banklink")
-public class BanklinkController {
+@RequestMapping("/donate")
+public class DonateController {
+
+  private final BanklinkService banklinkService;
 
   @Autowired
-  private BanklinkService banklinkService;
+  public DonateController(BanklinkService banklinkService) {
+    this.banklinkService = banklinkService;
+  }
 
   @GetMapping
   public String doGet() {
-    return "banklink";
+    return "donate";
   }
 
   @PostMapping
   public String doPost(@RequestParam Map<String, String> params, Model model) {
     model.addAttribute("vk_params", params);
-    return "banklink";
+    return "donate";
   }
 
   @GetMapping("/params")
   @ResponseBody
   public BanklinkService.BanklinkParams doGetParams(@RequestParam("banklinkName") String banklinkName, CsrfToken csrfToken) {
-    UriComponentsBuilder uriComponentsBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/banklink").queryParam(csrfToken.getParameterName(), csrfToken.getToken());
+    UriComponentsBuilder uriComponentsBuilder = ServletUriComponentsBuilder.fromCurrentContextPath()
+        .path("/donate")
+        .queryParam(csrfToken.getParameterName(), csrfToken.getToken());
 
     Payment payment = new Payment();
     payment.setStamp("123456");
-    payment.setAmount("1.50");
+    payment.setAmount("1.00");
     payment.setCurrency("EUR");
-    payment.setMessage("Raha!");
+    payment.setMessage("Annetus"); // TODO: 22.03.17 translate
     payment.setReturnUrl(uriComponentsBuilder.cloneBuilder().queryParam("return").toUriString());
     payment.setCancelUrl(uriComponentsBuilder.cloneBuilder().queryParam("cancel").toUriString());
-    payment.setLanguage("ENG");
+    payment.setLanguage("ENG"); // TODO: 22.03.17 map correct Language
 
     return banklinkService.getPaymentParams(banklinkName, payment);
   }
