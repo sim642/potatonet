@@ -29,12 +29,13 @@
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal" th:action="@{/login}" method="post">
-                        <div class="alert alert-danger" role="alert" th:if="${param.error}" th:text="#{login.wrong.credentials}">
-                            Invalid email or password
-                        </div>
-                        <div class="alert alert-danger" role="alert" th:if="${param.failureoauth}" th:text="${param.failureoauth}">
-                            Login error
-                        </div>
+                        <th:block th:if="${param.error}">
+                            <div th:replace="~{alert :: error(#{login.wrong.credentials})}"></div>
+                        </th:block>
+                        <th:block th:if="${param.failureoauth}">
+                            <div th:replace="~{alert :: error(${param.failureoauth})}"></div>
+                        </th:block>
+
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <input type="email" class="form-control" id="email" name="email" th:placeholder="#{login.placeholder.email}">

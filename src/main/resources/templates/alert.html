@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="alert alert-danger" role="alert" th:fragment="error(text)">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    <span th:text="${text}">Text</span>
+</div>
+
+<div class="alert alert-warning" role="alert" th:fragment="warning(text)">
+    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+    <span class="sr-only">Warning:</span>
+    <span th:text="${text}">Text</span>
+</div>
+
+<div class="alert alert-success" role="alert" th:fragment="success(text)">
+    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+    <span class="sr-only">Success:</span>
+    <span th:text="${text}">Text</span>
+</div>
+
+</body>
+</html>
