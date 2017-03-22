@@ -1,7 +1,10 @@
 package ee.potatonet.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,9 +26,14 @@ public class DonateController {
 
   private final BanklinkService banklinkService;
 
+  private final MessageSource messageSource;
+  private final LocaleResolver localeResolver;
+
   @Autowired
-  public DonateController(BanklinkService banklinkService) {
+  public DonateController(BanklinkService banklinkService, MessageSource messageSource, LocaleResolver localeResolver) {
     this.banklinkService = banklinkService;
+    this.messageSource = messageSource;
+    this.localeResolver = localeResolver;
   }
 
   @GetMapping
@@ -40,7 +49,9 @@ public class DonateController {
 
   @GetMapping("/params")
   @ResponseBody
-  public BanklinkService.BanklinkParams doGetParams(@RequestParam("banklinkName") String banklinkName, CsrfToken csrfToken) {
+  public BanklinkService.BanklinkParams doGetParams(@RequestParam("banklinkName") String banklinkName, CsrfToken csrfToken, HttpServletRequest request) {
+    Locale locale = localeResolver.resolveLocale(request);
+
     UriComponentsBuilder uriComponentsBuilder = ServletUriComponentsBuilder.fromCurrentContextPath()
         .path("/donate")
         .queryParam(csrfToken.getParameterName(), csrfToken.getToken());
@@ -49,10 +60,10 @@ public class DonateController {
     payment.setStamp("123456");
     payment.setAmount("1.00");
     payment.setCurrency("EUR");
-    payment.setMessage("Annetus"); // TODO: 22.03.17 translate
+    payment.setMessage(messageSource.getMessage("donate.message", null, locale));
     payment.setReturnUrl(uriComponentsBuilder.cloneBuilder().queryParam("return").toUriString());
     payment.setCancelUrl(uriComponentsBuilder.cloneBuilder().queryParam("cancel").toUriString());
-    payment.setLanguage("ENG"); // TODO: 22.03.17 map correct Language
+    payment.setLanguage(messageSource.getMessage("banklink.language", null, locale));
 
     return banklinkService.getPaymentParams(banklinkName, payment);
   }
