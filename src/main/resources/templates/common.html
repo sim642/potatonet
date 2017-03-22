@@ -51,21 +51,31 @@
 <div class="btn-group btns-friend" role="group" th:fragment="friendButtons(user)" th:data-user-id="${user.id}">
     <th:block th:unless="${user.equals(currentUser)}">
         <th:block th:if="${!currentUser.friends.contains(user)}">
-            <button th:text="#{friendrequest.add.friend}" type="button" class="btn btn-primary btn-friend-add"
-                    th:if="${!currentUser.incomingFriendRequests.contains(user) && !currentUser.outgoingFriendRequests.contains(user)}">Add friend
+            <button type="button" class="btn btn-primary btn-friend-add"
+                    th:if="${!currentUser.incomingFriendRequests.contains(user) && !currentUser.outgoingFriendRequests.contains(user)}">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span th:text="#{friendrequest.add.friend}">Add friend</span>
             </button>
 
-            <button th:text="#{friendrequest.accept}" type="button" class="btn btn-success btn-friend-accept" th:if="${currentUser.incomingFriendRequests.contains(user)}">Accept
+            <button type="button" class="btn btn-success btn-friend-accept" th:if="${currentUser.incomingFriendRequests.contains(user)}">
+                <span class="glyphicon glyphicon-ok"></span>
+                <span th:text="#{friendrequest.accept}">Accept</span>
             </button>
-            <button th:text="#{friendrequest.decline}" type="button" class="btn btn-danger btn-friend-reject" th:if="${currentUser.incomingFriendRequests.contains(user)}">Reject
+            <button type="button" class="btn btn-danger btn-friend-reject" th:if="${currentUser.incomingFriendRequests.contains(user)}">
+                <span class="glyphicon glyphicon-remove"></span>
+                <span th:text="#{friendrequest.decline}">Reject</span>
             </button>
 
-            <button th:text="#{friendrequest.cancel}" type="button" class="btn btn-default btn-friend-reject" th:if="${currentUser.outgoingFriendRequests.contains(user)}">Cancel
-                request
+            <button type="button" class="btn btn-default btn-friend-reject" th:if="${currentUser.outgoingFriendRequests.contains(user)}">
+                <span class="glyphicon glyphicon-remove"></span>
+                <span th:text="#{friendrequest.cancel}">Cancel request</span>
             </button>
         </th:block>
 
-        <button th:text="#{friend.remove}" type="button" class="btn btn-link btn-friend-remove" th:if="${currentUser.friends.contains(user)}">Remove friend</button>
+        <button type="button" class="btn btn-link btn-friend-remove" th:if="${currentUser.friends.contains(user)}">
+            <span class="glyphicon glyphicon-trash"></span>
+            <span th:text="#{friend.remove}">Remove friend</span>
+        </button>
     </th:block>
 </div>
 
