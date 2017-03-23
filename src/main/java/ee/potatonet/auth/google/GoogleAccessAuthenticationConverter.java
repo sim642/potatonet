@@ -2,6 +2,7 @@ package ee.potatonet.auth.google;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -67,6 +68,9 @@ public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticati
   private User register(String googleId, Authentication authentication, UserService userService, HttpServletRequest req) throws UsernameNotFoundException {
     if (authentication.getPrincipal() instanceof User) {
       User currentUser = (User) authentication.getPrincipal();
+
+      checkForExistingGoogleUser(currentUser, userService.findOneByGoogleId(googleId), localeResolver.resolveLocale(req));
+
       currentUser.setGoogleId(googleId);
       userService.save(currentUser);
 
@@ -77,6 +81,20 @@ public class GoogleAccessAuthenticationConverter extends DefaultUserAuthenticati
     }
     else {
       throw new UsernameNotFoundException(messageSource.getMessage("oauth.problem", null, localeResolver.resolveLocale(req)));
+    }
+  }
+
+  private void checkForExistingGoogleUser(User currentUser, User exisitingGoogleUser, Locale locale) throws UsernameNotFoundException {
+    if (exisitingGoogleUser != null) {
+      String message;
+      if (exisitingGoogleUser.getId().equals(currentUser.getId())) {
+        message = messageSource.getMessage("oauth.problem.you_already_registered", null, locale);
+      }
+      else {
+        message = messageSource.getMessage("oauth.problem.someone_already_registered", null, locale);
+      }
+
+      throw new UsernameNotFoundException(message);
     }
   }
 }
