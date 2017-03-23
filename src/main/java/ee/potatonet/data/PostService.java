@@ -17,7 +17,7 @@ import ee.potatonet.data.repos.PostRepository;
 @Transactional
 public class PostService {
 
-  private static final int FEED_COUNT = 50;
+  private static final int FEED_COUNT = 15;
 
   private final PostRepository postRepository;
   private final UserService userService;
