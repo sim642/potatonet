@@ -102,7 +102,7 @@ $(function () {
   var $loader = $("#loader");
 
   $window.scroll(function () {
-	if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {
+	if (canLoad && ($(document).height() - $window.height() - $window.scrollTop() < 100)) {
 	  canLoad = false;
 
 	  var lastPostId = $("#feed .panel-post").last().attr("data-post-id");
