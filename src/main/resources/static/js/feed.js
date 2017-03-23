@@ -122,10 +122,19 @@ $(function () {
 
 $(document).ready(function(){
     $('#postButton').attr('disabled', true);
+
+    $('#content').keypress(function (event) {
+      if (event.keyCode == 13 && !event.shiftKey) {
+        $('#post').submit();
+        event.preventDefault();
+        return false;
+      }
+    });
+
     $('#content').keyup(function(){
         if($(this).val().length !=0)
             $('#postButton').attr('disabled', false);
         else
             $('#postButton').attr('disabled', true);
-    })
+    });
 });
