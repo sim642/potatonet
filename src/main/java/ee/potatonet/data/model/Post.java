@@ -29,7 +29,7 @@ public class Post {
   @Size(min = 1, max = 32700)
   private String content;
 
-  private int likeCount;
+  private Integer likeCount = 0;
 
   @Embedded
   private Coordinates coordinates = new Coordinates();
@@ -121,8 +121,8 @@ public class Post {
     this.creationDateTime = creationDateTime;
   }
 
-  public int getLikeCount() {
-    return likeCount;
+  public Integer getLikeCount() {
+    return likeCount == null ? 0 : likeCount;
   }
 
   public void setLikeCount(int likeCount) {
