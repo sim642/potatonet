@@ -36,7 +36,8 @@
 
 <div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
     <th:block layout:fragment="content">
-        <p th:text="${post.content}"></p>
+        <!--/* http://stackoverflow.com/a/40930208 */-->
+        <p th:utext="${#strings.replace(#strings.escapeXml(post.content),'&#10;','&lt;br/&gt;')}"></p>
     </th:block>
 </div>
 
