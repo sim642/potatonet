@@ -14,17 +14,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.LocaleResolver;
 
-import ee.potatonet.data.Language;
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
+import ee.potatonet.controller.advice.CurrentUser;
+import ee.potatonet.data.model.Language;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.service.UserService;
 
 @Controller
+@RequestMapping("/settings")
 public class SettingsController {
 
   private final PasswordEncoder passwordEncoder;
@@ -38,17 +40,17 @@ public class SettingsController {
     this.localeResolver = localeResolver;
   }
 
-  @RequestMapping(value = "/settings", method = RequestMethod.GET)
+  @GetMapping
   public String doGet(Model model, @CurrentUser User currentUser) {
     model.addAttribute("passwordSettings", new PasswordSettings());
     model.addAttribute("languageSettings", new LanguageSettings(userService.find(currentUser).getLanguage()));
     return "settings";
   }
 
-  @PostMapping("/settings/password")
+  @PostMapping("/password")
   public String doPost(@ModelAttribute @Valid PasswordSettings passwordSettings, BindingResult bindingResult, @CurrentUser User currentUser, Model model) { // WTF spring magic: http://stackoverflow.com/a/29075342
     if (bindingResult.hasErrors()) {
-      model.addAttribute("languageSettings", new LanguageSettings(userService.find(currentUser).getLanguage()));
+      model.addAttribute("languageSettings", new LanguageSettings(userService.find(currentUser).getLanguage())); // TODO: 16.03.17 remove duplication
       return "settings";
     }
 
@@ -59,7 +61,7 @@ public class SettingsController {
     return "redirect:/settings?password_success";
   }
 
-  @PostMapping("/settings/locale")
+  @PostMapping("/locale")
   public String doPost(@ModelAttribute LanguageSettings languageSettings, @CurrentUser User currentUser,
                        HttpServletRequest req, HttpServletResponse resp) {
     currentUser = userService.find(currentUser);

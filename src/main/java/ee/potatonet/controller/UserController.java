@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ee.potatonet.data.PostService;
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.service.PostService;
+import ee.potatonet.data.service.UserService;
 
 @Controller
 @RequestMapping("/users/{userId}")
@@ -47,8 +47,8 @@ public class UserController {
   }
 
   @GetMapping("/posts")
-  public String doGetPosts(@CurrentUser User currentUser, @RequestParam("beforePostId") Long beforePostId, Model model) {
-    model.addAttribute("posts", postService.getUserProfilePosts(currentUser, postService.findById(beforePostId)));
+  public String doGetPosts(@ModelAttribute User user, @RequestParam("beforePostId") Long beforePostId, Model model) {
+    model.addAttribute("posts", postService.getUserProfilePosts(user, postService.findById(beforePostId)));
     return "posts";
   }
 }

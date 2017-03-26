@@ -29,25 +29,31 @@
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal" th:action="@{/login}" method="post">
-                        <div class="alert alert-danger" role="alert" th:if="${param.error}" th:text="#{login.wrong.credentials}">
-                            Invalid email or password
-                        </div>
-                        <div class="alert alert-danger" role="alert" th:if="${param.failureoauth}" th:text="${param.failureoauth}">
-                            Login error
-                        </div>
+                        <th:block th:if="${param.error}">
+                            <div th:replace="~{alert :: error(#{login.wrong.credentials})}"></div>
+                        </th:block>
+                        <th:block th:if="${param.failureoauth}">
+                            <div th:replace="~{alert :: error(${param.failureoauth})}"></div>
+                        </th:block>
+
                         <div class="form-group">
                             <div class="col-sm-12">
+                                <label class="sr-only" for="email" th:text="#{login.placeholder.email}"></label>
                                 <input type="email" class="form-control" id="email" name="email" th:placeholder="#{login.placeholder.email}">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
+                                <label class="sr-only" for="password" th:text="#{login.placeholder.password}"></label>
                                 <input type="password" class="form-control" id="password" name="password" th:placeholder="#{login.placeholder.password}">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <button type="submit" class="btn btn-default" th:text="#{login.login.button}">Sign in</button>
+                                <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                                    <span th:text="#{login.login.button}">Sign in</span>
+                                </button>
                             </div>
                         </div>
                         <hr/>

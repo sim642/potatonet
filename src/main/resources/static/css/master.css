@@ -1,9 +1,6 @@
 .btn-eid {
     height: 2.5em;
 }
-.panel-body  {
-    word-break:break-all
-}
 
 #login-title {
     font-size: 63px;
@@ -31,6 +28,9 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     margin-bottom: 0;
 }
 
+.panel-user-details .btns-friend {
+    margin-top: 20px;
+}
 
 /* https://www.w3schools.com/howto/howto_css_loader.asp */
 .loader-posts {
@@ -63,4 +63,37 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
 
 #loader {
     display: none;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.btn-modal-map {
+    margin-bottom: 1em;
+    margin-left: 0.5em;
+}
+
+legend {
+    /* copied from Bootstrap's label */
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+
+    /* copied and overridden from Bootstrap's legent */
+    padding: inherit;
+    font-size: inherit;
+    color: inherit;
+    border: inherit;
+}
+
+.clear-right {
+    clear: right;
+}
+
+@media (max-width: 768px) {
+    .unclear-right-xs {
+        clear: none !important;
+    }
 }

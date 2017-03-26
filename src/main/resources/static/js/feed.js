@@ -1,7 +1,10 @@
 var stomp = null;
 
 function onFeed(msg) {
-  $("#feed").prepend(msg.body);
+  var postId = msg.body;
+  $.get("/posts/" + postId, function (data) {
+    $("#feed").prepend($(data));
+  });
 }
 
 function showStoredPostAlert() {
@@ -86,6 +89,8 @@ $(function () {
 		  // Most likely geolocation being disabled by user.
 		  sendPost();
 		  console.warn(err);
+		}, {
+		  timeout: 5000
 		});
 	  } else {
 		sendPost();
@@ -99,7 +104,7 @@ $(function () {
   var $loader = $("#loader");
 
   $window.scroll(function () {
-	if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {
+	if (canLoad && ($(document).height() - $window.height() - $window.scrollTop() < 100)) {
 	  canLoad = false;
 
 	  var lastPostId = $("#feed .panel-post").last().attr("data-post-id");
@@ -119,10 +124,19 @@ $(function () {
 
 $(document).ready(function(){
     $('#postButton').attr('disabled', true);
+
+    $('#content').keypress(function (event) {
+      if (event.keyCode == 13 && !event.shiftKey) {
+        $('#post').submit();
+        event.preventDefault();
+        return false;
+      }
+    });
+
     $('#content').keyup(function(){
-        if($(this).val().length !=0)
+        if($(this).val().trim().length !=0)
             $('#postButton').attr('disabled', false);
         else
             $('#postButton').attr('disabled', true);
-    })
+    });
 });
