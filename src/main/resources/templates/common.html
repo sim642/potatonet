@@ -48,7 +48,7 @@
 
 
 <button th:fragment="likeButton(post)"
-        th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'btn-info' : 'btn-secondary'"
+        th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'btn-info' : 'btn-default'"
         type="submit"
         class="btn like-btn btn-sm">
     <span class="glyphicon glyphicon-thumbs-up"></span>
