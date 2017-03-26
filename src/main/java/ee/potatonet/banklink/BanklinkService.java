@@ -1,9 +1,5 @@
 package ee.potatonet.banklink;
 
-import static java.time.temporal.ChronoField.HOUR_OF_DAY;
-import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
-import static java.time.temporal.ChronoField.SECOND_OF_MINUTE;
-
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -11,8 +7,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
@@ -25,19 +19,6 @@ import ee.potatonet.banklink.properties.PropertiesBanklinkRegistrar;
 
 @Service
 public class BanklinkService {
-
-  private static final DateTimeFormatter DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
-      .parseCaseInsensitive()
-      .append(DateTimeFormatter.ISO_LOCAL_DATE)
-      .appendLiteral('T')
-      .appendValue(HOUR_OF_DAY, 2)
-      .appendLiteral(':')
-      .appendValue(MINUTE_OF_HOUR, 2)
-      .appendLiteral(':')
-      .appendValue(SECOND_OF_MINUTE, 2)
-      .appendPattern("xx")
-      .parseStrict()
-      .toFormatter();
 
   private final BanklinkRegistry registry;
   private final BanklinkProperties banklinkProperties;
@@ -71,11 +52,11 @@ public class BanklinkService {
     params.put("VK_CURR", payment.getCurrency());
     params.put("VK_ACC", banklink.getAccountNumber());
     params.put("VK_NAME", banklink.getAccountName());
-    params.put("VK_REF", getReference(payment.getStamp()));
+    params.put("VK_REF", BanklinkUtils.getReferenceNumber(payment.getStamp()));
     params.put("VK_MSG", payment.getMessage());
     params.put("VK_RETURN", payment.getReturnUrl());
     params.put("VK_CANCEL", payment.getCancelUrl());
-    params.put("VK_DATETIME", ZonedDateTime.now().format(DATE_TIME_FORMATTER));
+    params.put("VK_DATETIME", ZonedDateTime.now().format(BanklinkUtils.DATE_TIME_FORMATTER));
 
     params.put("VK_MAC", getMac(banklink, params));
     params.put("VK_ENCODING", "UTF-8");
@@ -86,20 +67,6 @@ public class BanklinkService {
     banklinkParams.setUrl(banklink.getUrl());
 
     return banklinkParams;
-  }
-
-  // http://www.pangaliit.ee/et/arveldused/viitenumber
-  private static String getReference(String stamp) {
-    return stamp + get731(stamp);
-  }
-
-  private static int get731(String number) {
-    int[] weights = {7, 3, 1};
-    int sum = 0;
-    for (int i = number.length() - 1, j = 0; i >= 0; i--, j++) {
-      sum += Character.digit(number.charAt(i), 10) * weights[j % weights.length];
-    }
-    return ((int) Math.ceil(sum / 10.0)) * 10 - sum;
   }
 
   private String getMac(Banklink banklink, Map<String, String> params) {
