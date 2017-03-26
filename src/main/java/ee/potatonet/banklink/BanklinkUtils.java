@@ -4,8 +4,15 @@ import static java.time.temporal.ChronoField.HOUR_OF_DAY;
 import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 import static java.time.temporal.ChronoField.SECOND_OF_MINUTE;
 
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.LinkedHashMap;
+import org.apache.commons.codec.binary.Base64;
 
 public final class BanklinkUtils {
 
@@ -38,5 +45,28 @@ public final class BanklinkUtils {
       sum += Character.digit(number.charAt(i), 10) * weights[j % weights.length];
     }
     return ((int) Math.ceil(sum / 10.0)) * 10 - sum;
+  }
+
+  public static String signParams(Banklink banklink, LinkedHashMap<String, String> params) {
+    String paramsSignatureString = getParamsSignatureString(params);
+
+    try {
+      Signature signature = Signature.getInstance("SHA1withRSA");
+      signature.initSign(banklink.getPrivateKey());
+      signature.update(paramsSignatureString.getBytes(StandardCharsets.UTF_8));
+      return Base64.encodeBase64String(signature.sign());
+    }
+    catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private static String getParamsSignatureString(LinkedHashMap<String, String> params) {
+    StringBuilder sb = new StringBuilder();
+    for (String value : params.values()) {
+      sb.append(String.format("%03d", value.length()));
+      sb.append(value);
+    }
+    return sb.toString();
   }
 }
