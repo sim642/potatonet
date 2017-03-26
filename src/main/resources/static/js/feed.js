@@ -89,6 +89,8 @@ $(function () {
 		  // Most likely geolocation being disabled by user.
 		  sendPost();
 		  console.warn(err);
+		}, {
+		  timeout: 5000
 		});
 	  } else {
 		sendPost();
