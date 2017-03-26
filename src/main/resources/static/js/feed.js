@@ -132,7 +132,7 @@ $(document).ready(function(){
     });
 
     $('#content').keyup(function(){
-        if($(this).val().length !=0)
+        if($(this).val().trim().length !=0)
             $('#postButton').attr('disabled', false);
         else
             $('#postButton').attr('disabled', true);
