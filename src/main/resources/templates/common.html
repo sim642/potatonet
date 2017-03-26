@@ -15,6 +15,7 @@
             <div class="media-body">
                 <th:block th:unless="${post.id == null || currentUser == null}">
                     <a class="clearfix pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
+                       th:href="@{/posts/{postId}(postId=${post.id})}" data-remote="false"
                        th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">
                         <span class="glyphicon glyphicon-map-marker"></span>
                         <span class="hidden-xs" th:text="${{post.creationDateTime}}">2017-02-11 15:00:00</span>
