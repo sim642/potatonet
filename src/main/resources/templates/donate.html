@@ -14,7 +14,7 @@
             <div th:replace="~{alert :: success(#{donate.success})}"></div>
         </th:block>
         <th:block th:if="${param.cancel}">
-            <div th:replace="~{alert :: success(#{donate.cancel})}"></div>
+            <div th:replace="~{alert :: error(#{donate.cancel})}"></div>
         </th:block>
     </th:block>
 
