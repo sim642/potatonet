@@ -6,6 +6,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.util.Map;
 
@@ -39,6 +40,16 @@ public class PropertiesBanklinkRegistrar implements BanklinkRegistrar {
           banklink.setPrivateKey(privateKey);
         }
         catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
+          throw new RuntimeException(e);
+        }
+      });
+
+      banklinks.forEach((name, banklink) -> {
+        try {
+          Certificate certificate = keyStore.getCertificate(banklink.getCertificateAlias());
+          banklink.setBankCertificate(certificate);
+        }
+        catch (KeyStoreException e) {
           throw new RuntimeException(e);
         }
       });

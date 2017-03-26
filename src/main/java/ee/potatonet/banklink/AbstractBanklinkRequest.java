@@ -1,6 +1,7 @@
 package ee.potatonet.banklink;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class AbstractBanklinkRequest {
 
@@ -58,7 +59,7 @@ public abstract class AbstractBanklinkRequest {
 
   protected abstract LinkedHashMap<String, String> getParams();
 
-  public LinkedHashMap<String, String> getCompleteParams() {
+  public Map<String, String> getCompleteParams() {
     LinkedHashMap<String, String> completeParams = new LinkedHashMap<>();
     completeParams.put("VK_SERVICE", service);
     completeParams.put("VK_VERSION", version);

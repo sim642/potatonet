@@ -61,6 +61,20 @@ public final class BanklinkUtils {
     }
   }
 
+  public static boolean verifyParams(Banklink banklink, LinkedHashMap<String, String> params, String mac) {
+    String paramsSignatureString = getParamsSignatureString(params);
+
+    try {
+      Signature signature = Signature.getInstance("SHA1withRSA");
+      signature.initVerify(banklink.getBankCertificate());
+      signature.update(paramsSignatureString.getBytes(StandardCharsets.UTF_8));
+      return signature.verify(Base64.decodeBase64(mac));
+    }
+    catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private static String getParamsSignatureString(LinkedHashMap<String, String> params) {
     StringBuilder sb = new StringBuilder();
     for (String value : params.values()) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import java.security.KeyPair;
+import java.security.cert.Certificate;
 import org.bouncycastle.openssl.PEMReader;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -52,6 +53,11 @@ public class PangalinknetBanklinkRegistrar implements BanklinkRegistrar {
         try (PEMReader pemReader = new PEMReader(new StringReader(project.getPrivateKey()))) {
           KeyPair keyPair = (KeyPair) pemReader.readObject();
           banklink.setPrivateKey(keyPair.getPrivate());
+        }
+
+        try (PEMReader pemReader = new PEMReader(new StringReader(project.getBankCertificate()))) {
+          Certificate certificate = (Certificate) pemReader.readObject();
+          banklink.setBankCertificate(certificate);
         }
 
         registry.registerBanklink(project.getId(), banklink);

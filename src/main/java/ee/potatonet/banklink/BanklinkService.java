@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import ee.potatonet.banklink.pangalinknet.PangalinknetBanklinkRegistrar;
 import ee.potatonet.banklink.payment.Payment;
+import ee.potatonet.banklink.payment.PaymentFailureResponse;
 import ee.potatonet.banklink.payment.PaymentRequest;
+import ee.potatonet.banklink.payment.PaymentSuccessResponse;
 import ee.potatonet.banklink.properties.PropertiesBanklinkRegistrar;
 
 @Service
@@ -43,6 +45,22 @@ public class BanklinkService {
     banklinkParams.setUrl(banklink.getUrl());
 
     return banklinkParams;
+  }
+
+  public AbstractBanklinkResponse getResponse(String banklinkName, Map<String, String> rawParams) {
+    Banklink banklink = registry.getBanklink(banklinkName);
+
+    String service = rawParams.get("VK_SERVICE");
+    switch (service) {
+      case "1111":
+        return new PaymentSuccessResponse(banklink, rawParams);
+
+      case "1911":
+        return new PaymentFailureResponse(banklink, rawParams);
+
+      default:
+        throw new RuntimeException("unknown response service");
+    }
   }
 
   public static class BanklinkParams {

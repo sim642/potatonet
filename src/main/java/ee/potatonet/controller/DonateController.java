@@ -17,6 +17,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import ee.potatonet.banklink.AbstractBanklinkResponse;
 import ee.potatonet.banklink.BanklinkService;
 import ee.potatonet.banklink.payment.Payment;
 
@@ -42,8 +43,13 @@ public class DonateController {
   }
 
   @PostMapping
-  public String doPost(@RequestParam Map<String, String> params, Model model) {
+  public String doPost(@RequestParam("banklinkName") String banklinkName, @RequestParam Map<String, String> params, Model model) {
+    AbstractBanklinkResponse banklinkResponse = banklinkService.getResponse(banklinkName, params);
+    if (!banklinkResponse.isValid()) // TODO: 26.03.17 use spring validation
+      throw new RuntimeException("invalid response");
+
     model.addAttribute("vk_params", params);
+    model.addAttribute("response", banklinkResponse);
     return "donate";
   }
 
@@ -54,6 +60,7 @@ public class DonateController {
 
     UriComponentsBuilder uriComponentsBuilder = ServletUriComponentsBuilder.fromCurrentContextPath()
         .path("/donate")
+        .queryParam("banklinkName", banklinkName)
         .queryParam(csrfToken.getParameterName(), csrfToken.getToken());
 
     Payment payment = new Payment();
