@@ -1,9 +1,6 @@
 .btn-eid {
     height: 2.5em;
 }
-.panel-body  {
-    word-break:break-all
-}
 
 #login-title {
     font-size: 63px;
@@ -69,8 +66,9 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     padding: 0 !important;
 }
 
-.like-btn {
-    margin-top: 1em;
+.btn-modal-map {
+    margin-bottom: 1em;
+    margin-left: 0.5em;
 }
 
 legend {
@@ -85,4 +83,14 @@ legend {
     font-size: inherit;
     color: inherit;
     border: inherit;
+}
+
+.clear-right {
+    clear: right;
+}
+
+@media (max-width: 768px) {
+    .unclear-right-xs {
+        clear: none !important;
+    }
 }

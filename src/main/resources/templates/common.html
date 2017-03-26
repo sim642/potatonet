@@ -11,7 +11,20 @@
                     <img alt="User avatar image" class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(post.user, 64)}">
                 </a>
             </div>
+
             <div class="media-body">
+                <th:block th:unless="${post.id == null || currentUser == null}">
+                    <a class="clearfix pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
+                       th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span class="hidden-xs" th:text="${{post.creationDateTime}}">2017-02-11 15:00:00</span>
+                    </a>
+
+                    <form class="like pull-right clear-right unclear-right-xs" th:action="@{/like/{id}(id=${post.id})}" th:method="PUT" th:unless="${post.id == null || currentUser == null}">
+                        <button th:replace="~{common :: likeButton (${post})}"></button>
+                    </form>
+                </th:block>
+
                 <h4 class="media-heading">
                     <a class="hidden-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
                 </h4>
@@ -19,16 +32,7 @@
                     <p>Content</p>
                 </th:block>
             </div>
-            <div class="media-right" th:unless="${post.id == null || currentUser == null}">
-                <a class="pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
-                   th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">
-                    <span class="glyphicon glyphicon-map-marker"></span>
-                    <span th:text="${{post.creationDateTime}}">2017-02-11 15:00:00</span>
-                </a>
-                <form class="like pull-right" th:action="@{/like/{id}(id=${post.id})}" th:method="PUT">
-                    <button th:replace="~{common :: likeButton (${post})}"></button>
-                </form>
-            </div>
+
         </div>
     </div>
 </div>
@@ -47,7 +51,7 @@
         type="submit"
         class="btn like-btn btn-sm">
     <span class="glyphicon glyphicon-thumbs-up"></span>
-    <span th:text="#{post.like}"></span>
+    <span class="hidden-xs" th:text="#{post.like}"></span>
     <span th:text="${post.likeCount}" class="label" th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'label-default' : 'label-info'">0</span>
 </button>
 
