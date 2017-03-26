@@ -16,6 +16,7 @@ class Project {
   private String accountNr;
 
   private String privateKey;
+  private String bankCertificate;
 
   public String getId() {
     return id;
@@ -71,5 +72,13 @@ class Project {
 
   public void setPrivateKey(String privateKey) {
     this.privateKey = privateKey;
+  }
+
+  public String getBankCertificate() {
+    return bankCertificate;
+  }
+
+  public void setBankCertificate(String bankCertificate) {
+    this.bankCertificate = bankCertificate;
   }
 }

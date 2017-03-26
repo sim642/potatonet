@@ -1,4 +1,4 @@
-package ee.potatonet.banklink;
+package ee.potatonet.banklink.payment;
 
 public class Payment {
 
