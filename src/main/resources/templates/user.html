@@ -11,10 +11,10 @@
         var userId = [[${user.id}]];
         var userIds = [[${userIds}]];
     </script>
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-user-details">
         <div class="panel-body">
             <div class="media">
-                <div class="media-left">
+                <div class="pull-left">
                     <img alt="User avatar image" src="http://placehold.it/256x256" th:src="${@avatarService.getAvatarUrl(user, 256)}" class="img-rounded">
                 </div>
                 <div class="media-body">

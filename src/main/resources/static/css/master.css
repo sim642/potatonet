@@ -28,6 +28,9 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     margin-bottom: 0;
 }
 
+.panel-user-details .btns-friend {
+    margin-top: 20px;
+}
 
 /* https://www.w3schools.com/howto/howto_css_loader.asp */
 .loader-posts {
