@@ -19,5 +19,20 @@
     </div>
 </div>
 
+<th:block layout:fragment="fallback">
+    <script th:src="@{/js/fallback-websocket.js}"></script>
+    <script>
+      fallback.load({
+        likejs: [
+          '/js/like.js'
+        ]
+      }, {
+        shim: {
+          'likejs': ['jQuery', 'jQuery.fn.modal' ]
+        }
+      });
+    </script>
+</th:block>
+
 </body>
 </html>
