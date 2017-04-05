@@ -38,6 +38,29 @@
     </div>
 </div>
 
+<li class="media" layout:fragment="commentBaseMedia(comment)">
+    <div class="media-left">
+        <a th:href="@{/users/{userId}(userId=${comment.user.id})}">
+            <img alt="User avatar image" class="img-rounded" src="http://placehold.it/24x24" th:src="${@avatarService.getAvatarUrl(comment.user, 24)}">
+        </a>
+    </div>
+    <div class="media-body">
+        <span class="pull-right text-muted hidden-xs" th:text="${{comment.creationDateTime}}">2017-02-11 15:00:00</span>
+        <span class="media-heading">
+            <a class="name-link" th:href="@{/users/{userId}(userId=${comment.user.id})}" th:text="${comment.user.fullName}"></a>
+        </span>
+
+        <th:block layout:fragment="content">
+            <p>Content</p>
+        </th:block>
+    </div>
+</li>
+
+<li layout:replace="~{:: commentBaseMedia(${comment})}" th:fragment="commentMedia(comment)">
+    <th:block layout:fragment="content">
+        <span th:utext="${#strings.replace(#strings.escapeXml(comment.content),'&#10;','&lt;br/&gt;')}"></span>
+    </th:block>
+</li>
 
 <div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
     <th:block layout:fragment="content">
@@ -45,21 +68,9 @@
         <p th:utext="${#strings.replace(#strings.escapeXml(post.content),'&#10;','&lt;br/&gt;')}"></p>
 
         <ul class="media-list list-comments">
-            <li class="media" th:each="comment : ${post.comments}">
-                <div class="media-left">
-                    <a th:href="@{/users/{userId}(userId=${comment.user.id})}">
-                        <img alt="User avatar image" class="img-rounded" src="http://placehold.it/24x24" th:src="${@avatarService.getAvatarUrl(comment.user, 24)}">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <span class="pull-right text-muted hidden-xs" th:text="${{comment.creationDateTime}}">2017-02-11 15:00:00</span>
-                    <span class="media-heading">
-                        <a class="name-link" th:href="@{/users/{userId}(userId=${comment.user.id})}" th:text="${comment.user.fullName}"></a>
-                    </span>
-
-                    <span th:utext="${#strings.replace(#strings.escapeXml(comment.content),'&#10;','&lt;br/&gt;')}"></span>
-                </div>
-            </li>
+            <th:block th:each="comment : ${post.comments}">
+                <li th:replace="~{:: commentMedia (${comment})}"></li>
+            </th:block>
             <!--<li class="media">
                 <div class="media-left">
                     <a href="#">
