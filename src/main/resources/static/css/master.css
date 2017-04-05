@@ -15,7 +15,7 @@ a.name-link:link, a.name-link:visited, a.name-link:hover, a.name-link:active {
     text-decoration: none;
 }
 
-#post textarea {
+.textarea-vertical {
     resize: vertical;
 }
 
