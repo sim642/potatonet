@@ -45,7 +45,22 @@
         <p th:utext="${#strings.replace(#strings.escapeXml(post.content),'&#10;','&lt;br/&gt;')}"></p>
 
         <ul class="media-list list-comments">
-            <li class="media">
+            <li class="media" th:each="comment : ${post.comments}">
+                <div class="media-left">
+                    <a th:href="@{/users/{userId}(userId=${comment.user.id})}">
+                        <img alt="User avatar image" class="img-rounded" src="http://placehold.it/24x24" th:src="${@avatarService.getAvatarUrl(comment.user, 24)}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <span class="pull-right text-muted hidden-xs" th:text="${{comment.creationDateTime}}">2017-02-11 15:00:00</span>
+                    <span class="media-heading">
+                        <a class="name-link" th:href="@{/users/{userId}(userId=${comment.user.id})}" th:text="${comment.user.fullName}"></a>
+                    </span>
+
+                    <span th:utext="${#strings.replace(#strings.escapeXml(comment.content),'&#10;','&lt;br/&gt;')}"></span>
+                </div>
+            </li>
+            <!--<li class="media">
                 <div class="media-left">
                     <a href="#">
                         <img class="img-rounded" src="http://placehold.it/24x24">
@@ -58,21 +73,7 @@
                     </span>
                     comment comment comment comment
                 </div>
-            </li>
-            <li class="media">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="img-rounded" src="http://placehold.it/24x24">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <span class="pull-right text-muted">2017-02-11 15:00:00</span>
-                    <span class="media-heading">
-                        <a class="name-link" href="#">Peeter Pakiraam</a>
-                    </span>
-                    comment comment comment comment
-                </div>
-            </li>
+            </li>-->
             <li class="media">
                 <div class="media-left">
                     <a href="#">
