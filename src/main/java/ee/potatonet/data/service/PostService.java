@@ -7,9 +7,11 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ee.potatonet.data.model.Comment;
 import ee.potatonet.data.model.Coordinates;
 import ee.potatonet.data.model.Post;
 import ee.potatonet.data.model.User;
+import ee.potatonet.data.repository.CommentRepository;
 import ee.potatonet.data.repository.PostRepository;
 
 @Service
@@ -21,12 +23,14 @@ public class PostService {
   private final PostRepository postRepository;
   private final UserService userService;
   private final SimpMessagingTemplate simpMessagingTemplate;
+  private final CommentRepository commentRepository;
 
   @Autowired
-  public PostService(PostRepository postRepository, UserService userService, SimpMessagingTemplate simpMessagingTemplate) {
+  public PostService(PostRepository postRepository, UserService userService, SimpMessagingTemplate simpMessagingTemplate, CommentRepository commentRepository) {
     this.postRepository = postRepository;
     this.userService = userService;
     this.simpMessagingTemplate = simpMessagingTemplate;
+    this.commentRepository = commentRepository;
   }
 
   public Post findById(Long id) {
@@ -55,7 +59,11 @@ public class PostService {
     return userFeedPosts;
   }
 
-  public void savePostToUser(Post post, User user) {
+  public Post save(Post post) {
+    return postRepository.save(post);
+  }
+
+  public Post savePostToUser(Post post, User user) {
     user = userService.find(user);
 
     post.setUser(user);
@@ -66,6 +74,21 @@ public class PostService {
     user = userService.save(user);
 
     simpMessagingTemplate.convertAndSend("/topic/posts/" + user.getId(), post.getId());
+
+    return post;
+  }
+
+  public Comment saveCommentToPost(Comment comment, Post post) {
+    post = find(post);
+
+    comment.setPost(post);
+    comment.setCreationDateTime(ZonedDateTime.now());
+    comment = commentRepository.save(comment);
+
+    post.getComments().add(comment);
+    post = save(post);
+
+    return comment;
   }
 
   public List<Coordinates> getAllPostCoordinates() {
