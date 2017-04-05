@@ -1,9 +1,6 @@
 .btn-eid {
     height: 2.5em;
 }
-.panel-body  {
-    word-break:break-all
-}
 
 #login-title {
     font-size: 63px;
@@ -33,6 +30,76 @@ a.name-link:link, a.name-link:visited, a.name-link:hover, a.name-link:active {
 
 .user-details .form-group {
     margin-bottom: 0;
+}
+
+.panel-user-details .btns-friend {
+    margin-top: 20px;
+}
+
+/* https://www.w3schools.com/howto/howto_css_loader.asp */
+.loader-posts {
+    background: url('/img/potato-48.png');
+    width: 48px;
+    height: 48px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-google{
+    height: 2.7em;
+}
+
+.btn-google:hover {
+    box-shadow: 0 0 6px #4285F4;
+}
+
+#map {
+    height:80vh
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+#loader {
+    display: none;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.btn-modal-map {
+    margin-bottom: 1em;
+    margin-left: 0.5em;
+}
+
+legend {
+    /* copied from Bootstrap's label */
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+
+    /* copied and overridden from Bootstrap's legent */
+    padding: inherit;
+    font-size: inherit;
+    color: inherit;
+    border: inherit;
+}
+
+.clear-right {
+    clear: right;
+}
+
+@media (max-width: 768px) {
+    .unclear-right-xs {
+        clear: none !important;
+    }
 }
 
 .list-comments {

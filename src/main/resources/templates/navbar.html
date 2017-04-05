@@ -15,27 +15,49 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-                <img th:src="@{/img/potato-48.png}"/>
+                <img alt="Navbar potato logo" th:src="@{/img/potato-48.png}"/>
             </a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li th:classappend="(*{active} == 'feed')? 'active' : _">
-                    <a th:href="@{/}">Feed</a>
+                    <a th:href="@{/}">
+                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                        <span th:text="#{feed.title}">Feed</span>
+                    </a>
                 </li>
                 <li th:classappend="(*{active} == 'friends')? 'active' : _">
-                    <a th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">Friends <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span></a>
+                    <a th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        <span th:text="#{friends.friends}">Friends</span>
+                        <span class="badge" th:text="${incomingFriendRequestCount}" th:if="${incomingFriendRequestCount > 0}"></span>
+                    </a>
                 </li>
                 <li th:classappend="(*{active} == 'users')? 'active' : _">
-                    <a th:href="@{/users}">People</a>
+                    <a th:href="@{/users}">
+                        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                        <span th:text="#{users.title}">People</span>
+                    </a>
+                </li>
+                <li th:classappend="(*{active} == 'statistics')? 'active' : _">
+                    <a th:href="@{/statistics}">
+                        <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+                        <span th:text="#{statistics.title}">Statistics</span>
+                    </a>
+                </li>
+                <li th:classappend="(*{active} == 'donate')? 'active' : _">
+                    <a th:href="@{/donate}">
+                        <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span>
+                        <span th:text="#{donate.title}">Donate</span>
+                    </a>
                 </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 <li th:classappend="(*{active} == 'user')? 'active' : _">
                     <a th:href="@{/users/{userId}(userId=${currentUser.id})}">
-                        <img src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
-                        <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.User"*/-->
+                        <img alt="User avatar image" src="http://placehold.it/20x20" class="navbar-img-left" th:src="${@avatarService.getAvatarUrl(currentUser, 20)}">
+                        <!--/*@thymesVar id="currentUser" type="ee.potatonet.data.model.User"*/-->
                         <span th:text="${currentUser.fullName}"></span>
                     </a>
                 </li>
@@ -46,10 +68,16 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dLabel">
                         <li th:classappend="(*{active} == 'settings')? 'active' : _">
-                            <a th:href="@{/settings}">Settings</a>
+                            <a th:href="@{/settings}">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                <span th:text="#{settings.title}">Settings</span>
+                            </a>
                         </li>
                         <li>
-                            <a th:href="@{/logout}">Logout</a>
+                            <a th:href="@{/logout}">
+                                <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                                <span th:text="#{navbar.logout}">Logout</span>
+                            </a>
                         </li>
                     </ul>
                 </li>

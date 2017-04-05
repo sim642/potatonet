@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{master}">
 <head>
-    <title>login</title>
+    <title th:text="#{login.login}">login</title>
 </head>
 <body>
 
 <div layout:fragment="content">
     <div class="row">
         <div class="col-md-9">
-            <img class="img-responsive" th:src="@{/img/potato-md.png}"
+            <img alt="Potato logo" class="img-responsive" th:src="@{/img/potato-md.png}"
                  srcset="/img/potato-xxs.png 480w,
                          /img/potato-xs.png 768w,
                          /img/potato-sm.png 992w,
@@ -24,34 +24,50 @@
         <div class="col-md-3">
             <h1 id="login-title">potatonet</h1>
             <div class="panel panel-default">
-                <div class="panel-heading">
+                <div class="panel-heading" th:text="#{login.login}">
                     Login
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal" th:action="@{/login}" method="post">
-                        <div class="alert alert-danger" role="alert" th:if="${param.error}">
-                            Invalid email or password
-                        </div>
+                        <th:block th:if="${param.error}">
+                            <div th:replace="~{alert :: error(#{login.wrong.credentials})}"></div>
+                        </th:block>
+                        <th:block th:if="${param.failureoauth}">
+                            <div th:replace="~{alert :: error(${param.failureoauth})}"></div>
+                        </th:block>
+
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                                <label class="sr-only" for="email" th:text="#{login.placeholder.email}"></label>
+                                <input type="email" class="form-control" id="email" name="email" th:placeholder="#{login.placeholder.email}">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                                <label class="sr-only" for="password" th:text="#{login.placeholder.password}"></label>
+                                <input type="password" class="form-control" id="password" name="password" th:placeholder="#{login.placeholder.password}">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <button type="submit" class="btn btn-default">Sign in</button>
+                                <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                                    <span th:text="#{login.login.button}">Sign in</span>
+                                </button>
                             </div>
                         </div>
                         <hr/>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <a href="https://localhost:8446/" th:href="@{{domain}/login/eid(domain=${app.domainEid})}" th:fragment="eidButton">
+                                    <img alt="ID-card button" th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
+                                </a>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <a href="https://localhost:8446/" th:href="@{{domain}/login(domain=${app.domainEid})}" th:fragment="eidButton">
-                                    <img th:src="@{/img/id-card-et.svg}" class="btn-eid"/>
+                                <a href="https://localhost:8443/login/google/pre" th:href="@{{domain}/login/google/pre(domain=${app.domain})}">
+                                   <img alt="Google login button" th:src="@{/img/google-login.png}" class="btn-google"/>
                                 </a>
                             </div>
                         </div>
@@ -60,7 +76,7 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">
+                <div th:text="#{login.register}" class="panel-heading">
                     Register
                 </div>
                 <div class="panel-body">

@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ee.potatonet.data.User;
-import ee.potatonet.data.UserService;
+import ee.potatonet.controller.advice.CurrentUser;
+import ee.potatonet.data.model.User;
+import ee.potatonet.data.service.UserService;
 
 @Controller
 @RequestMapping("/users/{userId}/friendrequests")

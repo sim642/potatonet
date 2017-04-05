@@ -7,14 +7,6 @@ fallback.load({
     'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
     '/js/bootstrap.min.js'
   ],
-  bootstrapCSS: [
-    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
-    '/css/bootstrap.min.css'
-  ],
-  bootstrapThemeCSS: [
-    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css',
-    '/css/bootstrap-theme.min.css'
-  ],
   masterjs: [
     '/js/master.js'
   ]

@@ -2,16 +2,30 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
 
-<div class="panel panel-post" layout:fragment="postBasePanel(post, panel_class)" th:classappend="${panel_class} ?: 'panel-default'">
-    <div class="panel-body">
+<div class="panel panel-post" layout:fragment="postBasePanel(post, panel_class)" th:classappend="${panel_class} ?: 'panel-default'" th:data-post-id="${post.id}">
+
+    <div class="panel-body" >
         <div class="media">
             <div class="media-left">
                 <a th:href="@{/users/{userId}(userId=${post.user.id})}">
-                    <img class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(post.user, 64)}">
+                    <img alt="User avatar image" class="img-rounded" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(post.user, 64)}">
                 </a>
             </div>
+
             <div class="media-body">
-                <span class="pull-right text-muted" th:text="${post.creationDateTime}">2017-02-11 15:00:00</span>
+                <th:block th:unless="${post.id == null || currentUser == null}">
+                    <a class="clearfix pull-right btn btn-link btn-modal-map no-padding" data-toggle="modal" data-target="#mapModal"
+                       th:href="@{/posts/{postId}(postId=${post.id})}" data-remote="false"
+                       th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span class="hidden-xs" th:text="${{post.creationDateTime}}">2017-02-11 15:00:00</span>
+                    </a>
+
+                    <form class="like pull-right clear-right unclear-right-xs" th:action="@{/like/{id}(id=${post.id})}" th:method="PUT" th:unless="${post.id == null || currentUser == null}">
+                        <button th:replace="~{common :: likeButton (${post})}"></button>
+                    </form>
+                </th:block>
+
                 <h4 class="media-heading">
                     <a class="name-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
                 </h4>
@@ -19,13 +33,16 @@
                     <p>Content</p>
                 </th:block>
             </div>
+
         </div>
     </div>
 </div>
 
+
 <div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
     <th:block layout:fragment="content">
-        <p th:text="${post.content}"></p>
+        <!--/* http://stackoverflow.com/a/40930208 */-->
+        <p th:utext="${#strings.replace(#strings.escapeXml(post.content),'&#10;','&lt;br/&gt;')}"></p>
 
         <ul class="media-list list-comments">
             <li class="media">
@@ -105,37 +122,66 @@
     </th:block>
 </div>
 
+
+<button th:fragment="likeButton(post)"
+        th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'btn-info' : 'btn-default'"
+        type="submit"
+        class="btn like-btn btn-sm">
+    <span class="glyphicon glyphicon-thumbs-up"></span>
+    <span class="hidden-xs" th:text="#{post.like}"></span>
+    <span th:text="${post.likeCount}" class="label" th:classappend="${currentUser.likedPostsIds.contains(post.id)} ? 'label-default' : 'label-info'">0</span>
+</button>
+
 <div class="btn-group btns-friend" role="group" th:fragment="friendButtons(user)" th:data-user-id="${user.id}">
     <th:block th:unless="${user.equals(currentUser)}">
         <th:block th:if="${!currentUser.friends.contains(user)}">
-            <button type="button" class="btn btn-primary btn-friend-add" th:if="${!currentUser.incomingFriendRequests.contains(user) && !currentUser.outgoingFriendRequests.contains(user)}">Add friend</button>
+            <button type="button" class="btn btn-primary btn-friend-add"
+                    th:if="${!currentUser.incomingFriendRequests.contains(user) && !currentUser.outgoingFriendRequests.contains(user)}">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span th:text="#{friendrequest.add.friend}">Add friend</span>
+            </button>
 
-            <button type="button" class="btn btn-success btn-friend-accept" th:if="${currentUser.incomingFriendRequests.contains(user)}">Accept</button>
-            <button type="button" class="btn btn-danger btn-friend-reject" th:if="${currentUser.incomingFriendRequests.contains(user)}">Reject</button>
+            <button type="button" class="btn btn-success btn-friend-accept" th:if="${currentUser.incomingFriendRequests.contains(user)}">
+                <span class="glyphicon glyphicon-ok"></span>
+                <span th:text="#{friendrequest.accept}">Accept</span>
+            </button>
+            <button type="button" class="btn btn-danger btn-friend-reject" th:if="${currentUser.incomingFriendRequests.contains(user)}">
+                <span class="glyphicon glyphicon-remove"></span>
+                <span th:text="#{friendrequest.decline}">Reject</span>
+            </button>
 
-            <button type="button" class="btn btn-default btn-friend-reject" th:if="${currentUser.outgoingFriendRequests.contains(user)}">Cancel request</button>
+            <button type="button" class="btn btn-default btn-friend-reject" th:if="${currentUser.outgoingFriendRequests.contains(user)}">
+                <span class="glyphicon glyphicon-remove"></span>
+                <span th:text="#{friendrequest.cancel}">Cancel request</span>
+            </button>
         </th:block>
 
-        <button type="button" class="btn btn-link btn-friend-remove" th:if="${currentUser.friends.contains(user)}">Remove friend</button>
+        <button type="button" class="btn btn-link btn-friend-remove" th:if="${currentUser.friends.contains(user)}">
+            <span class="glyphicon glyphicon-trash"></span>
+            <span th:text="#{friend.remove}">Remove friend</span>
+        </button>
     </th:block>
 </div>
 
-<a class="hidden-link" th:href="@{/users/{userId}(userId=${user.id})}" th:fragment="userPanel(user)">
-    <div class="panel panel-default panel-user">
-        <div class="panel-body">
-            <div class="media">
-                <div class="media-left media-middle">
-                    <img src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="img-rounded">
-                </div>
-                <div class="media-body">
-                    <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
-
+<div class="panel panel-default panel-user" th:fragment="userPanel(user)">
+    <div class="panel-body">
+        <div class="media">
+            <div class="media-left media-middle">
+                <a th:href="@{/users/{userId}(userId=${user.id})}">
+                    <img alt="User avatar image" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(user, 64)}" class="img-rounded">
+                </a>
+            </div>
+            <div class="media-body">
+                <div class="pull-right" th:insert="~{common :: friendButtons (${user})}"></div>
+                <a class="hidden-link" th:href="@{/users/{userId}(userId=${user.id})}">
                     <h3 th:text="${user.fullName}"></h3>
-                </div>
+                </a>
             </div>
         </div>
     </div>
-</a>
+</div>
+
+
 
 </body>
 </html>

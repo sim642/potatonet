@@ -10,6 +10,11 @@
     <meta name="_current_user_id" th:content="${currentUser.id}" th:unless="${currentUser == null}"/>
 
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">potatonet</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}">
+
     <link th:href="@{/css/master.css}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
