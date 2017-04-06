@@ -25,10 +25,14 @@
       fallback.load({
         likejs: [
           '/js/like.js'
-        ]
+        ],
+        commentsjs: [
+          '/js/comments.js'
+        ],
       }, {
         shim: {
-          'likejs': ['jQuery', 'jQuery.fn.modal' ]
+          'likejs': ['jQuery', 'jQuery.fn.modal' ],
+          'commentsjs': ['jQuery', 'Stomp', 'SockJS']
         }
       });
     </script>

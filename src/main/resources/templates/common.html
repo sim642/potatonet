@@ -38,7 +38,7 @@
     </div>
 </div>
 
-<li class="media" layout:fragment="commentBaseMedia(comment)">
+<li class="media media-comment" layout:fragment="commentBaseMedia(comment)" th:data-comment-id="${comment.id}">
     <div class="media-left">
         <a th:href="@{/users/{userId}(userId=${comment.user.id})}">
             <img alt="User avatar image" class="img-rounded" src="http://placehold.it/24x24" th:src="${@avatarService.getAvatarUrl(comment.user, 24)}">

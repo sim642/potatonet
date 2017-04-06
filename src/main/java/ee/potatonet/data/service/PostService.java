@@ -88,6 +88,8 @@ public class PostService {
     post.getComments().add(comment);
     post = save(post);
 
+    simpMessagingTemplate.convertAndSend("/topic/comments/" + post.getId(), comment.getId());
+
     return comment;
   }
 
