@@ -46,4 +46,11 @@ $(function () {
 
     return false;
   });
+
+  $(document).on("click", ".btn-comment", function () {
+    var $btn = $(this);
+    var $form = $btn.closest(".media-comment").find(".form-comment");
+    $btn.slideUp();
+    $form.removeClass("hidden").hide().slideDown();
+  });
 });
