@@ -21,7 +21,7 @@ $(function () {
   var $loader = $("#loader");
 
   $window.scroll(function () {
-    if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {
+    if (canLoad && ($(document).height() - $window.height() - $window.scrollTop() < 100)) {
       canLoad = false;
 
       var lastPostId = $("#posts .panel-post").last().attr("data-post-id");
