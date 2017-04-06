@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.potatonet.controller.advice.CurrentUser;
 import ee.potatonet.data.model.Comment;
@@ -41,5 +42,12 @@ public class PostsController {
     comment.setUser(currentUser);
     postService.saveCommentToPost(comment, post);
     return "redirect:/posts/" + post.getId();
+  }
+
+  @PostMapping(value = "/{id}/comments", headers = MappingUtils.AJAX_HEADERS)
+  @ResponseBody
+  public void doPostCommentsAjax(@PathVariable("id") Post post, @CurrentUser User currentUser, @Valid @ModelAttribute Comment comment) {
+    comment.setUser(currentUser);
+    postService.saveCommentToPost(comment, post);
   }
 }
