@@ -74,7 +74,7 @@
 
             <li layout:replace="~{:: commentBaseMedia(${newComment})}">
                 <th:block layout:fragment="content">
-                    <form th:object="${newComment}">
+                    <form th:action="@{/posts/{postId}/comments(postId=${post.id})}" th:object="${newComment}" method="post">
                         <div class="form-group">
                             <label class="sr-only">Content</label>
                             <textarea class="form-control textarea-vertical" rows="1" th:field="*{content}"></textarea>
