@@ -3,7 +3,9 @@ var stomp = null;
 function onPosts (msg) {
   var postId = msg.body;
   $.get("/posts/" + postId, function (data) {
-    $("#posts").prepend($(data));
+    var $post = $(data);
+    $("#posts").prepend($post);
+    subscribeComments($post);
   });
 }
 
@@ -21,7 +23,7 @@ $(function () {
   var $loader = $("#loader");
 
   $window.scroll(function () {
-    if (canLoad && ($(document).height() - $window.height() == $window.scrollTop())) {
+    if (canLoad && ($(document).height() - $window.height() - $window.scrollTop() < 100)) {
       canLoad = false;
 
       var lastPostId = $("#posts .panel-post").last().attr("data-post-id");

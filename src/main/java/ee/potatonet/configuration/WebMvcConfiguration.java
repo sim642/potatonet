@@ -1,5 +1,6 @@
 package ee.potatonet.configuration;
 
+import com.github.ziplet.filter.compression.CompressingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import ee.potatonet.data.model.Language;
+
+import javax.servlet.Filter;
 
 @Configuration
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
@@ -39,5 +42,10 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
     CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
     cookieLocaleResolver.setDefaultLocale(Language.EN.getLocale());
     return cookieLocaleResolver;
+  }
+
+  @Bean
+  public Filter compressingFilter() {
+    return new CompressingFilter();
   }
 }

@@ -10,7 +10,7 @@
     <script th:inline="javascript">
 	  var passwordReqString = [[#{settings.password.requirements}]];
     </script>
-    <div class="panel panel-default">
+    <div id="panel-password" class="panel panel-default">
         <div class="panel-heading" th:text="#{settings.heading.password}">
             Password settings
         </div>
@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div id="panel-locale" class="panel panel-default">
         <div class="panel-heading" th:text="#{settings.heading.locale}">
             Language settings
         </div>

@@ -8,20 +8,23 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class GoogleAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String url;
+    ServletUriComponentsBuilder uri = ServletUriComponentsBuilder.fromContextPath(request);
 
     if (authentication != null && authentication.isAuthenticated()) {
-      url = String.format("/settings?failureoauth=%s", exception.getMessage());
+      uri.path("settings");
     }
     else {
-      url = String.format("/login?failureoauth=%s", exception.getMessage());
+      uri.path("login");
     }
 
-    getRedirectStrategy().sendRedirect(request, response, url);
+    uri.queryParam("failureoauth", exception.getMessage());
+
+    getRedirectStrategy().sendRedirect(request, response, uri.toUriString());
   }
 }

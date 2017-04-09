@@ -11,7 +11,11 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
     text-decoration: none;
 }
 
-#post textarea {
+a.name-link:link, a.name-link:visited, a.name-link:hover, a.name-link:active {
+    text-decoration: none;
+}
+
+.textarea-vertical {
     resize: vertical;
 }
 
@@ -70,8 +74,7 @@ a.hidden-link:link, a.hidden-link:visited, a.hidden-link:hover, a.hidden-link:ac
 }
 
 .btn-modal-map {
-    margin-bottom: 1em;
-    margin-left: 0.5em;
+    margin-top: -0.7em;
 }
 
 legend {
@@ -96,4 +99,43 @@ legend {
     .unclear-right-xs {
         clear: none !important;
     }
+}
+
+.list-comments {
+    margin-bottom: 0;
+}
+
+.list-comments .media {
+    margin-top: 5px;
+}
+
+.body-navbar {
+    padding-top: 70px;
+}
+
+.navbar .badge {
+    margin-top: -3px;
+}
+
+.navbar .navbar-img-left {
+    float: left;
+    margin-right: 15px;
+}
+
+.navbar-brand img {
+    margin-top: -13px;
+    height: 48px;
+}
+
+.sitemap h1, .sitemap h2, .sitemap h3, .sitemap h4, .sitemap h5, .sitemap h6 {
+    display: inline-block;
+    width: 100%;
+}
+
+.sitemap-other {
+    padding-top: 56.4px;
+}
+
+.sitemap ul {
+    padding-left: 20px;
 }
