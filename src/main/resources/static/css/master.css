@@ -74,8 +74,7 @@ a.name-link:link, a.name-link:visited, a.name-link:hover, a.name-link:active {
 }
 
 .btn-modal-map {
-    margin-bottom: 1em;
-    margin-left: 0.5em;
+    margin-top: -0.7em;
 }
 
 legend {
