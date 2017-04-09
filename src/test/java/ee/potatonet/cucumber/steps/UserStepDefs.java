@@ -88,8 +88,8 @@ public class UserStepDefs {
     User me = userService.save(TestUtils.generateUser());
     testState.setMyUser(me);
 
+    webDriver.get("https://localhost:8443/logout");
     webDriver.get("https://localhost:8443/login");
-
     userLogsInWithUserAndPass(me.getUsername(), "password");
   }
 }
