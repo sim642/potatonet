@@ -74,7 +74,7 @@
 
             <li layout:replace="~{:: commentBaseMedia(${newComment})}">
                 <th:block layout:fragment="content">
-                    <button type="button" class="btn btn-default btn-sm btn-comment">
+                    <button type="button" class="btn btn-default btn-sm btn-comment-expand">
                         <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
                         <span>Comment</span>
                     </button>
@@ -84,7 +84,7 @@
                             <label class="sr-only">Content</label>
                             <textarea class="form-control textarea-vertical" rows="1" th:field="*{content}"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-default btn-sm pull-right">
+                        <button type="submit" class="btn btn-default btn-sm pull-right btn-comment">
                             <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
                             <span>Comment</span>
                         </button>

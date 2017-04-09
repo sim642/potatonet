@@ -3,6 +3,12 @@ $(function () {
   var stomp = Stomp.over(sockJs);
 
   window.subscribeComments = function subscribeComments($post) {
+    var $btnComment = $post.find(".btn-comment");
+    $btnComment.attr("disabled", true);
+    $post.find("textarea").keyup(function (event) {
+      $btnComment.attr("disabled", $(this).val().trim().length == 0);
+    });
+
     var postId = $post.attr("data-post-id");
     stomp.subscribe('/topic/comments/' + postId, function (msg) {
       var commentId = msg.body;
@@ -47,7 +53,7 @@ $(function () {
     return false;
   });
 
-  $(document).on("click", ".btn-comment", function () {
+  $(document).on("click", ".btn-comment-expand", function () {
     var $btn = $(this);
     var $form = $btn.closest(".media-comment").find(".form-comment");
     $btn.slideUp();
