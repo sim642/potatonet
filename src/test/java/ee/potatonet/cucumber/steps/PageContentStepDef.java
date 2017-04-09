@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;
 import ee.potatonet.cucumber.config.CucumberTestState;
 import ee.potatonet.cucumber.config.SpringCucumberSteps;
