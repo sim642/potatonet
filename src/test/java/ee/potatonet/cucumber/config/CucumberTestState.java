@@ -1,7 +1,6 @@
 package ee.potatonet.cucumber.config;
 
 import org.springframework.stereotype.Component;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import ee.potatonet.data.model.User;
 

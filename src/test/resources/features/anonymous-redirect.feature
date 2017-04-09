@@ -1,6 +1,6 @@
 Feature: Redirect anonymous users to login page
 
-  Scenario Outline:
+  Scenario Outline: Anonymous users are always redirected to the login page
     Given I am anonymous
     When I navigate to url "<url>"
     Then I am redirected to "<redirect>"

@@ -2,7 +2,6 @@ package ee.potatonet.cucumber.config;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-import javax.servlet.Filter;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +16,7 @@ import ee.potatonet.PotatonetApplication;
 @Configuration
 @Import(PotatonetApplication.class)
 public class CucumberFeatureTestConfiguration {
+
   @Autowired
   private WebApplicationContext context;
 

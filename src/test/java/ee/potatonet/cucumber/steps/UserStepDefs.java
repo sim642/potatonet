@@ -1,7 +1,6 @@
 package ee.potatonet.cucumber.steps;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.openqa.selenium.By;
@@ -11,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import ee.potatonet.TestUtils;
@@ -51,7 +46,7 @@ public class UserStepDefs {
 
     User user = userService.findOneByEidEmail(email);
     if (user == null) {
-      user = new User(new EIDDetails(new EIDCodeDetails("30101010000"), email, email, email));
+      user = new User(new EIDDetails(new EIDCodeDetails("30101010000"), email, "", email));
     }
 
     user.setPassword(passwordEncoder.encode(password));
@@ -91,5 +86,13 @@ public class UserStepDefs {
     webDriver.get("https://localhost:8443/logout");
     webDriver.get("https://localhost:8443/login");
     userLogsInWithUserAndPass(me.getUsername(), "password");
+  }
+
+  @Given("^user \"([^\"]*)\" has sent friend request to me$")
+  public void userHasSentFriendRequestToMe(String email) throws Throwable {
+    User me = testState.getMyUser();
+    User user = userService.findOneByEidEmail(email);
+
+    userService.addFriendRequest(user, me);
   }
 }
