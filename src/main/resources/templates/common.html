@@ -76,17 +76,17 @@
                 <th:block layout:fragment="content">
                     <button type="button" class="btn btn-default btn-sm btn-comment-expand">
                         <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                        <span>Comment</span>
+                        <span th:text="#{post.comment}">Comment</span>
                     </button>
 
                     <form class="form-comment hidden" th:action="@{/posts/{postId}/comments(postId=${post.id})}" th:object="${newComment}" method="post">
                         <div class="form-group">
-                            <label class="sr-only">Content</label>
-                            <textarea class="form-control textarea-vertical" rows="1" th:field="*{content}"></textarea>
+                            <label class="sr-only" th:for="${#ids.next('content')}">Content</label>
+                            <textarea class="form-control textarea-vertical" rows="1" th:id="${#ids.seq('content')}" name="content"></textarea>
                         </div>
                         <button type="submit" class="btn btn-default btn-sm pull-right btn-comment">
                             <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                            <span>Comment</span>
+                            <span th:text="#{post.comment}">Comment</span>
                         </button>
                     </form>
                 </th:block>
