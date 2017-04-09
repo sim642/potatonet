@@ -2,14 +2,15 @@ package ee.potatonet.cucumber.config;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
+import javax.servlet.Filter;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.htmlunit.MockMvcWebClientBuilder;
+import org.springframework.test.web.servlet.htmlunit.webdriver.MockMvcHtmlUnitDriverBuilder;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 
 import ee.potatonet.PotatonetApplication;
 
@@ -20,9 +21,10 @@ public class CucumberFeatureTestConfiguration {
   private WebApplicationContext context;
 
   @Bean
-  public WebClient webClient() {
-    return MockMvcWebClientBuilder
+  public WebDriver webClient() {
+    return MockMvcHtmlUnitDriverBuilder
         .webAppContextSetup(context, springSecurity())
+        .javascriptEnabled(true)
         .build();
   }
 }

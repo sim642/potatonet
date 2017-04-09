@@ -4,31 +4,33 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import ee.potatonet.cucumber.config.CucumberTestContext;
+import ee.potatonet.cucumber.config.CucumberTestState;
 import ee.potatonet.cucumber.config.SpringCucumberSteps;
 
 @SpringCucumberSteps
 public class UrlNavigationStepDefs {
 
   @Autowired
-  private WebClient webClient;
+  private WebDriver webDriver;
 
   @Autowired
-  private CucumberTestContext context;
+  private CucumberTestState testState;
 
-  @When("^user navigates to url \"([^\"]*)\"$")
+  @When("^I navigate to url \"([^\"]*)\"$")
   public void userNavigatesToUrl(String url) throws Throwable {
-    context.setCurrentPage(webClient.getPage(url));
+    webDriver.get(url);
   }
 
-  @Then("^user is redirected to \"([^\"]*)\"$")
+  @Then("^I am redirected to \"([^\"]*)\"$")
   public void userIsRedirectedTo(String redirectUrl) throws Throwable {
-    assertThat(context.getCurrentPage().getUrl().toExternalForm(), is(redirectUrl));
+    assertThat(webDriver.getCurrentUrl(), is(redirectUrl));
   }
 }

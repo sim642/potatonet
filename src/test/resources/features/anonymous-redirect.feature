@@ -1,9 +1,9 @@
 Feature: Redirect anonymous users to login page
 
   Scenario Outline:
-    Given user is anonymous
-    When user navigates to url "<url>"
-    Then user is redirected to "<redirect>"
+    Given I am anonymous
+    When I navigate to url "<url>"
+    Then I am redirected to "<redirect>"
     Examples:
       | url                               | redirect                     |
       | https://localhost:8443/           | https://localhost:8443/login |
