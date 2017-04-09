@@ -126,3 +126,16 @@ body {
     margin-top: -13px;
     height: 48px;
 }
+
+.sitemap h1, .sitemap h2, .sitemap h3, .sitemap h4, .sitemap h5, .sitemap h6 {
+    display: inline-block;
+    width: 100%;
+}
+
+.sitemap-other {
+    padding-top: 56.4px;
+}
+
+.sitemap ul {
+    padding-left: 20px;
+}

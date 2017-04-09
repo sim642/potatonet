@@ -90,4 +90,13 @@ $(function () {
     $("input[type=submit], button[type=submit]", $(this).parents("form")).removeAttr("clicked");
     $(this).attr("clicked", "clicked");
   });
+
+  // https://github.com/twbs/bootstrap/issues/1768#issuecomment-6531466
+  var shiftWindow = function() {
+    scrollBy(0, -70)
+  };
+
+  if (location.hash)
+    shiftWindow();
+  window.addEventListener("hashchange", shiftWindow);
 });
