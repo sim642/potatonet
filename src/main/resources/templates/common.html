@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
 
-<div class="panel panel-post" layout:fragment="postBasePanel(post, panel_class)" th:classappend="${panel_class} ?: 'panel-default'" th:data-post-id="${post.id}">
+<div class="panel panel-post" layout:fragment="postBasePanel(post, panel_class, panel_id)" th:classappend="${panel_class} ?: 'panel-default'" th:attrappend="id=${panel_id}" th:data-post-id="${post.id}">
 
     <div class="panel-body" >
         <div class="media">

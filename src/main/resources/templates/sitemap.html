@@ -9,12 +9,12 @@
 <div layout:fragment="content">
     <div class="row sitemap">
         <div class="col-md-3">
-            <a th:href="@{/}">
+            <a th:href="@{/#feed}">
                 <h3 th:text="#{feed.title}"></h3>
             </a>
             <ul>
                 <li>
-                    <a th:href="@{/}">
+                    <a th:href="@{/#panel-post}">
                         <h4 th:text="#{feed.post}"></h4>
                     </a>
                 </li>
@@ -27,17 +27,17 @@
             </a>
             <ul>
                 <li>
-                    <a th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">
+                    <a th:href="@{/users/{userId}/friends#incoming(userId=${currentUser.id})}">
                         <h4 th:text="#{friends.incoming.friend.requests}"></h4>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">
+                    <a th:href="@{/users/{userId}/friends#friends(userId=${currentUser.id})}">
                         <h4 th:text="#{friends.friends}"></h4>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/users/{userId}/friends(userId=${currentUser.id})}">
+                    <a th:href="@{/users/{userId}/friends#outgoing(userId=${currentUser.id})}">
                         <h4 th:text="#{friends.outgoing.friend.requests}"></h4>
                     </a>
                 </li>
@@ -55,12 +55,12 @@
                     </a>
                     <ul>
                         <li>
-                            <a th:href="@{/settings}">
+                            <a th:href="@{/settings#password}">
                                 <h5 th:text="#{settings.heading.password}"></h5>
                             </a>
                         </li>
                         <li>
-                            <a th:href="@{/settings}">
+                            <a th:href="@{/settings#locale}">
                                 <h5 th:text="#{settings.heading.locale}"></h5>
                             </a>
                         </li>

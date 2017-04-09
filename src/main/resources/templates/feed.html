@@ -11,7 +11,7 @@
         var key = [[${app.googleApiKey}]];
     </script>
 
-    <div layout:replace="~{common :: postBasePanel(${post}, 'panel-primary')}">
+    <div layout:replace="~{common :: postBasePanel(${post}, 'panel-primary', 'panel-post')}">
         <th:block layout:fragment="content">
             <form id="post" th:action="@{/}" th:object="${post}" method="post">
                 <input type="hidden" th:field="*{latitude}">
