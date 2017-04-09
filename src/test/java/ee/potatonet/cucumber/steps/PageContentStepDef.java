@@ -30,7 +30,7 @@ public class PageContentStepDef {
   @Then("^page contains a post with text \"([^\"]*)\"$")
   public void pageContainsAPostWithText(String postContent) throws Throwable {
     try {
-      WebElement post = new WebDriverWait(webDriver, 10).until(
+      WebElement post = new WebDriverWait(webDriver, 2).until(
           ExpectedConditions.presenceOfElementLocated(
               By.xpath("//div[contains(@class, 'panel-post')]//div[contains(@class, 'media-body')]//p[text()='" + postContent + "']")
           )
@@ -113,10 +113,24 @@ public class PageContentStepDef {
     }
   }
 
+  @Then("^page contains a comment with text \"([^\"]*)\"$")
+  public void pageContainsCommentWithText(String commentText) throws Throwable {
+    try {
+      WebElement div = new WebDriverWait(webDriver, 2).until(
+          ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(@class, 'media-comment')][@data-comment-id]//span[contains(., '" + commentText +"')]"))
+      );
+
+      assertNotNull(div);
+    }
+    catch (TimeoutException e) {
+      fail();
+    }
+  }
+
   @Then("^page contains a post with text \"([^\"]*)\" and (\\d+) likes$")
   public void pageContainsAPostWithTextAndLike(String postContent, int likeCount) throws Throwable {
     try {
-      WebElement post = new WebDriverWait(webDriver, 10).until(
+      WebElement post = new WebDriverWait(webDriver, 2).until(
           ExpectedConditions.presenceOfElementLocated(
               By.xpath("//div" +
                   "[contains(@class, 'panel-post')][.//div[contains(@class, 'media-body')]//p[text()='" + postContent + "']]" +

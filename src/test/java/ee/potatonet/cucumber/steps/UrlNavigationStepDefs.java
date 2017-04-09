@@ -121,7 +121,7 @@ public class UrlNavigationStepDefs {
   @When("^I like a post with content \"([^\"]*)\"$")
   public void iLikeAPostWithContent(String postContent) throws Throwable {
     try {
-      WebElement postButton = new WebDriverWait(webDriver, 10).until(
+      WebElement postButton = new WebDriverWait(webDriver, 2).until(
           ExpectedConditions.presenceOfElementLocated(
               By.xpath("//div" +
                   "[contains(@class, 'panel-post')][.//div[contains(@class, 'media-body')]//p[text()='" + postContent + "']]" +
