@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ee.potatonet.auth.eid.EIDCodeDetails;
 import ee.potatonet.auth.eid.EIDDetails;
+import ee.potatonet.data.model.Comment;
 import ee.potatonet.data.model.Post;
 import ee.potatonet.data.model.User;
 import ee.potatonet.data.service.PostService;
@@ -67,6 +68,17 @@ public class DevConfiguration {
     post.setLatitude(random.nextFloat() +  58.0f);
     post.setLongitude(random.nextFloat() +  26.0f);
     post.setContent(content);
-    postService.savePostToUser(post, user);
+    post = postService.savePostToUser(post, user);
+
+    for (int i = 0; i < 3; i++) {
+      createComment(post, user, "Foo " + i);
+    }
+  }
+
+  private void createComment(Post post, User user, String content) {
+    Comment comment = new Comment();
+    comment.setUser(user);
+    comment.setContent(content);
+    postService.saveCommentToPost(comment, post);
   }
 }

@@ -27,7 +27,7 @@
                 </th:block>
 
                 <h4 class="media-heading">
-                    <a class="hidden-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
+                    <a class="name-link" th:href="@{/users/{userId}(userId=${post.user.id})}" th:text="${post.user.fullName}"></a>
                 </h4>
                 <th:block layout:fragment="content">
                     <p>Content</p>
@@ -38,11 +38,60 @@
     </div>
 </div>
 
+<li class="media media-comment" layout:fragment="commentBaseMedia(comment)" th:data-comment-id="${comment.id}">
+    <div class="media-left">
+        <a th:href="@{/users/{userId}(userId=${comment.user.id})}">
+            <img alt="User avatar image" class="img-rounded" src="http://placehold.it/24x24" th:src="${@avatarService.getAvatarUrl(comment.user, 24)}">
+        </a>
+    </div>
+    <div class="media-body">
+        <span class="pull-right text-muted hidden-xs" th:text="${{comment.creationDateTime}}">2017-02-11 15:00:00</span>
+        <span class="media-heading">
+            <a class="name-link" th:href="@{/users/{userId}(userId=${comment.user.id})}" th:text="${comment.user.fullName}"></a>
+        </span>
+
+        <th:block layout:fragment="content">
+            <p>Content</p>
+        </th:block>
+    </div>
+</li>
+
+<li layout:replace="~{:: commentBaseMedia(${comment})}" th:fragment="commentMedia(comment)">
+    <th:block layout:fragment="content">
+        <span th:utext="${#strings.replace(#strings.escapeXml(comment.content),'&#10;','&lt;br/&gt;')}"></span>
+    </th:block>
+</li>
 
 <div layout:replace="~{common :: postBasePanel(${post})}" th:fragment="postPanel(post)">
     <th:block layout:fragment="content">
         <!--/* http://stackoverflow.com/a/40930208 */-->
         <p th:utext="${#strings.replace(#strings.escapeXml(post.content),'&#10;','&lt;br/&gt;')}"></p>
+
+        <ul class="media-list list-comments">
+            <th:block th:each="comment : ${post.comments}">
+                <li th:replace="~{:: commentMedia (${comment})}"></li>
+            </th:block>
+
+            <li layout:replace="~{:: commentBaseMedia(${newComment})}">
+                <th:block layout:fragment="content">
+                    <button type="button" class="btn btn-default btn-sm btn-comment">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                        <span>Comment</span>
+                    </button>
+
+                    <form class="form-comment hidden" th:action="@{/posts/{postId}/comments(postId=${post.id})}" th:object="${newComment}" method="post">
+                        <div class="form-group">
+                            <label class="sr-only">Content</label>
+                            <textarea class="form-control textarea-vertical" rows="1" th:field="*{content}"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-default btn-sm pull-right">
+                            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                            <span>Comment</span>
+                        </button>
+                    </form>
+                </th:block>
+            </li>
+        </ul>
     </th:block>
 </div>
 

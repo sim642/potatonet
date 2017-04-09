@@ -1,7 +1,6 @@
 package ee.potatonet.data.model;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,19 +8,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-public class Post {
+public class Comment {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Post post;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
@@ -32,27 +31,28 @@ public class Post {
   @Size(min = 1, max = 32700)
   private String content;
 
-  private Integer likeCount = 0;
-
-  @OneToMany(mappedBy = "post")
-  private List<Comment> comments = new ArrayList<>();
-
-  @Embedded
-  private Coordinates coordinates = new Coordinates();
-
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private ZonedDateTime creationDateTime;
 
-  public Post(User user, String content) {
+  public Comment(Post post, User user, String content) {
+    this.post = post;
     this.user = user;
     this.content = content;
   }
 
-  public Post() {
+  public Comment() {
   }
 
   public Long getId() {
     return id;
+  }
+
+  public Post getPost() {
+    return post;
+  }
+
+  public void setPost(Post post) {
+    this.post = post;
   }
 
   public String getContent() {
@@ -71,26 +71,6 @@ public class Post {
     this.user = user;
   }
 
-  public Float getLongitude() {
-    return coordinates.getLongitude();
-  }
-
-  public void setLongitude(Float longitude) {
-    coordinates.setLongitude(longitude);
-  }
-
-  public Float getLatitude() {
-    return coordinates.getLatitude();
-  }
-
-  public void setLatitude(Float latitude) {
-    coordinates.setLatitude(latitude);
-  }
-
-  public Coordinates getCoordinates() {
-    return coordinates;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -100,9 +80,9 @@ public class Post {
       return false;
     }
 
-    Post post = (Post) o;
+    Comment comment = (Comment) o;
 
-    return id != null ? id.equals(post.id) : post.id == null;
+    return id != null ? id.equals(comment.id) : comment.id == null;
   }
 
   @Override
@@ -112,7 +92,7 @@ public class Post {
 
   @Override
   public String toString() {
-    return "Post{" +
+    return "Comment{" +
         "id=" + id +
         ", user=" + user +
         ", content='" + content + '\'' +
@@ -125,17 +105,5 @@ public class Post {
 
   public void setCreationDateTime(ZonedDateTime creationDateTime) {
     this.creationDateTime = creationDateTime;
-  }
-
-  public Integer getLikeCount() {
-    return likeCount == null ? 0 : likeCount;
-  }
-
-  public void setLikeCount(int likeCount) {
-    this.likeCount = likeCount;
-  }
-
-  public List<Comment> getComments() {
-    return comments;
   }
 }
