@@ -8,7 +8,7 @@
 
 <div layout:fragment="content">
     <div class="row sitemap">
-        <div class="col-md-3">
+        <div class="col-sm-2 col-md-2 col-lg-3">
             <a th:href="@{/#feed}">
                 <h3 th:text="#{feed.title}"></h3>
             </a>
@@ -21,7 +21,7 @@
             </ul>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-sm-4 col-md-4 col-lg-3">
             <a th:href="@{/users}">
                 <h3 th:text="#{users.title}"></h3>
             </a>
@@ -44,7 +44,7 @@
             </ul>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-sm-4 col-md-3 col-lg-3">
             <a th:href="@{/users/{userId}(userId=${currentUser.id})}">
                 <h3 th:text="${currentUser.fullName}"></h3>
             </a>
@@ -74,7 +74,7 @@
             </ul>
         </div>
 
-        <div class="col-md-3 sitemap-other">
+        <div class="col-sm-2 col-md-3 col-lg-3 sitemap-other">
             <a th:href="@{/statistics}">
                 <h4 th:text="#{statistics.title}"></h4>
             </a>
