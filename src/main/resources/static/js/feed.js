@@ -3,7 +3,9 @@ var stomp = null;
 function onFeed(msg) {
   var postId = msg.body;
   $.get("/posts/" + postId, function (data) {
-    $("#feed").prepend($(data));
+    var $post = $(data);
+    $("#feed").prepend($post);
+    subscribeComments($post);
   });
 }
 

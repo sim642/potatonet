@@ -132,6 +132,17 @@
 			<artifactId>spring-security-test</artifactId>
 			<version>4.2.2.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.ziplet</groupId>
+			<artifactId>ziplet</artifactId>
+			<version>2.2.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -161,6 +172,50 @@
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+				<version>1.7.6</version>
+				<executions>
+					<execution>
+						<id>default-minify</id>
+						<configuration>
+							<charset>UTF-8</charset>
+							<webappSourceDir>${basedir}/src/main/resources</webappSourceDir>
+							<webappTargetDir>${basedir}/target/classes</webappTargetDir>
+							<skipMerge>true</skipMerge>
+							<verbose>true</verbose>
+							<nosuffix>true</nosuffix>
+
+							<cssSourceDir>static/css</cssSourceDir>
+							<cssSourceIncludes>
+								<cssSourceInclude>**</cssSourceInclude>
+							</cssSourceIncludes>
+							<cssSourceExcludes>
+								<cssSourceExclude>bootstrap.css</cssSourceExclude>
+								<cssSourceExclude>bootstrap-theme.css</cssSourceExclude>
+								<cssSourceExclude>**/*.min.css</cssSourceExclude>
+								<cssSourceExclude>**/*.css.map</cssSourceExclude>
+							</cssSourceExcludes>
+
+							<jsSourceDir>static/js</jsSourceDir>
+							<jsSourceIncludes>
+								<jsSourceInclude>**</jsSourceInclude>
+							</jsSourceIncludes>
+							<jsSourceExcludes>
+								<jsSourceExclude>**/*.min.js</jsSourceExclude>
+							</jsSourceExcludes>
+
+							<jsEngine>CLOSURE</jsEngine>
+						</configuration>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 

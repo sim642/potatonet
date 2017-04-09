@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{navbar}">
+<head>
+    <title th:text="#{sitemap.title}">Sitemap</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row sitemap">
+        <div class="col-sm-2 col-md-2 col-lg-3">
+            <a th:href="@{/#feed}">
+                <h3 th:text="#{feed.title}"></h3>
+            </a>
+            <ul>
+                <li>
+                    <a th:href="@{/#panel-post}">
+                        <h4 th:text="#{feed.post}"></h4>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-4 col-md-4 col-lg-3">
+            <a th:href="@{/users}">
+                <h3 th:text="#{users.title}"></h3>
+            </a>
+            <ul>
+                <li>
+                    <a th:href="@{/users/{userId}/friends#incoming(userId=${currentUser.id})}">
+                        <h4 th:text="#{friends.incoming.friend.requests}"></h4>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/users/{userId}/friends#friends(userId=${currentUser.id})}">
+                        <h4 th:text="#{friends.friends}"></h4>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/users/{userId}/friends#outgoing(userId=${currentUser.id})}">
+                        <h4 th:text="#{friends.outgoing.friend.requests}"></h4>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-4 col-md-3 col-lg-3">
+            <a th:href="@{/users/{userId}(userId=${currentUser.id})}">
+                <h3 th:text="${currentUser.fullName}"></h3>
+            </a>
+            <ul>
+                <li>
+                    <a th:href="@{/settings}">
+                        <h4 th:text="#{settings.title}"></h4>
+                    </a>
+                    <ul>
+                        <li>
+                            <a th:href="@{/settings#password}">
+                                <h5 th:text="#{settings.heading.password}"></h5>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:href="@{/settings#locale}">
+                                <h5 th:text="#{settings.heading.locale}"></h5>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a th:href="@{/logout}">
+                        <h4 th:text="#{navbar.logout}"></h4>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-2 col-md-3 col-lg-3 sitemap-other">
+            <a th:href="@{/statistics}">
+                <h4 th:text="#{statistics.title}"></h4>
+            </a>
+            <a th:href="@{/donate}">
+                <h4 th:text="#{donate.title}"></h4>
+            </a>
+            <a th:href="@{/sitemap}">
+                <h4 th:text="#{sitemap.title}"></h4>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
