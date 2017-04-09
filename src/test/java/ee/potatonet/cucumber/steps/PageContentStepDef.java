@@ -112,5 +112,23 @@ public class PageContentStepDef {
       fail();
     }
   }
+
+  @Then("^page contains a post with text \"([^\"]*)\" and (\\d+) likes$")
+  public void pageContainsAPostWithTextAndLike(String postContent, int likeCount) throws Throwable {
+    try {
+      WebElement post = new WebDriverWait(webDriver, 10).until(
+          ExpectedConditions.presenceOfElementLocated(
+              By.xpath("//div" +
+                  "[contains(@class, 'panel-post')][.//div[contains(@class, 'media-body')]//p[text()='" + postContent + "']]" +
+                  "//button[contains(@class, 'like-btn')]//span[contains(@class, 'label')][text()=" + likeCount + "]")
+          )
+      );
+
+      assertNotNull(post);
+    }
+    catch (TimeoutException e) {
+      fail();
+    }
+  }
 }
 

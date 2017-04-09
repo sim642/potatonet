@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -115,5 +116,23 @@ public class UrlNavigationStepDefs {
 
     languageInput.click();
     saveButton.submit();
+  }
+
+  @When("^I like a post with content \"([^\"]*)\"$")
+  public void iLikeAPostWithContent(String postContent) throws Throwable {
+    try {
+      WebElement postButton = new WebDriverWait(webDriver, 10).until(
+          ExpectedConditions.presenceOfElementLocated(
+              By.xpath("//div" +
+                  "[contains(@class, 'panel-post')][.//div[contains(@class, 'media-body')]//p[text()='" + postContent + "']]" +
+                  "//button[contains(@class, 'like-btn')]")
+          )
+      );
+
+      postButton.click();
+    }
+    catch (TimeoutException e) {
+      fail();
+    }
   }
 }
