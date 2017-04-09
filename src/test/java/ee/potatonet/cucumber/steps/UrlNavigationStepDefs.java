@@ -57,4 +57,10 @@ public class UrlNavigationStepDefs {
     );
     button.click();
   }
+
+  @When("^I navigate to my friends view$")
+  public void iNavigateToMyFriendsView() throws Throwable {
+    Long id = testState.getMyUser().getId();
+    userNavigatesToUrl("https://localhost:8443/users/" + id + "/friends");
+  }
 }

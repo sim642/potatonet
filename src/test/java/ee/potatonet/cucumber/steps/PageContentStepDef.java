@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;
 import ee.potatonet.cucumber.config.CucumberTestState;
 import ee.potatonet.cucumber.config.SpringCucumberSteps;
@@ -29,17 +30,13 @@ public class PageContentStepDef {
   @Then("^page contains a post with text \"([^\"]*)\"$")
   public void pageContainsAPostWithText(String postContent) throws Throwable {
     try {
-      List<WebElement> posts = new WebDriverWait(webDriver, 2).until(
-          ExpectedConditions.presenceOfAllElementsLocatedBy(
-              By.xpath("//div[contains(@class, 'panel-post')]//div[contains(@class, 'media-body')]//p")
+      WebElement post = new WebDriverWait(webDriver, 10).until(
+          ExpectedConditions.presenceOfElementLocated(
+              By.xpath("//div[contains(@class, 'panel-post')]//div[contains(@class, 'media-body')]//p[text()='" + postContent + "']")
           )
       );
 
-      boolean postExists = posts.stream()
-          .map(WebElement::getText)
-          .anyMatch(s -> s.equals(postContent));
-
-      assertTrue(postExists);
+      assertNotNull(post);
     }
     catch (TimeoutException e) {
       fail();
@@ -57,6 +54,34 @@ public class PageContentStepDef {
     }
     catch (TimeoutException e) {
       fail();
+    }
+  }
+
+  @Then("^page contains a user panel with name \"([^\"]*)\"$")
+  public void pageContainsAUserPanelWithName(String userName) throws Throwable {
+    try {
+      WebElement div = new WebDriverWait(webDriver, 2).until(
+          ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'panel-user')][.//h3[contains(.,'" + userName + "')]]"))
+      );
+
+      assertNotNull(div);
+    }
+    catch (TimeoutException e) {
+      fail();
+    }
+  }
+
+  @Then("^page doesn't contain a user panel with name \"([^\"]*)\"$")
+  public void pageDoesnTContainAUserPanelWithName(String userName) throws Throwable {
+    try {
+      WebElement div = new WebDriverWait(webDriver, 2).until(
+          ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'panel-user')][.//h3[contains(.,'" + userName + "')]]"))
+      );
+
+      fail();
+    }
+    catch (TimeoutException e) {
+      // success
     }
   }
 }

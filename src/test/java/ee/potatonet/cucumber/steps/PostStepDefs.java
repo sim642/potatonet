@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
 import ee.potatonet.cucumber.config.CucumberTestState;
 import ee.potatonet.cucumber.config.SpringCucumberSteps;
 import ee.potatonet.data.model.Post;
@@ -29,7 +30,7 @@ public class PostStepDefs {
     postService.savePostToUser(new Post(null, postContent), user);
   }
 
-  @And("^my friend has a post with content \"([^\"]*)\"")
+  @Given("^my friend has a post with content \"([^\"]*)\"")
   public void myFriendHasAPostWithContentAndId(String postContent) throws Throwable {
     User friend = testState.getFriend();
     postService.savePostToUser(new Post(null, postContent), friend);
