@@ -98,5 +98,19 @@ public class PageContentStepDef {
       fail();
     }
   }
+
+  @Then("^page contains a div with class \"([^\"]*)\" which contains span with text \"([^\"]*)\"$")
+  public void pageContainsADivWithClassWhichContainsSpanWithText(String divClass, String spanText) throws Throwable {
+    try {
+      WebElement div = new WebDriverWait(webDriver, 2).until(
+          ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, '" + divClass + "')]//span[contains(.,'" + spanText + "')]"))
+      );
+
+      assertNotNull(div);
+    }
+    catch (TimeoutException e) {
+      fail();
+    }
+  }
 }
 

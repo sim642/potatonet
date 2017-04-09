@@ -49,6 +49,8 @@ public class UserStepDefs {
     User user = userService.findOneByEidEmail(email);
     if (user == null) {
       user = new User(new EIDDetails(new EIDCodeDetails(eidCode), email, "", email));
+    } else {
+      user.setEid(new EIDDetails(new EIDCodeDetails(eidCode), user.getEid().getGivenName(), user.getEid().getSurname(), user.getEid().getEmail()));
     }
 
     user.setPassword(passwordEncoder.encode(password));
@@ -93,6 +95,8 @@ public class UserStepDefs {
     userNameInput.sendKeys(username);
     passwordInput.sendKeys(password);
     submitButton.submit();
+
+    testState.setMyUser(userService.findOneByEidEmail(username));
   }
 
   @Given("^I am authenticated$")

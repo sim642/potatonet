@@ -1,5 +1,6 @@
 package ee.potatonet.cucumber.steps;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
@@ -73,5 +74,46 @@ public class UrlNavigationStepDefs {
   public void iNavigateToUsersView(String eidEmail) throws Throwable {
     Long id = userService.findOneByEidEmail(eidEmail).getId();
     userNavigatesToUrl("https://localhost:8443/users/" + id);
+  }
+
+  @When("^I change password to \"([^\"]*)\"$")
+  public void iChangePasswordTo(String newPassword) throws Throwable {
+    savePassword(newPassword, newPassword);
+  }
+
+  @When("^I miswrite password confirmation$")
+  public void iMiswritePasswordConfirmation() throws Throwable {
+    savePassword("asdadsdasdasd", "#dvfbvbmfgbewr");
+  }
+
+  private void savePassword(String pass, String confirm) {
+    assertThat(webDriver.getCurrentUrl(), containsString("/settings"));
+
+    WebElement passwordInput = webDriver.findElement(
+        By.xpath("//form//input[@id='password']")
+    );
+    WebElement passwordConfirmInput = webDriver.findElement(
+        By.xpath("//form//input[@id='passwordConfirm']")
+    );
+    WebElement saveButton = webDriver.findElements(
+        By.xpath("//form//button[@type='submit']")
+    ).get(0);
+
+    passwordInput.sendKeys(pass);
+    passwordConfirmInput.sendKeys(confirm);
+    saveButton.submit();
+  }
+
+  @When("^I switch language to \"([^\"]*)\"$")
+  public void iSwitchLanguageTo(String languageName) throws Throwable {
+    WebElement languageInput = webDriver.findElement(
+        By.xpath("//form//input[@id='" + languageName + "']")
+    );
+    WebElement saveButton = webDriver.findElements(
+        By.xpath("//form//button[@type='submit']")
+    ).get(1);
+
+    languageInput.click();
+    saveButton.submit();
   }
 }

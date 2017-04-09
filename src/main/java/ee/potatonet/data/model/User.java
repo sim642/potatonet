@@ -89,6 +89,10 @@ public class User extends TransientAuthoritiesUser {
     return eid;
   }
 
+  public void setEid(EIDDetails eid) {
+    this.eid = eid;
+  }
+
   public String getFullName() {
     return eid.getFullName();
   }
