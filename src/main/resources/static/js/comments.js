@@ -48,6 +48,7 @@ $(function () {
         })
         .done(function () {
           $content.val("");
+          $form.find(".btn-comment").attr("disabled", true);
         });
 
     return false;
