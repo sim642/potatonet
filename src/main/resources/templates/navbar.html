@@ -73,6 +73,12 @@
                                 <span th:text="#{settings.title}">Settings</span>
                             </a>
                         </li>
+                        <li th:classappend="(*{active} == 'sitemap')? 'active' : _">
+                            <a th:href="@{/sitemap}">
+                                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                                <span th:text="#{sitemap.title}">Sitemap</span>
+                            </a>
+                        </li>
                         <li>
                             <a th:href="@{/logout}">
                                 <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
