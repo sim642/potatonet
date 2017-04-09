@@ -4,7 +4,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cucumber.api.java.en.Then;
@@ -41,5 +46,15 @@ public class UrlNavigationStepDefs {
   public void iNavigateToMyFriendUserView() throws Throwable {
     Long id = testState.getFriend().getId();
     userNavigatesToUrl("https://localhost:8443/users/" + id);
+  }
+
+  @When("^I click on user panel button with class \"([^\"]*)\" for user \"([^\"]*)\"$")
+  public void iClickOnUserPanelButtonWithClassForUser(String btnClass, String userName) throws Throwable {
+    WebElement button = new WebDriverWait(webDriver, 2).until(
+        ExpectedConditions.elementToBeClickable(
+            By.xpath("//div[contains(@class, 'panel-user')][.//h3[contains(.,'" + userName + "')]]//button[contains(@class, '" + btnClass + "')]")
+        )
+    );
+    button.click();
   }
 }

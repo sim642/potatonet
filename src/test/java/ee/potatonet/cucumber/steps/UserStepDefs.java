@@ -1,6 +1,7 @@
 package ee.potatonet.cucumber.steps;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import org.openqa.selenium.By;
@@ -94,5 +95,14 @@ public class UserStepDefs {
     User user = userService.findOneByEidEmail(email);
 
     userService.addFriendRequest(user, me);
+  }
+
+  @Given("^I am not friends with user \"([^\"]*)\"$")
+  public void iAmNotFriendsWithUser(String email) throws Throwable {
+    User me = testState.getMyUser();
+    User notFriend = userService.findOneByEidEmail(email);
+
+    userService.removeFriends(me, notFriend);
+    userService.removeFriendRequests(me, notFriend);
   }
 }
