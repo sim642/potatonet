@@ -12,16 +12,21 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import ee.potatonet.cucumber.config.CucumberTestState;
 import ee.potatonet.cucumber.config.SpringCucumberSteps;
+import ee.potatonet.data.service.UserService;
 
 @SpringCucumberSteps
 public class UrlNavigationStepDefs {
 
   @Autowired
   private WebDriver webDriver;
+
+  @Autowired
+  private UserService userService;
 
   @Autowired
   private CucumberTestState testState;
@@ -62,5 +67,11 @@ public class UrlNavigationStepDefs {
   public void iNavigateToMyFriendsView() throws Throwable {
     Long id = testState.getMyUser().getId();
     userNavigatesToUrl("https://localhost:8443/users/" + id + "/friends");
+  }
+
+  @When("^I navigate to users \"([^\"]*)\" view$")
+  public void iNavigateToUsersView(String eidEmail) throws Throwable {
+    Long id = userService.findOneByEidEmail(eidEmail).getId();
+    userNavigatesToUrl("https://localhost:8443/users/" + id);
   }
 }

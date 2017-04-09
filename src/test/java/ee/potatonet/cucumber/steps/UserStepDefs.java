@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import ee.potatonet.TestUtils;
 import ee.potatonet.auth.eid.EIDCodeDetails;
 import ee.potatonet.auth.eid.EIDDetails;
@@ -42,13 +42,13 @@ public class UserStepDefs {
     testState.setFriend(friend);
   }
 
-  @Given("^exists user with email \"([^\"]*)\" and pass \"([^\"]*)\"$")
-  public void existsUserWithEmailAndPass(String email, String password) throws Throwable {
+  @Given("^exists user with email \"([^\"]*)\" and pass \"([^\"]*)\" and eid_code \"([^\"]*)\"$")
+  public void existsUserWithEmailAndPassAndEidCode(String email, String password, String eidCode) throws Throwable {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     User user = userService.findOneByEidEmail(email);
     if (user == null) {
-      user = new User(new EIDDetails(new EIDCodeDetails("30101010000"), email, "", email));
+      user = new User(new EIDDetails(new EIDCodeDetails(eidCode), email, "", email));
     }
 
     user.setPassword(passwordEncoder.encode(password));
@@ -56,9 +56,19 @@ public class UserStepDefs {
     userService.save(user);
   }
 
+  @Given("^exists user with email \"([^\"]*)\" and pass \"([^\"]*)\"$")
+  public void existsUserWithEmailAndPass(String email, String password) throws Throwable {
+    existsUserWithEmailAndPassAndEidCode(email, password, "30101010000");
+  }
+
   @Given("^exists user with email \"([^\"]*)\"$")
   public void existsUserWithEmail(String email) throws Throwable {
-    existsUserWithEmailAndPass(email, "password168");
+    existsUserWithEmailAndPassAndEidCode(email, "password168", "30101010000");
+  }
+
+  @Given("^exists user with email \"([^\"]*)\" and eid_code \"([^\"]*)\"$")
+  public void existsUserWithEmailAndEid_code(String email, String eidCode) throws Throwable {
+    existsUserWithEmailAndPassAndEidCode(email, "password168", eidCode);
   }
 
   @Given("^I am anonymous$")

@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;
 import ee.potatonet.cucumber.config.CucumberTestState;
 import ee.potatonet.cucumber.config.SpringCucumberSteps;
@@ -81,6 +82,20 @@ public class PageContentStepDef {
     }
     catch (TimeoutException e) {
       // success
+    }
+  }
+
+  @Then("^page contains a div with class \"([^\"]*)\" which contains paragraph with id \"([^\"]*)\" and text \"([^\"]*)\"$")
+  public void pageContainsADivWithClassWhichContainsParagraphWithIdAndText(String divClass, String paragraphId, String paragraphText) throws Throwable {
+    try {
+      WebElement div = new WebDriverWait(webDriver, 2).until(
+          ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, '" + divClass + "')]//p[@id='" + paragraphId + "' and contains(.,'" + paragraphText + "')]"))
+      );
+
+      assertNotNull(div);
+    }
+    catch (TimeoutException e) {
+      fail();
     }
   }
 }
