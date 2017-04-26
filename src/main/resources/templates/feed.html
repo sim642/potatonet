@@ -70,18 +70,11 @@
 </div>
 
 <th:block layout:fragment="fallback">
-    <script th:src="@{/js/fallback-websocket.js}"></script>
     <script>
 	  fallback.load({
-        likejs: [
-          '/js/like.js'
-        ],
-		feedjs: [
+	    feedjs: [
 		  '/js/feed.js'
 		],
-        commentsjs: [
-          '/js/comments.js'
-        ],
 		modaljs: [
 		  '/js/modal.js'
 		],
@@ -90,10 +83,8 @@
 		]
 	  }, {
 		shim: {
-		  'feedjs': ['Stomp', 'SockJS'],
-		  'modaljs': ['jQuery', 'jQuery.fn.modal', 'google.maps.Map'],
-		  'likejs': ['jQuery', 'jQuery.fn.modal' ],
-          'commentsjs': ['jQuery', 'Stomp', 'SockJS']
+		  'feedjs': ['masterjs'],
+		  'modaljs': ['jQuery', 'jQuery.fn.modal', 'google.maps.Map']
 		}
 	  });
     </script>

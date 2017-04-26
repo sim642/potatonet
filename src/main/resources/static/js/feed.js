@@ -1,5 +1,3 @@
-var stomp = null;
-
 function onFeed(msg) {
   var postId = msg.body;
   $.get("/posts/" + postId, function (data) {
@@ -60,9 +58,7 @@ function trySendStoredPost(callback) {
 }
 
 $(function () {
-  var sockJs = new SockJS('/stomp');
-  stomp = Stomp.over(sockJs);
-  stomp.connect({}, function () {
+  stompConnect(function () {
 	$.each(userIds, function (i, userId) {
 	  stomp.subscribe('/topic/posts/' + userId, onFeed);
 	});
