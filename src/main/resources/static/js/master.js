@@ -217,6 +217,56 @@ function setupComments() {
   });
 }
 
+function setupFeed() {
+  var $feed = $("#feed");
+  if (!$feed.exists())
+    return;
+
+  var feedUserIds = $feed.attr("data-feed-user-ids").split(",");
+
+  function onFeed(msg) {
+    var postId = msg.body;
+    $.get("/posts/" + postId, function (data) {
+      var $post = $(data);
+      $feed.prepend($post);
+      subscribeComments($post);
+    });
+  }
+
+  stompConnect(function () {
+    $.each(feedUserIds, function (i, userId) {
+      stomp.subscribe('/topic/posts/' + userId, onFeed);
+    });
+  });
+
+  var canLoad = true;
+  var $window = $(window);
+  var $loader = $("#loader");
+
+  $window.scroll(function () {
+    if (canLoad && ($(document).height() - $window.height() - $window.scrollTop() < 100)) {
+      canLoad = false;
+
+      var lastPostId = $feed.find(".panel-post").last().attr("data-post-id");
+      $loader.show();
+
+      $.get("/posts", {
+        beforePostId: lastPostId
+      }, function (data) {
+        var $data = $(data);
+        $loader.hide();
+        $("#feed").append($data);
+        canLoad = $data.length > 0;
+      });
+    }
+  });
+}
+
+// http://stackoverflow.com/a/31047
+jQuery.fn.exists = function () {
+  return this.length > 0;
+};
+
 $.fn.inputButton = function ($btn) {
   var $input = this;
   var $form = $btn.closest("form");
@@ -246,4 +296,5 @@ $(function () {
   setupHash();
   setupWebsocket();
   setupComments();
+  setupFeed();
 });

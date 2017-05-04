@@ -154,6 +154,25 @@
     </div>
 </div>
 
+<div th:fragment="feed(posts, feedUserIds)">
+    <div id="feed" th:data-feed-user-ids="${#strings.listJoin(feedUserIds, ',')}">
+        <th:block th:each="post : ${posts}">
+            <div th:replace="~{common :: postPanel (${post})}"></div>
+        </th:block>
+    </div>
+
+    <div class="row">
+        <div id="loader">
+            <div class="loader-posts center-block"></div>
+        </div>
+
+        <noscript>
+            <div class="col-md-12 text-center">
+                <a class="btn btn-primary" th:href="@{/(beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button" th:text="#{feed.more}">Show older posts</a>
+            </div>
+        </noscript>
+    </div>
+</div>
 
 
 </body>

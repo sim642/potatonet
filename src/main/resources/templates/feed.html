@@ -7,7 +7,6 @@
 
 <div layout:fragment="content">
     <script th:inline="javascript">
-        var userIds = [[${userIds}]];
         var key = [[${app.googleApiKey}]];
     </script>
 
@@ -36,23 +35,7 @@
         <span id="stored-count">0</span>
     </div>
 
-    <div id="feed">
-        <th:block th:each="post : ${posts}">
-            <div th:replace="~{common :: postPanel (${post})}"></div>
-        </th:block>
-    </div>
-
-    <div class="row">
-        <div id="loader">
-            <div class="loader-posts center-block"></div>
-        </div>
-
-        <noscript>
-            <div class="col-md-12 text-center">
-                <a class="btn btn-primary" th:href="@{/(beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button" th:text="#{feed.more}">Show older posts</a>
-            </div>
-        </noscript>
-    </div>
+    <div th:replace="~{common :: feed(${posts}, ${userIds})}"></div>
 
     <div class="modal fade" id="mapModal">
         <div class="modal-dialog" role="document">
