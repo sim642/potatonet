@@ -160,18 +160,7 @@ function setupComments() {
     var $btnComment = $formComment.find(".btn-comment");
     var $textarea = $formComment.find("textarea");
 
-    $textarea.keypress(function (event) {
-      if (event.keyCode == 13 && !event.shiftKey) {
-        $formComment.submit();
-        event.preventDefault();
-        return false;
-      }
-    });
-
-    $btnComment.attr("disabled", true);
-    $textarea.keyup(function (event) {
-      $btnComment.attr("disabled", $(this).val().trim().length == 0);
-    });
+    $textarea.inputButton($btnComment);
 
     var postId = $post.attr("data-post-id");
     stomp.subscribe('/topic/comments/' + postId, function (msg) {
@@ -193,7 +182,7 @@ function setupComments() {
     var $post = $form.closest(".panel-post");
     var postId = $post.attr("data-post-id");
     var $content = $form.find("textarea");
-    if ($content.val().trim().length != 0) {
+    if ($content.val().trim().length !== 0) {
       $.post("/posts/" + postId + "/comments", $form.serialize())
           .fail(function (jqXHR) {
             // http://stackoverflow.com/a/28404728
@@ -227,6 +216,26 @@ function setupComments() {
     $form.removeClass("hidden").hide().slideDown();
   });
 }
+
+$.fn.inputButton = function ($btn) {
+  var $input = this;
+  var $form = $btn.closest("form");
+
+  $input.keypress(function (event) {
+    if (event.keyCode === 13 && !event.shiftKey) {
+      $form.submit();
+      event.preventDefault();
+      return false;
+    }
+  });
+
+  $btn.attr("disabled", true);
+  $input.keyup(function (event) {
+    $btn.attr("disabled", $(this).val().trim().length === 0);
+  });
+
+  return this;
+};
 
 $(function () {
   setupCsrf();
