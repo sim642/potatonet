@@ -289,6 +289,10 @@ $.fn.inputButton = function ($btn) {
   return this;
 };
 
+function setupPopover() {
+  $('[data-toggle="popover"]').popover();
+}
+
 $(function () {
   setupCsrf();
   setupCurrentUser();
@@ -299,4 +303,5 @@ $(function () {
   setupWebsocket();
   setupComments();
   setupFeed();
+  setupPopover();
 });
