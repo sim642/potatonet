@@ -116,6 +116,25 @@ function setupHash() {
 }
 
 function setupLikeButtons() {
+  window.subscribeLikes = function subscribeLikes($post) {
+    var postId = $post.attr("data-post-id");
+    stomp.subscribe('/topic/likes/' + postId, function (msg) {
+      // find here because the like button gets replaced
+      var $btn = $post.find(".like-btn");
+      var $label = $btn.find(".label");
+
+      var likeCount = msg.body;
+      $label.text(likeCount);
+    });
+  };
+
+  stompConnect(function () {
+    $(".panel-post").each(function () {
+      subscribeLikes($(this));
+    });
+  });
+
+
   $(document).on("submit", ".like", function (event) {
     var panelpost = $(event.target).closest(".panel-post");
     var post_id = panelpost.attr("data-post-id");
@@ -232,6 +251,7 @@ function setupFeed() {
       var $post = $(data);
       $feed.prepend($post);
       subscribeComments($post);
+      subscribeLikes($post);
     });
   }
 
@@ -297,10 +317,10 @@ $(function () {
   setupCsrf();
   setupCurrentUser();
   setupFriendButtons();
-  setupLikeButtons();
   setupBanklinks();
   setupHash();
   setupWebsocket();
+  setupLikeButtons();
   setupComments();
   setupFeed();
   setupPopover();
