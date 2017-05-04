@@ -8,8 +8,6 @@
 <div layout:fragment="content">
     <script th:inline="javascript">
         var key = [[${app.googleApiKey}]];
-        var userId = [[${user.id}]];
-        var userIds = [[${userIds}]];
     </script>
     <div class="panel panel-default panel-user-details">
         <div class="panel-body">
@@ -51,24 +49,7 @@
         </div>
     </div>
 
-
-    <div id="posts">
-        <th:block th:each="post : ${posts}">
-            <div th:replace="~{common :: postPanel (${post})}"></div>
-        </th:block>
-    </div>
-
-    <div class="row">
-        <div id="loader">
-            <div class="loader-posts center-block"></div>
-        </div>
-
-        <noscript>
-            <div class="col-md-12 text-center">
-                <a class="btn btn-primary" th:href="@{/users/{userId}(userId=${user.id},beforePostId=${posts[posts.size()-1].id})}" th:unless="${posts.isEmpty()}" role="button" th:text="#{user.more}">Show older posts</a>
-            </div>
-        </noscript>
-    </div>
+    <div th:replace="~{common :: feed(${posts}, ${userIds})}"></div>
 
     <!-- TODO: This modal div element could be made into reusable element -->
     <div class="modal fade" id="mapModal">
@@ -89,9 +70,6 @@
 <th:block layout:fragment="fallback">
     <script>
 	  fallback.load({
-	    userjs: [
-		  '/js/user.js'
-		],
 		modaljs: [
 		  '/js/modal.js'
 		],
@@ -100,7 +78,6 @@
 		]
 	  }, {
 		shim: {
-		  'userjs': ['masterjs'],
 		  'modaljs': ['jQuery', 'jQuery.fn.modal', 'google.maps.Map']
 		}
 	  });

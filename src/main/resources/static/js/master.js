@@ -1,5 +1,7 @@
 var masterjs = true; // hax
 
+window.location.pathbase = window.location.pathname !== "/" ? window.location.pathname : "";
+
 var csrfToken = null;
 var csrfHeader = null;
 var currentUserId = null;
@@ -250,12 +252,12 @@ function setupFeed() {
       var lastPostId = $feed.find(".panel-post").last().attr("data-post-id");
       $loader.show();
 
-      $.get("/posts", {
+      $.get(window.location.pathbase + "/posts", {
         beforePostId: lastPostId
       }, function (data) {
         var $data = $(data);
         $loader.hide();
-        $("#feed").append($data);
+        $feed.append($data);
         canLoad = $data.length > 0;
       });
     }
