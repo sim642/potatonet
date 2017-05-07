@@ -1,14 +1,3 @@
-var stomp = null;
-
-function onFeed(msg) {
-  var postId = msg.body;
-  $.get("/posts/" + postId, function (data) {
-    var $post = $(data);
-    $("#feed").prepend($post);
-    subscribeComments($post);
-  });
-}
-
 function showStoredPostAlert() {
   var userStorage = JSON.parse(localStorage.getItem(currentUserId)) || {};
   var posts = (userStorage.posts || []);
@@ -60,13 +49,7 @@ function trySendStoredPost(callback) {
 }
 
 $(function () {
-  var sockJs = new SockJS('/stomp');
-  stomp = Stomp.over(sockJs);
-  stomp.connect({}, function () {
-	$.each(userIds, function (i, userId) {
-	  stomp.subscribe('/topic/posts/' + userId, onFeed);
-	});
-
+  stompConnect(function () {
     trySendStoredPost();
 
 	var sendPost = function() {
@@ -117,45 +100,8 @@ $(function () {
 	  return false;
 	});
   });
-
-  var canLoad = true;
-  var $window = $(window);
-  var $loader = $("#loader");
-
-  $window.scroll(function () {
-	if (canLoad && ($(document).height() - $window.height() - $window.scrollTop() < 100)) {
-	  canLoad = false;
-
-	  var lastPostId = $("#feed .panel-post").last().attr("data-post-id");
-	  $loader.show();
-
-	  $.get("/posts", {
-		beforePostId: lastPostId
-	  }, function (data) {
-		var $data = $(data);
-		$loader.hide();
-		$("#feed").append($data);
-		canLoad = $data.length > 0;
-	  });
-	}
-  });
 });
 
 $(document).ready(function(){
-    $('#postButton').attr('disabled', true);
-
-    $('#content').keypress(function (event) {
-      if (event.keyCode == 13 && !event.shiftKey) {
-        $('#post').submit();
-        event.preventDefault();
-        return false;
-      }
-    });
-
-    $('#content').keyup(function(){
-        if($(this).val().trim().length !=0)
-            $('#postButton').attr('disabled', false);
-        else
-            $('#postButton').attr('disabled', true);
-    });
+  $('#content').inputButton($('#postButton'));
 });

@@ -99,5 +99,7 @@ public class PostService {
 
   public void toggleLike(User user, Long postId) {
     postRepository.toggleLike(postId, user.getId());
+
+    simpMessagingTemplate.convertAndSend("/topic/likes/" + postId, findById(postId).getLikeCount());
   }
 }

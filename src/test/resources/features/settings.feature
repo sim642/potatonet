@@ -6,19 +6,19 @@ Feature: Change password and language settings
     When I navigate to url "https://localhost:8443/login"
     When I log in with email "settings_test@eesti.ee" and pass "password_old"
 
-  Scenario: Original password stops working after password change
-    When I navigate to url "https://localhost:8443/settings"
-    When I change password to "password_new"
-    When I navigate to url "https://localhost:8443/logout"
-    When I log in with email "settings_test@eesti.ee" and pass "password_old"
-    Then I am redirected to "https://localhost:8443/login?error"
-
   Scenario: New password works after password change
     When I navigate to url "https://localhost:8443/settings"
     When I change password to "password_new"
     When I navigate to url "https://localhost:8443/logout"
     When I log in with email "settings_test@eesti.ee" and pass "password_new"
     Then I am redirected to "https://localhost:8443/"
+
+  Scenario: Original password stops working after password change
+    When I navigate to url "https://localhost:8443/settings"
+    When I change password to "password_new"
+    When I navigate to url "https://localhost:8443/logout"
+    When I log in with email "settings_test@eesti.ee" and pass "password_old"
+    Then I am redirected to "https://localhost:8443/login?error"
 
   Scenario: Password change fails when passwords aren't identical
     When I navigate to url "https://localhost:8443/settings"

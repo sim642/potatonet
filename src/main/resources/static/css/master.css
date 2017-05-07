@@ -132,8 +132,10 @@ legend {
     width: 100%;
 }
 
-.sitemap-other {
-    padding-top: 56.4px;
+@media (min-width: 768px) {
+    .sitemap-other {
+        padding-top: 56.4px;
+    }
 }
 
 .sitemap ul {
