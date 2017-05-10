@@ -72,7 +72,7 @@ public class Post {
   }
 
   public Float getLongitude() {
-    return coordinates.getLongitude();
+    return coordinates != null ? coordinates.getLongitude() : null;
   }
 
   public void setLongitude(Float longitude) {
@@ -80,7 +80,7 @@ public class Post {
   }
 
   public Float getLatitude() {
-    return coordinates.getLatitude();
+    return coordinates != null ? coordinates.getLatitude() : null;
   }
 
   public void setLatitude(Float latitude) {

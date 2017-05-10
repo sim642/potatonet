@@ -4,7 +4,7 @@ $('#mapModal').on('show.bs.modal', function (event) {
   var post = $(event.relatedTarget);
   var latitude = post.data('latitude');
   var longitude = post.data('longitude');
-  if (typeof latitude !== 'undefined' && latitude != -91 && longitude != -181) {
+  if (typeof latitude !== 'undefined' && latitude != -91 && longitude != -181) { // TODO remove magic constants
 	initMap(longitude, latitude);
   } else {
     $('#map').text("No location information available for this post!");
