@@ -28,6 +28,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label th:text="#{user.age}" class="control-label col-md-2">Age</label>
+                            <div class="col-md-10">
+                                <p class="form-control-static" id="age" th:text="${user.eid.eidCode.age}"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label th:text="#{user.birthday}" class="control-label col-md-2">Birthday</label>
                             <div class="col-md-10">
                                 <p class="form-control-static" id="birthday" th:text="${user.eid.eidCode.birthDate}"></p>

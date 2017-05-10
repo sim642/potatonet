@@ -4,10 +4,16 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.Objects;
+import java.util.TimeZone;
 
 @Embeddable
 public class EIDCodeDetails {
+
+  private static final ZoneId ESTONIA_ZONEID = TimeZone.getTimeZone("Europe/Tallinn").toZoneId();
+
   public enum Gender {
     MALE,
     FEMALE
@@ -48,6 +54,10 @@ public class EIDCodeDetails {
 
   public LocalDate getBirthDate() {
     return birthDate;
+  }
+
+  public int getAge() {
+    return Period.between(birthDate, LocalDate.now(ESTONIA_ZONEID)).getYears();
   }
 
   @Override
