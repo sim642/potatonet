@@ -77,6 +77,10 @@ a.name-link:link, a.name-link:visited, a.name-link:hover, a.name-link:active {
     margin-top: -0.7em;
 }
 
+.btn-modal-map:not([data-latitude]):not([data-longitude]) .glyphicon {
+    display: none;
+}
+
 legend {
     /* copied from Bootstrap's label */
     display: inline-block;
