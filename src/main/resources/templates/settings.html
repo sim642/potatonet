@@ -7,6 +7,25 @@
 <body>
 
 <div layout:fragment="content">
+    <div id="panel-avatar" class="panel panel-default">
+        <div class="panel-heading" th:text="#{settings.heading.avatar}">
+            Avatar settings
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" th:text="#{settings.label.avatar}"></label>
+                    <div class="col-sm-10">
+                        <img alt="User avatar image" src="http://placehold.it/64x64" th:src="${@avatarService.getAvatarUrl(currentUser, 64)}" class="img-rounded">
+                        <span th:utext="#{settings.html.avatar(${currentUser.eid.email})}">
+                            Avatar can be added and modified through <a href="http://en.gravatar.com/">Gravatar</a> for the email <strong th:text="${currentUser.eid.email}"></strong>.
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="panel-password" class="panel panel-default">
         <div class="panel-heading" th:text="#{settings.heading.password}">
             Password settings
