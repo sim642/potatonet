@@ -145,3 +145,7 @@ legend {
 .sitemap ul {
     padding-left: 20px;
 }
+
+.badge-link {
+    background-color: #337ab7;
+}

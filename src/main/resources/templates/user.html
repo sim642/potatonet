@@ -45,6 +45,7 @@
                                     <a class="btn btn-link" th:href="@{/users/{userId}/friends(userId=${user.id})}" role="button">
                                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                         <span th:text="#{friends.friends}">Friends</span>
+                                        <span class="badge badge-link" th:text="${user.friends.size()}"></span>
                                     </a>
                                 </p>
                             </div>
