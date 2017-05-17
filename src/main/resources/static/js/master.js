@@ -165,6 +165,13 @@ function stompConnect(callback) {
         $.each(stompConnects, function (i, callback) {
           callback();
         });
+      }, function (err) {
+        if ($.type(err) === "string") {
+          if (err.toLowerCase().indexOf("lost connection") >= 0) {
+            // security session end
+            alert("Session timeout");
+          }
+        }
       });
     }
   }
