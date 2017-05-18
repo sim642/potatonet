@@ -1,11 +1,9 @@
 package ee.potatonet.configuration;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyStore;
@@ -14,15 +12,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
-import org.bouncycastle.openssl.PEMReader;
-import org.bouncycastle.openssl.PasswordFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -32,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
 
 import ee.potatonet.AppProperties;
+import ee.potatonet.security.OpenSslUtils;
 
 @Configuration
 public class ConnectorConfiguration {
@@ -80,22 +76,8 @@ public class ConnectorConfiguration {
     try {
       char[] rawPassword = password.toCharArray();
 
-      PasswordFinder passwordFinder = () -> rawPassword;
-
-      PrivateKey privateKey;
-      try (InputStream is = ResourceUtils.getURL(appProperties.getOpensslCertificateKey()).openStream();
-           PEMReader pemReader = new PEMReader(new InputStreamReader(is, StandardCharsets.UTF_8), passwordFinder)) {
-        privateKey = (PrivateKey) pemReader.readObject();
-      }
-
-      List<Certificate> certificates = new ArrayList<>();
-      try (InputStream is = ResourceUtils.getURL(appProperties.getOpensslCertificateFullChain()).openStream();
-           PEMReader pemReader = new PEMReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-        Object object;
-        while ((object = pemReader.readObject()) != null) {
-          certificates.add((Certificate) object);
-        }
-      }
+      PrivateKey privateKey = OpenSslUtils.readPrivateKey(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateKey()).openStream()), rawPassword);
+      List<Certificate> certificates = OpenSslUtils.readCertificates(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateFullChain()).openStream()));
 
       try {
         KeyStore keyStore = KeyStore.getInstance("jks");
