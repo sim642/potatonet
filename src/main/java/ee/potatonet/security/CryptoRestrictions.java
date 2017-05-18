@@ -1,25 +1,16 @@
-package ee.potatonet.configuration;
+package ee.potatonet.security;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.security.Security;
 import java.util.Map;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class SecurityConfiguration {
+// http://stackoverflow.com/a/22492582
+public class CryptoRestrictions {
 
-  static {
-    Security.addProvider(new BouncyCastleProvider());
-    removeCryptographyRestrictions();
-  }
-
-  // http://stackoverflow.com/a/22492582
-  private static void removeCryptographyRestrictions() {
-    if (!isRestrictedCryptography()) {
+  public static void removeRestrictions() {
+    if (!isRestricted()) {
 //      logger.fine("Cryptography restrictions removal not needed");
       return;
     }
@@ -60,7 +51,7 @@ public class SecurityConfiguration {
     }
   }
 
-  private static boolean isRestrictedCryptography() {
+  public static boolean isRestricted() {
     // This simply matches the Oracle JRE, but not OpenJDK.
     return "Java(TM) SE Runtime Environment".equals(System.getProperty("java.runtime.name"));
   }
