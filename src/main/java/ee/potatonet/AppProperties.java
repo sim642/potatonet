@@ -12,6 +12,10 @@ public class AppProperties {
   private String domainPort;
   private String domainEid;
 
+  private String opensslCertificateFullChain;
+  private String opensslCertificateKey;
+  private String opensslCertificateKeyPassword;
+
   private String trustStore;
   private String trustStorePassword;
 
@@ -47,6 +51,30 @@ public class AppProperties {
 
   public void setDomainEid(String domainEid) {
     this.domainEid = domainEid;
+  }
+
+  public String getOpensslCertificateFullChain() {
+    return opensslCertificateFullChain;
+  }
+
+  public void setOpensslCertificateFullChain(String opensslCertificateFullChain) {
+    this.opensslCertificateFullChain = opensslCertificateFullChain;
+  }
+
+  public String getOpensslCertificateKey() {
+    return opensslCertificateKey;
+  }
+
+  public void setOpensslCertificateKey(String opensslCertificateKey) {
+    this.opensslCertificateKey = opensslCertificateKey;
+  }
+
+  public String getOpensslCertificateKeyPassword() {
+    return opensslCertificateKeyPassword;
+  }
+
+  public void setOpensslCertificateKeyPassword(String opensslCertificateKeyPassword) {
+    this.opensslCertificateKeyPassword = opensslCertificateKeyPassword;
   }
 
   public String getTrustStore() {
