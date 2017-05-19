@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
-import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
@@ -23,17 +21,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.util.ResourceUtils;
 
 import ee.potatonet.AppProperties;
 import ee.potatonet.security.KeyStoreUtils;
 import ee.potatonet.security.OpenSslUtils;
+import ee.potatonet.security.SslKeyStore;
 
 @Configuration
 public class ConnectorConfiguration {
 
   private final AppProperties appProperties;
   private final ServerProperties serverProperties;
+
+  @Autowired
+  public SslKeyStore sslKeyStore;
 
   @Autowired
   public ConnectorConfiguration(AppProperties appProperties, ServerProperties serverProperties) {
@@ -72,30 +73,12 @@ public class ConnectorConfiguration {
     connector.setSecure(true);
     connector.setParseBodyMethods("POST,PUT,DELETE");
 
-    String password = appProperties.getOpensslCertificateKeyPassword();
-    Path keyStorePath;
-    try {
-      char[] rawPassword = password.toCharArray();
-
-      PrivateKey privateKey = OpenSslUtils.readPrivateKey(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateKey()).openStream()), rawPassword);
-      List<Certificate> certificates = OpenSslUtils.readCertificates(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateFullChain()).openStream()));
-
-      keyStorePath = KeyStoreUtils.newTemporaryKeyStore(rawPassword, privateKey, certificates);
-    }
-    catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
-
-
     Http11NioProtocol protocol = connector.getProtocolHandler();
     protocol.setSSLEnabled(true);
-    /*Ssl ssl = serverProperties.getSsl();
-    protocol.setKeystoreFile(ssl.getKeyStore());
-    protocol.setKeystorePass(ssl.getKeyStorePassword());
-    protocol.setKeyPass(ssl.getKeyPassword());*/
-    protocol.setKeystoreFile("file:" + keyStorePath);
-    protocol.setKeystorePass(password);
-    protocol.setKeyPass(password);
+    protocol.setKeystoreFile(sslKeyStore.getKeyStoreFile());
+    protocol.setKeystorePass(sslKeyStore.getKeyStorePassword());
+    protocol.setKeyAlias(sslKeyStore.getKeyAlias());
+    protocol.setKeyPass(sslKeyStore.getKeyPassword());
 
     return connector;
   }
