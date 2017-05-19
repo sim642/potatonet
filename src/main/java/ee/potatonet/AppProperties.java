@@ -16,6 +16,8 @@ public class AppProperties {
   private String opensslCertificateKey;
   private String opensslCertificateKeyPassword;
 
+  private String eidRootCertificatePattern;
+
   private String trustStore;
   private String trustStorePassword;
 
@@ -75,6 +77,14 @@ public class AppProperties {
 
   public void setOpensslCertificateKeyPassword(String opensslCertificateKeyPassword) {
     this.opensslCertificateKeyPassword = opensslCertificateKeyPassword;
+  }
+
+  public String getEidRootCertificatePattern() {
+    return eidRootCertificatePattern;
+  }
+
+  public void setEidRootCertificatePattern(String eidRootCertificatePattern) {
+    this.eidRootCertificatePattern = eidRootCertificatePattern;
   }
 
   public String getTrustStore() {

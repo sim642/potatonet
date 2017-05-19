@@ -6,9 +6,12 @@ import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
@@ -18,6 +21,8 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.util.ResourceUtils;
 
 import ee.potatonet.AppProperties;
@@ -75,7 +80,7 @@ public class ConnectorConfiguration {
       PrivateKey privateKey = OpenSslUtils.readPrivateKey(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateKey()).openStream()), rawPassword);
       List<Certificate> certificates = OpenSslUtils.readCertificates(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateFullChain()).openStream()));
 
-      keyStorePath = KeyStoreUtils.newTemporaryPrivateKeyStore(rawPassword, privateKey, certificates);
+      keyStorePath = KeyStoreUtils.newTemporaryKeyStore(rawPassword, privateKey, certificates);
     }
     catch (IOException e) {
       throw new UncheckedIOException(e);
@@ -106,9 +111,30 @@ public class ConnectorConfiguration {
     Http11NioConnector connector = httpsBaseConnector();
     connector.setPort(8446);
 
+    String password = "123456";
+    Path trustStorePath;
+    try {
+      PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+      Resource[] resources = resourceResolver.getResources(appProperties.getEidRootCertificatePattern());
+
+      Map<String, Certificate> namedCertificates = new HashMap<>();
+      for (Resource resource : resources) {
+        String name = FilenameUtils.removeExtension(resource.getFilename());
+        Certificate certificate = OpenSslUtils.readCertificate(new InputStreamReader(resource.getInputStream()));
+        namedCertificates.put(name, certificate);
+      }
+
+      trustStorePath = KeyStoreUtils.newTemporaryTrustStore(password.toCharArray(), namedCertificates);
+    }
+    catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+
     Http11NioProtocol protocol = connector.getProtocolHandler();
-    protocol.setTruststoreFile(appProperties.getTrustStore());
-    protocol.setTruststorePass(appProperties.getTrustStorePassword());
+    /*protocol.setTruststoreFile(appProperties.getTrustStore());
+    protocol.setTruststorePass(appProperties.getTrustStorePassword());*/
+    protocol.setTruststoreFile("file:" + trustStorePath);
+    protocol.setTruststorePass(password);
     protocol.setClientAuth("true");
 
     return connector;
