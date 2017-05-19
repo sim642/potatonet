@@ -18,9 +18,6 @@ public class AppProperties {
 
   private String eidRootCertificatePattern;
 
-  private String trustStore;
-  private String trustStorePassword;
-
   private String googleApiKey;
 
   public boolean getShowErrors() {
@@ -85,22 +82,6 @@ public class AppProperties {
 
   public void setEidRootCertificatePattern(String eidRootCertificatePattern) {
     this.eidRootCertificatePattern = eidRootCertificatePattern;
-  }
-
-  public String getTrustStore() {
-    return trustStore;
-  }
-
-  public void setTrustStore(String trustStore) {
-    this.trustStore = trustStore;
-  }
-
-  public String getTrustStorePassword() {
-    return trustStorePassword;
-  }
-
-  public void setTrustStorePassword(String trustStorePassword) {
-    this.trustStorePassword = trustStorePassword;
   }
 
   public String getGoogleApiKey() {
