@@ -2,16 +2,10 @@ package ee.potatonet.configuration;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
+import java.nio.file.Path;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
 import java.util.List;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
@@ -27,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
 
 import ee.potatonet.AppProperties;
+import ee.potatonet.security.KeyStoreUtils;
 import ee.potatonet.security.OpenSslUtils;
 
 @Configuration
@@ -73,26 +68,14 @@ public class ConnectorConfiguration {
     connector.setParseBodyMethods("POST,PUT,DELETE");
 
     String password = appProperties.getOpensslCertificateKeyPassword();
+    Path keyStorePath;
     try {
       char[] rawPassword = password.toCharArray();
 
       PrivateKey privateKey = OpenSslUtils.readPrivateKey(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateKey()).openStream()), rawPassword);
       List<Certificate> certificates = OpenSslUtils.readCertificates(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateFullChain()).openStream()));
 
-      try {
-        KeyStore keyStore = KeyStore.getInstance("jks");
-        keyStore.load(null, rawPassword);
-
-        Certificate[] fullChain = certificates.toArray(new Certificate[0]);
-        keyStore.setKeyEntry("ssl", privateKey, rawPassword, fullChain);
-
-        try (OutputStream os = Files.newOutputStream(Paths.get("testkeystore.jks"))) {
-          keyStore.store(os, rawPassword);
-        }
-      }
-      catch (KeyStoreException | CertificateException | NoSuchAlgorithmException e) {
-        throw new RuntimeException(e);
-      }
+      keyStorePath = KeyStoreUtils.newTemporaryPrivateKeyStore(rawPassword, privateKey, certificates);
     }
     catch (IOException e) {
       throw new UncheckedIOException(e);
@@ -105,10 +88,9 @@ public class ConnectorConfiguration {
     protocol.setKeystoreFile(ssl.getKeyStore());
     protocol.setKeystorePass(ssl.getKeyStorePassword());
     protocol.setKeyPass(ssl.getKeyPassword());*/
-    protocol.setKeystoreFile("file:./testkeystore.jks");
+    protocol.setKeystoreFile("file:" + keyStorePath);
     protocol.setKeystorePass(password);
     protocol.setKeyPass(password);
-
 
     return connector;
   }
