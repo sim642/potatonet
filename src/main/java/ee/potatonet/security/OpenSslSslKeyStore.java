@@ -19,21 +19,23 @@ import ee.potatonet.AppProperties;
 public class OpenSslSslKeyStore implements SslKeyStore {
 
   private static final String ALIAS = "privatekey";
+  private static final String DEFAULT_PASSWORD = "123456";
 
   private final Path keyStorePath;
   private final String password;
 
   @Autowired
   public OpenSslSslKeyStore(AppProperties appProperties) {
-    password = appProperties.getOpensslCertificateKeyPassword();
+    String definedPassword = appProperties.getOpensslCertificateKeyPassword();
+    password = definedPassword != null ? definedPassword : DEFAULT_PASSWORD; // JKS must have a password
 
     try {
-      char[] rawPassword = password.toCharArray();
+      char[] rawPassword = definedPassword != null ? definedPassword.toCharArray() : null; // OpenSSL key might not have a password
 
       PrivateKey privateKey = OpenSslUtils.readPrivateKey(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateKey()).openStream()), rawPassword);
       List<Certificate> certificates = OpenSslUtils.readCertificates(new InputStreamReader(ResourceUtils.getURL(appProperties.getOpensslCertificateFullChain()).openStream()));
 
-      keyStorePath = KeyStoreUtils.newTemporaryKeyStore(ALIAS, rawPassword, privateKey, certificates);
+      keyStorePath = KeyStoreUtils.newTemporaryKeyStore(ALIAS, password.toCharArray(), privateKey, certificates);
     }
     catch (IOException e) {
       throw new UncheckedIOException(e);
