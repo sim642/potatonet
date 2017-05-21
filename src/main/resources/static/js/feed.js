@@ -82,16 +82,25 @@ $(function () {
     $("#post").submit(function (event) {
       if ($("#content").val().trim().length !== 0) {
         if ("geolocation" in navigator) {
+          var geolocationTimeout = 10000;
+
+          var timeout = setTimeout(function () {
+            console.warn("Geolocation timed out");
+            sendPost();
+          }, geolocationTimeout);
+
           navigator.geolocation.getCurrentPosition(function (position) {
+            clearTimeout(timeout);
             $("#longitude").val(position.coords.longitude);
             $("#latitude").val(position.coords.latitude);
             sendPost();
           }, function error(err) {
             // Most likely geolocation being disabled by user.
-            sendPost();
+            clearTimeout(timeout);
             console.warn(err);
+            sendPost();
           }, {
-            timeout: 5000
+            timeout: geolocationTimeout
           });
         } else {
           sendPost();
