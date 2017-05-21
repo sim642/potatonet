@@ -26,7 +26,7 @@ function trySendStoredPost(callback) {
   clearTimeout(trySendTimeout);
 
   var endCallback = function () {
-    (callback || function(){})();
+    (callback || function () {})();
     trySendTimeout = setTimeout(trySendStoredPost, 60 * 1000);
   };
 
@@ -52,56 +52,56 @@ $(function () {
   stompConnect(function () {
     trySendStoredPost();
 
-	var sendPost = function() {
-	  var $content = $("#content");
-	  trySendStoredPost(function () {
-		$.post("/", $("#post").serialize())
-			.fail(function (jqXHR) {
-			  // http://stackoverflow.com/a/28404728
-        switch (jqXHR.readyState) {
-          case 0:
-            storePost();
-            break;
+    var sendPost = function () {
+      var $content = $("#content");
+      trySendStoredPost(function () {
+        $.post("/", $("#post").serialize())
+            .fail(function (jqXHR) {
+              // http://stackoverflow.com/a/28404728
+              switch (jqXHR.readyState) {
+                case 0:
+                  storePost();
+                  break;
 
-          case 4:
-            alert("HTTP error (" + jqXHR.status + ")");
-            break;
+                case 4:
+                  alert("HTTP error (" + jqXHR.status + ")");
+                  break;
 
-          default:
-            alert("Unknown error");
-            break;
+                default:
+                  alert("Unknown error");
+                  break;
+              }
+            })
+            .always(function () {
+              $content.val("");
+              $('#postButton').attr('disabled', true);
+            });
+      });
+    };
+
+    $("#post").submit(function (event) {
+      if ($("#content").val().trim().length !== 0) {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            $("#longitude").val(position.coords.longitude);
+            $("#latitude").val(position.coords.latitude);
+            sendPost();
+          }, function error(err) {
+            // Most likely geolocation being disabled by user.
+            sendPost();
+            console.warn(err);
+          }, {
+            timeout: 5000
+          });
+        } else {
+          sendPost();
         }
-      })
-			.always(function () {
-			  $content.val("");
-			  $('#postButton').attr('disabled', true);
-			});
-	  });
-	};
-
-	$("#post").submit(function (event) {
-	  if ($("#content").val().trim().length != 0) {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          $("#longitude").val(position.coords.longitude);
-          $("#latitude").val(position.coords.latitude);
-          sendPost();
-        }, function error(err) {
-          // Most likely geolocation being disabled by user.
-          sendPost();
-          console.warn(err);
-        }, {
-          timeout: 5000
-        });
-      } else {
-        sendPost();
       }
-    }
-	  return false;
-	});
+      return false;
+    });
   });
 });
 
-$(document).ready(function(){
+$(document).ready(function () {
   $('#content').inputButton($('#postButton'));
 });
