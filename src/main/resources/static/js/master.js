@@ -151,6 +151,13 @@ function setupLikeButtons() {
   });
 }
 
+var browserNavigating = false;
+
+// http://stackoverflow.com/a/9393870
+window.onbeforeunload = function () {
+  browserNavigating = true;
+};
+
 
 var stompConnects = [];
 
@@ -165,6 +172,14 @@ function stompConnect(callback) {
         $.each(stompConnects, function (i, callback) {
           callback();
         });
+      }, function (err) {
+        if ($.type(err) === "string") {
+          if (err.toLowerCase().indexOf("lost connection") >= 0 && !browserNavigating) {
+            // security session end
+            // alert("Session timeout");
+            $("#modal-timeout").modal("show");
+          }
+        }
       });
     }
   }
