@@ -3,14 +3,12 @@ package ee.potatonet.banklink.pangalinknet;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
-import java.security.KeyPair;
-import java.security.cert.Certificate;
-import org.bouncycastle.openssl.PEMReader;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ee.potatonet.banklink.BanklinkRegistrar;
 import ee.potatonet.banklink.BanklinkRegistry;
+import ee.potatonet.security.OpenSslUtils;
 
 public class PangalinknetBanklinkRegistrar implements BanklinkRegistrar {
 
@@ -50,15 +48,8 @@ public class PangalinknetBanklinkRegistrar implements BanklinkRegistrar {
         banklink.setAccountNumber(project.getAccountNr());
         banklink.setAccountName(project.getAccountOwner());
 
-        try (PEMReader pemReader = new PEMReader(new StringReader(project.getPrivateKey()))) {
-          KeyPair keyPair = (KeyPair) pemReader.readObject();
-          banklink.setPrivateKey(keyPair.getPrivate());
-        }
-
-        try (PEMReader pemReader = new PEMReader(new StringReader(project.getBankCertificate()))) {
-          Certificate certificate = (Certificate) pemReader.readObject();
-          banklink.setBankCertificate(certificate);
-        }
+        banklink.setPrivateKey(OpenSslUtils.readPrivateKey(new StringReader(project.getPrivateKey())));
+        banklink.setBankCertificate(OpenSslUtils.readCertificate(new StringReader(project.getBankCertificate())));
 
         registry.registerBanklink(project.getId(), banklink);
       }

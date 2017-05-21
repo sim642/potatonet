@@ -1,10 +1,12 @@
 var mapModalPopping = false; // hack to allow modal's event handlers to know whether modal show/hide was triggered by history state pop
+var map; // global state hax
+var postLocation;
 
 $('#mapModal').on('show.bs.modal', function (event) {
   var post = $(event.relatedTarget);
   var latitude = post.data('latitude');
   var longitude = post.data('longitude');
-  if (typeof latitude !== 'undefined' && latitude != -91 && longitude != -181) {
+  if (typeof latitude !== 'undefined' && latitude != -91 && longitude != -181) { // TODO remove magic constants
 	initMap(longitude, latitude);
   } else {
     $('#map').text("No location information available for this post!");
@@ -20,6 +22,7 @@ $('#mapModal').on('show.bs.modal', function (event) {
 
 $('#mapModal').on('shown.bs.modal', function () {
   google.maps.event.trigger(map, "resize");
+  map.setCenter(postLocation);
 });
 
 $('#mapModal').on('hide.bs.modal', function () {
@@ -41,9 +44,9 @@ window.onpopstate = function (event) {
 };
 
 function initMap(longitude, latitude) {
-  var postLocation = {lat: latitude, lng: longitude};
-  var map = new google.maps.Map(document.getElementById('map'), {
-	zoom: 10,
+  postLocation = {lat: latitude, lng: longitude};
+  map = new google.maps.Map(document.getElementById('map'), {
+	zoom: 11,
 	center: postLocation
   });
   var marker = new google.maps.Marker({

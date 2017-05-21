@@ -20,7 +20,7 @@
 
                     <a class="pull-right btn btn-link btn-modal-map" data-toggle="modal" data-target="#mapModal"
                        th:href="@{/posts/{postId}(postId=${post.id})}" data-remote="false"
-                       th:attr="data-latitude=${post.coordinates != null ? post.coordinates.latitude : -91}, data-longitude=${post.coordinates != null ? post.coordinates.longitude : -181}">
+                       th:data-latitude="${post.latitude}" th:data-longitude="${post.longitude}">
                         <span class="glyphicon glyphicon-map-marker"></span>
                         <span class="hidden-xs" th:text="${{post.creationDateTime}}">2017-02-11 15:00:00</span>
                     </a>

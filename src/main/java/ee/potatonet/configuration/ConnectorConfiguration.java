@@ -6,25 +6,28 @@ import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import ee.potatonet.AppProperties;
+import ee.potatonet.security.SslKeyStore;
+import ee.potatonet.security.SslTrustStore;
 
 @Configuration
 public class ConnectorConfiguration {
 
   private final AppProperties appProperties;
-  private final ServerProperties serverProperties;
+
+  private final SslKeyStore sslKeyStore;
+  private final SslTrustStore sslTrustStore;
 
   @Autowired
-  public ConnectorConfiguration(AppProperties appProperties, ServerProperties serverProperties) {
+  public ConnectorConfiguration(AppProperties appProperties, SslKeyStore sslKeyStore, SslTrustStore sslTrustStore) {
     this.appProperties = appProperties;
-    this.serverProperties = serverProperties;
+    this.sslKeyStore = sslKeyStore;
+    this.sslTrustStore = sslTrustStore;
   }
 
   @Bean
@@ -43,40 +46,58 @@ public class ConnectorConfiguration {
       @Override
       protected void customizeConnector(Connector connector) {
         super.customizeConnector(connector);
+        connector.setRedirectPort(appProperties.getDomainPort());
         connector.setParseBodyMethods("POST,PUT,DELETE");
       }
     };
-    tomcat.addAdditionalTomcatConnectors(httpConnector());
+    tomcat.addAdditionalTomcatConnectors(httpsConnector());
     tomcat.addAdditionalTomcatConnectors(httpsEidConnector());
     return tomcat;
   }
 
-  // Redirects requests to HTTP port 8080 to HTTPS port
-  private Connector httpConnector() {
-    Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-    connector.setScheme("http");
-    connector.setPort(8080);
-    connector.setRedirectPort(appProperties.getDomainPort());
+  private Http11NioConnector httpsBaseConnector() {
+    Http11NioConnector connector = new Http11NioConnector();
+    connector.setScheme("https");
+    connector.setSecure(true);
+    connector.setParseBodyMethods("POST,PUT,DELETE");
+
+    Http11NioProtocol protocol = connector.getProtocolHandler();
+    protocol.setSSLEnabled(true);
+    protocol.setKeystoreFile(sslKeyStore.getKeyStoreFile());
+    protocol.setKeystorePass(sslKeyStore.getKeyStorePassword());
+    protocol.setKeyAlias(sslKeyStore.getKeyAlias());
+    protocol.setKeyPass(sslKeyStore.getKeyPassword());
+
+    return connector;
+  }
+
+  private Connector httpsConnector() {
+    Http11NioConnector connector = httpsBaseConnector();
+    connector.setPort(8443);
+
     return connector;
   }
 
   private Connector httpsEidConnector() {
-    Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-    Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();
-    connector.setScheme("https");
-    connector.setSecure(true);
+    Http11NioConnector connector = httpsBaseConnector();
     connector.setPort(8446);
 
-    protocol.setSSLEnabled(true);
-    Ssl ssl = serverProperties.getSsl();
-    protocol.setKeystoreFile(ssl.getKeyStore());
-    protocol.setKeystorePass(ssl.getKeyStorePassword());
-    protocol.setKeyPass(ssl.getKeyPassword());
-
-    protocol.setTruststoreFile(appProperties.getTrustStore());
-    protocol.setTruststorePass(appProperties.getTrustStorePassword());
+    Http11NioProtocol protocol = connector.getProtocolHandler();
+    protocol.setTruststoreFile(sslTrustStore.getTrustStoreFile());
+    protocol.setTruststorePass(sslTrustStore.getTrustStorePassword());
     protocol.setClientAuth("true");
 
     return connector;
+  }
+
+  private static class Http11NioConnector extends Connector {
+    public Http11NioConnector() {
+      super("org.apache.coyote.http11.Http11NioProtocol");
+    }
+
+    @Override
+    public Http11NioProtocol getProtocolHandler() {
+      return (Http11NioProtocol) super.getProtocolHandler();
+    }
   }
 }

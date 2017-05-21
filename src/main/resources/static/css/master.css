@@ -44,6 +44,15 @@ a.name-link:link, a.name-link:visited, a.name-link:hover, a.name-link:active {
     animation: spin 2s linear infinite;
 }
 
+#loader-post {
+    background: url('/img/potato-32.png');
+    width: 32px;
+    height: 32px;
+    animation: spin 2s linear infinite;
+    margin-right: 1em;
+    display: none;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -75,6 +84,10 @@ a.name-link:link, a.name-link:visited, a.name-link:hover, a.name-link:active {
 
 .btn-modal-map {
     margin-top: -0.7em;
+}
+
+.btn-modal-map:not([data-latitude]):not([data-longitude]) .glyphicon {
+    display: none;
 }
 
 legend {
@@ -140,4 +153,12 @@ legend {
 
 .sitemap ul {
     padding-left: 20px;
+}
+
+.badge-link {
+    background-color: #337ab7;
+}
+
+.fine-print {
+    font-size: 75%;
 }

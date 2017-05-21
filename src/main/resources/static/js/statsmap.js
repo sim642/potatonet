@@ -1,15 +1,13 @@
 function initMap() {
-  var mapCenterLocation;
-  if (coords.length == 0 || coords[0].latitude == null) {
-    // default center locations is Tartu(58.3776 N, 26.7290 E)
-	mapCenterLocation = {'latitude' : 58.3776, 'longitude' : 26.7290};
-  } else {
-    mapCenterLocation = coords[0];
+  if (coords == null || coords.length == 0 || coords[0] == null) {
+	var mapContainer = document.getElementById('mapContainer');
+	mapContainer.parentNode.removeChild(mapContainer);
+   	return;
   }
 
   var map = new google.maps.Map(document.getElementById('map'), {
-	zoom: 3,
-	center: {lat: mapCenterLocation.latitude, lng: mapCenterLocation.longitude}
+	zoom: 11,
+	center: {lat: coords[0].latitude, lng: coords[0].longitude}
   });
 
   var markers = coords.map(function (location) {

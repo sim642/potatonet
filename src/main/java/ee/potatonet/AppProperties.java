@@ -12,8 +12,11 @@ public class AppProperties {
   private String domainPort;
   private String domainEid;
 
-  private String trustStore;
-  private String trustStorePassword;
+  private String opensslCertificateFullChain;
+  private String opensslCertificateKey;
+  private String opensslCertificateKeyPassword;
+
+  private String eidRootCertificatePattern;
 
   private String googleApiKey;
 
@@ -49,20 +52,36 @@ public class AppProperties {
     this.domainEid = domainEid;
   }
 
-  public String getTrustStore() {
-    return trustStore;
+  public String getOpensslCertificateFullChain() {
+    return opensslCertificateFullChain;
   }
 
-  public void setTrustStore(String trustStore) {
-    this.trustStore = trustStore;
+  public void setOpensslCertificateFullChain(String opensslCertificateFullChain) {
+    this.opensslCertificateFullChain = opensslCertificateFullChain;
   }
 
-  public String getTrustStorePassword() {
-    return trustStorePassword;
+  public String getOpensslCertificateKey() {
+    return opensslCertificateKey;
   }
 
-  public void setTrustStorePassword(String trustStorePassword) {
-    this.trustStorePassword = trustStorePassword;
+  public void setOpensslCertificateKey(String opensslCertificateKey) {
+    this.opensslCertificateKey = opensslCertificateKey;
+  }
+
+  public String getOpensslCertificateKeyPassword() {
+    return opensslCertificateKeyPassword;
+  }
+
+  public void setOpensslCertificateKeyPassword(String opensslCertificateKeyPassword) {
+    this.opensslCertificateKeyPassword = opensslCertificateKeyPassword;
+  }
+
+  public String getEidRootCertificatePattern() {
+    return eidRootCertificatePattern;
+  }
+
+  public void setEidRootCertificatePattern(String eidRootCertificatePattern) {
+    this.eidRootCertificatePattern = eidRootCertificatePattern;
   }
 
   public String getGoogleApiKey() {
