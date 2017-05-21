@@ -176,7 +176,8 @@ function stompConnect(callback) {
         if ($.type(err) === "string") {
           if (err.toLowerCase().indexOf("lost connection") >= 0 && !browserNavigating) {
             // security session end
-            alert("Session timeout");
+            // alert("Session timeout");
+            $("#modal-timeout").modal("show");
           }
         }
       });

@@ -93,6 +93,22 @@
 </nav>
 
 <th:block layout:fragment="tail">
+    <div id="modal-timeout" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" th:text="#{navbar.timeout.title}">Session ended</h4>
+                </div>
+                <div class="modal-body">
+                    <p th:text="#{navbar.timeout.text}">Your session has ended because you logged out or it timed out. To continue, sign in again.</p>
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/}" class="btn btn-primary" th:text="#{login.login.button}">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script th:src="@{/js/lib/fallback.min.js}" ></script>
     <script th:src="@{/js/fallback-master.js}"></script>
     <!--/* This is for additional script loading which should also be covered with a fallback */-->
