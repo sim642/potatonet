@@ -49,13 +49,19 @@ function trySendStoredPost(callback) {
 }
 
 $(function () {
+  var $post = $("#post");
+  var $content = $("#content");
+  var $postButton = $("#postButton");
+  var $postLoader = $("#loader-post");
+
+  $content.inputButton($postButton);
+
   stompConnect(function () {
     trySendStoredPost();
 
     var sendPost = function () {
-      var $content = $("#content");
       trySendStoredPost(function () {
-        $.post("/", $("#post").serialize())
+        $.post("/", $post.serialize())
             .fail(function (jqXHR) {
               // http://stackoverflow.com/a/28404728
               switch (jqXHR.readyState) {
@@ -74,13 +80,19 @@ $(function () {
             })
             .always(function () {
               $content.val("");
-              $('#postButton').attr('disabled', true);
+              $content.prop("readonly", false);
+              $postButton.attr('disabled', true);
+              $postLoader.hide();
             });
       });
     };
 
-    $("#post").submit(function (event) {
-      if ($("#content").val().trim().length !== 0) {
+    $post.submit(function (event) {
+      if ($content.val().trim().length !== 0) {
+        $content.prop("readonly", true);
+        $postButton.prop("disabled", true);
+        $postLoader.show();
+
         if ("geolocation" in navigator) {
           var geolocationTimeout = 10000;
 
@@ -109,8 +121,4 @@ $(function () {
       return false;
     });
   });
-});
-
-$(document).ready(function () {
-  $('#content').inputButton($('#postButton'));
 });
