@@ -94,7 +94,7 @@ $(function () {
         $postLoader.show();
 
         if ("geolocation" in navigator) {
-          var geolocationTimeout = 10000;
+          var geolocationTimeout = 5000;
 
           var timeout = setTimeout(function () {
             console.warn("Geolocation timed out");
@@ -112,7 +112,7 @@ $(function () {
             console.warn(err);
             sendPost();
           }, {
-            timeout: geolocationTimeout
+            timeout: geolocationTimeout / 2
           });
         } else {
           sendPost();
