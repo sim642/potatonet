@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,6 @@ import ee.potatonet.banklink.BanklinkService;
 import ee.potatonet.banklink.payment.Payment;
 
 @Controller
-@Profile(value = "prod")
 @RequestMapping("/donate")
 public class DonateController {
 

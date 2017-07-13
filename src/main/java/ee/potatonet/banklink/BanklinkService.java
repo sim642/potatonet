@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import ee.potatonet.banklink.pangalinknet.PangalinknetBanklinkRegistrar;
@@ -15,7 +14,6 @@ import ee.potatonet.banklink.payment.PaymentSuccessResponse;
 import ee.potatonet.banklink.properties.PropertiesBanklinkRegistrar;
 
 @Service
-@Profile(value = "prod")
 public class BanklinkService {
 
   private final BanklinkRegistry registry;
