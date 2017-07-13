@@ -1,5 +1,10 @@
 package ee.potatonet.banklink.pangalinknet;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+@Component
+@ConfigurationProperties(prefix = "banklink.pangalinknet")
 public class PangalinknetBanklinkProperties {
 
   private String url;
