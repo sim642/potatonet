@@ -1,39 +1,34 @@
 package ee.potatonet.banklink;
 
-import javax.annotation.PostConstruct;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import ee.potatonet.banklink.pangalinknet.PangalinknetBanklinkRegistrar;
 import ee.potatonet.banklink.payment.Payment;
 import ee.potatonet.banklink.payment.PaymentFailureResponse;
 import ee.potatonet.banklink.payment.PaymentRequest;
 import ee.potatonet.banklink.payment.PaymentSuccessResponse;
-import ee.potatonet.banklink.properties.PropertiesBanklinkRegistrar;
 
 @Service
 public class BanklinkService {
 
   private final BanklinkRegistry registry;
-  private final BanklinkProperties banklinkProperties;
 
   @Autowired
-  public BanklinkService(BanklinkProperties banklinkProperties) {
+  public BanklinkService(Optional<List<BanklinkRegistrar>> banklinkRegistrars) { // https://stackoverflow.com/a/31327710
     this.registry = new DefaultBanklinkRegistry();
-    this.banklinkProperties = banklinkProperties;
+    banklinkRegistrars
+        .orElse(Collections.emptyList())
+        .forEach(registrar -> registrar.registerBanklinks(registry));
   }
 
   @Bean
   public BanklinkRegistry banklinkRegistry() {
     return registry;
-  }
-
-  @PostConstruct
-  public void postConstruct() {
-    new PropertiesBanklinkRegistrar(banklinkProperties.getProperties()).registerBanklinks(registry);
-    new PangalinknetBanklinkRegistrar(banklinkProperties.getPangalinknet()).registerBanklinks(registry);
   }
 
   public BanklinkParams getPaymentParams(String banklinkName, Payment payment) {

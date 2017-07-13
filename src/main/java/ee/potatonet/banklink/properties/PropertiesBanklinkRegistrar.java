@@ -9,14 +9,20 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 import ee.potatonet.banklink.BanklinkRegistrar;
 import ee.potatonet.banklink.BanklinkRegistry;
 
+@Component
+@ConditionalOnProperty("banklink.properties.key-store")
 public class PropertiesBanklinkRegistrar implements BanklinkRegistrar {
 
   private final PropertiesBanklinkProperties properties;
 
+  @Autowired
   public PropertiesBanklinkRegistrar(PropertiesBanklinkProperties properties) {
     this.properties = properties;
   }
@@ -45,6 +51,9 @@ public class PropertiesBanklinkRegistrar implements BanklinkRegistrar {
       });
 
       banklinks.forEach((name, banklink) -> {
+        if (banklink.getCertificateAlias() == null)
+          banklink.setCertificateAlias(name);
+
         try {
           Certificate certificate = keyStore.getCertificate(banklink.getCertificateAlias());
           banklink.setBankCertificate(certificate);

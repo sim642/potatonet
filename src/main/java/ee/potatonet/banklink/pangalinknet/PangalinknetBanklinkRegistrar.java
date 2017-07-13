@@ -3,6 +3,9 @@ package ee.potatonet.banklink.pangalinknet;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -10,12 +13,15 @@ import ee.potatonet.banklink.BanklinkRegistrar;
 import ee.potatonet.banklink.BanklinkRegistry;
 import ee.potatonet.security.OpenSslUtils;
 
+@Component
+@ConditionalOnProperty("banklink.pangalinknet.url")
 public class PangalinknetBanklinkRegistrar implements BanklinkRegistrar {
 
   private final PangalinknetBanklinkProperties properties;
 
   private final RestTemplate restTemplate;
 
+  @Autowired
   public PangalinknetBanklinkRegistrar(PangalinknetBanklinkProperties properties) {
     this.properties = properties;
     this.restTemplate = new RestTemplate();

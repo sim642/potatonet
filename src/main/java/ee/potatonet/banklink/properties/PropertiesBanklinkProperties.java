@@ -1,8 +1,12 @@
 package ee.potatonet.banklink.properties;
 
 import java.util.Map;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
+@Component
+@ConfigurationProperties(prefix = "banklink.properties")
 public class PropertiesBanklinkProperties {
 
   private Map<String, PropertiesBanklink> banklinks;
